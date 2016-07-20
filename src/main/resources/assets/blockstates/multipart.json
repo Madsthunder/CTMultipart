@@ -1,0 +1,7 @@
+{
+    "variants":
+    {
+        "normal": { "model": "ctmultipart:multipart" },
+        "inventory": { "model": "ctmultipart:multipart" }
+    }
+}
