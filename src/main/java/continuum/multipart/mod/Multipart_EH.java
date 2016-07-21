@@ -494,9 +494,7 @@ public class Multipart_EH
 		RayTraceResult result = event.getWorld().rayTraceBlocks(vec1, vec3, false, false, true);
 		if(result != null && result.hitInfo instanceof MultipartInfo)
 		{
-			new Throwable().printStackTrace();
 			BlockMultipart.currentData = (MultipartInfo)result.hitInfo;
-			System.out.println(BlockMultipart.currentData.getTileEntity().writeToNBT(new NBTTagCompound()));
 		}
 	}
 	

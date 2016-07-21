@@ -46,7 +46,6 @@ public class ModelMultipart implements IModel
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> function)
 	{
-		System.out.println(state == null ? "nothing" : IPerspectiveAwareModel.MapWrapper.getTransforms(state));
 		return new BakedModelMultipart(format, function);
 	}
 	
