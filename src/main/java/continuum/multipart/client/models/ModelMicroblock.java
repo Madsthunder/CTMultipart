@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 
 import continuum.api.multipart.CTMultipart_API;
 import continuum.api.multipart.implementations.IMicroblock;
+import continuum.api.multipart.registry.MicroblockTextureEntry;
 import continuum.api.multipart.state.MicroblockStateImpl;
 import continuum.api.multipart.state.MultiblockStateImpl;
 import continuum.essentials.mod.CTMod;
@@ -24,7 +25,6 @@ import continuum.multipart.items.ItemMicroblock;
 import continuum.multipart.mod.Multipart_EH;
 import continuum.multipart.mod.Multipart_OH;
 import continuum.multipart.multiparts.MultipartMicroblock;
-import continuum.multipart.registry.MicroblockTextureEntry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;

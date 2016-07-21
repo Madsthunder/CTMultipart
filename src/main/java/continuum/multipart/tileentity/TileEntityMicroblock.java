@@ -3,8 +3,8 @@ package continuum.multipart.tileentity;
 import java.util.HashMap;
 
 import continuum.api.multipart.CTMultipart_API;
+import continuum.api.multipart.registry.MicroblockTextureEntry;
 import continuum.essentials.tileentity.CTTileEntity;
-import continuum.multipart.registry.MicroblockTextureEntry;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;

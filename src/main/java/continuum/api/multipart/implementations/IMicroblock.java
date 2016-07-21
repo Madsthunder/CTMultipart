@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.tuple.Triple;
 
-import continuum.multipart.registry.MicroblockTextureEntry;
+import continuum.api.multipart.registry.MicroblockTextureEntry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;

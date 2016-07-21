@@ -2,6 +2,7 @@ package continuum.multipart.mod;
 
 import java.util.HashMap;
 
+import continuum.api.multipart.BlockMultipart;
 import continuum.core.mod.Core_EH;
 import continuum.core.mod.Core_OH;
 import continuum.essentials.mod.CTMod;
@@ -9,7 +10,6 @@ import continuum.essentials.mod.ObjectHolder;
 import continuum.multipart.blocks.BlockAxised;
 import continuum.multipart.blocks.BlockCornered;
 import continuum.multipart.blocks.BlockLayered;
-import continuum.multipart.blocks.BlockMultipart;
 import continuum.multipart.client.models.ModelMicroblock;
 import continuum.multipart.client.models.ModelMultipart;
 import continuum.multipart.client.state.StateMapperMicroblock;

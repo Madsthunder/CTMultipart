@@ -1,4 +1,4 @@
-package continuum.multipart.blocks;
+package continuum.api.multipart;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,13 +6,11 @@ import java.util.Random;
 
 import com.google.common.collect.Lists;
 
-import continuum.api.multipart.MultipartInfo;
 import continuum.api.multipart.boundingboxes.CollidableAABB;
 import continuum.api.multipart.state.MultiblockStateImpl;
 import continuum.essentials.block.CuboidSelector;
 import continuum.essentials.block.IBlockBoundable;
 import continuum.essentials.block.ICuboid;
-import continuum.multipart.tileentity.TileEntityMultiblock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

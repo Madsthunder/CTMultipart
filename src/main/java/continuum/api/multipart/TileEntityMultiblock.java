@@ -1,4 +1,4 @@
-package continuum.multipart.tileentity;
+package continuum.api.multipart;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,12 +7,11 @@ import java.util.UUID;
 
 import com.google.common.collect.Lists;
 
-import continuum.api.multipart.MultipartInfo;
 import continuum.api.multipart.boundingboxes.MultipartAABB;
+import continuum.api.multipart.event.MultipartEvent.AABBExceptionsEvent;
 import continuum.api.multipart.implementations.Multipart;
 import continuum.essentials.helpers.NBTHelper;
 import continuum.essentials.tileentity.CTTileEntity;
-import continuum.multipart.events.MultipartEvent.AABBExceptionsEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;

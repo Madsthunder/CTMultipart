@@ -5,8 +5,11 @@ import java.util.Map.Entry;
 
 import com.google.common.collect.Lists;
 
+import continuum.api.multipart.BlockMultipart;
 import continuum.api.multipart.CTMultipart_API;
 import continuum.api.multipart.MultipartInfo;
+import continuum.api.multipart.TileEntityMultiblock;
+import continuum.api.multipart.event.MultipartEvent.AABBExceptionsEvent;
 import continuum.api.multipart.implementations.IMicroblock;
 import continuum.api.multipart.implementations.Multipart;
 import continuum.essentials.events.DebugInfoEvent;
@@ -14,15 +17,12 @@ import continuum.essentials.helpers.BlockHelper;
 import continuum.essentials.mod.CTMod;
 import continuum.multipart.blocks.BlockCornered;
 import continuum.multipart.blocks.BlockLayered;
-import continuum.multipart.blocks.BlockMultipart;
 import continuum.multipart.enums.CoverCuboid;
 import continuum.multipart.enums.EnumMicroblockType.EnumPlaceType;
 import continuum.multipart.enums.ILayeredCuboid;
 import continuum.multipart.enums.PanelCuboid;
 import continuum.multipart.enums.SlabCuboid;
-import continuum.multipart.events.MultipartEvent.AABBExceptionsEvent;
 import continuum.multipart.items.ItemMicroblock;
-import continuum.multipart.tileentity.TileEntityMultiblock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;

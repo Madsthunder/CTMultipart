@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import continuum.api.multipart.CTMultipart_API;
+import continuum.api.multipart.registry.MicroblockTextureEntry;
 import continuum.essentials.mod.CTMod;
 import continuum.multipart.mod.Multipart_EH;
 import continuum.multipart.mod.Multipart_OH;
-import continuum.multipart.registry.MicroblockTextureEntry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;

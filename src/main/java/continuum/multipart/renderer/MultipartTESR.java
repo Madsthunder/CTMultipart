@@ -3,8 +3,8 @@ package continuum.multipart.renderer;
 import java.util.List;
 
 import continuum.api.multipart.MultipartInfo;
+import continuum.api.multipart.TileEntityMultiblock;
 import continuum.api.multipart.state.MultiblockStateImpl;
-import continuum.multipart.tileentity.TileEntityMultiblock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;

@@ -1,4 +1,4 @@
-package continuum.multipart.registry;
+package continuum.api.multipart.registry;
 
 import com.google.common.reflect.TypeToken;
 

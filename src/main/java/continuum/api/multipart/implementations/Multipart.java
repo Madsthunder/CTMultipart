@@ -5,8 +5,8 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import continuum.api.multipart.MultipartInfo;
+import continuum.api.multipart.TileEntityMultiblock;
 import continuum.essentials.block.ICuboid;
-import continuum.multipart.tileentity.TileEntityMultiblock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

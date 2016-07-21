@@ -6,7 +6,6 @@ import java.util.UUID;
 import continuum.api.multipart.implementations.Multipart;
 import continuum.api.multipart.state.MultiblockStateImpl;
 import continuum.essentials.block.ICuboid;
-import continuum.multipart.tileentity.TileEntityMultiblock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

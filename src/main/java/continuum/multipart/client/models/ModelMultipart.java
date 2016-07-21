@@ -6,9 +6,9 @@ import java.util.List;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
+import continuum.api.multipart.BlockMultipart;
 import continuum.api.multipart.MultipartInfo;
 import continuum.api.multipart.state.MultiblockStateImpl;
-import continuum.multipart.blocks.BlockMultipart;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
