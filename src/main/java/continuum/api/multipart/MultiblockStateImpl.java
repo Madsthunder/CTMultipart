@@ -1,7 +1,5 @@
-package continuum.api.multipart.state;
+package continuum.api.multipart;
 
-import continuum.api.multipart.MultipartInfo;
-import continuum.api.multipart.TileEntityMultiblock;
 import net.minecraft.block.state.BlockStateContainer.StateImplementation;
 
 public class MultiblockStateImpl extends StateImplementation

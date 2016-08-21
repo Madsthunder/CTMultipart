@@ -6,12 +6,10 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import com.google.common.collect.Lists;
 
-import continuum.api.multipart.implementations.IMicroblockType;
-import continuum.api.multipart.registry.MicroblockTextureEntry;
-import continuum.essentials.mod.CTMod;
+import continuum.api.microblock.IMicroblockType;
+import continuum.api.multipart.MicroblockTextureEntry;
 import continuum.multipart.enums.EnumFacingArray;
 import continuum.multipart.enums.EnumMicroblockType;
-import continuum.multipart.mod.Multipart_EH;
 import continuum.multipart.mod.Multipart_OH;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;

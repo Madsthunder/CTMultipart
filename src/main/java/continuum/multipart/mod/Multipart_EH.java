@@ -5,18 +5,17 @@ import java.util.Map.Entry;
 
 import com.google.common.collect.Lists;
 
-import continuum.api.multipart.BlockMultipart;
-import continuum.api.multipart.CTMultipart_API;
+import continuum.api.microblock.IMicroblock;
+import continuum.api.multipart.Multipart;
 import continuum.api.multipart.MultipartInfo;
+import continuum.api.multipart.MultipartAPI;
 import continuum.api.multipart.TileEntityMultiblock;
-import continuum.api.multipart.event.MultipartEvent.AABBExceptionsEvent;
-import continuum.api.multipart.implementations.IMicroblock;
-import continuum.api.multipart.implementations.Multipart;
 import continuum.essentials.events.DebugInfoEvent;
-import continuum.essentials.helpers.BlockHelper;
+import continuum.essentials.hooks.BlockHooks;
 import continuum.essentials.mod.CTMod;
 import continuum.multipart.blocks.BlockCornered;
 import continuum.multipart.blocks.BlockLayered;
+import continuum.multipart.blocks.BlockMultiblock;
 import continuum.multipart.enums.CoverCuboid;
 import continuum.multipart.enums.EnumMicroblockType.EnumPlaceType;
 import continuum.multipart.enums.ILayeredCuboid;
@@ -41,20 +40,18 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -64,20 +61,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class Multipart_EH
 {
 	private static CTMod<Multipart_OH, Multipart_EH> mod;
-	private static final Minecraft minecraft = Minecraft.getMinecraft();
 	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public <T extends Comparable<T>>void onDebugInfoGet(DebugInfoEvent event)
 	{
-		RayTraceResult result = minecraft.objectMouseOver;
+		RayTraceResult result = Minecraft.getMinecraft().objectMouseOver;
 		if(event.getInfoSide() == DebugInfoEvent.EnumSide.RIGHT && result != null && result.typeOfHit == Type.BLOCK && result.getBlockPos() != null && result.hitInfo instanceof MultipartInfo)
 		{
 			List<String> list = event.getDebugInfo();
 			if(list.remove(mod.getObjectHolder().multipart.getRegistryName().toString()))
 			{
 				MultipartInfo info = (MultipartInfo)result.hitInfo;
-				World world = minecraft.theWorld;
+				World world = Minecraft.getMinecraft().theWorld;
 				BlockPos pos = result.getBlockPos();
 				IBlockState state = world.getWorldType() == WorldType.DEBUG_WORLD ? info.getState() : info.getActualState();
 				list.add("(Multipart) " + info.getMultipart().getRegistryName());
@@ -99,57 +95,55 @@ public class Multipart_EH
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onItemRightClick(RightClickItem event)
 	{
-		ItemStack stack = event.getItemStack();
-		EntityPlayer player = event.getEntityPlayer();
-		RayTraceResult result = player.rayTrace(player.capabilities.isCreativeMode ? 5D : 4.5D, 1F);
-		World world = event.getWorld();
-		BlockPos pos = result.getBlockPos().offset(result.sideHit);
-		Block possibleBlock = Block.getBlockFromItem(stack.getItem());
-		if(possibleBlock == null) possibleBlock = ForgeRegistries.BLOCKS.getValue(stack.getItem().getRegistryName());
-		Multipart prevEntry;
-		Multipart possibleEntry;
-		if(possibleBlock != null && (possibleEntry = CTMultipart_API.getMultipart(stack.getItem().getRegistryName())) != CTMultipart_API.getDefaultMultipart())
+		if(MultipartAPI.apiActive())
 		{
-			Vec3d hitPos = result.hitVec.subtract(pos.getX(), pos.getY(), pos.getZ());
-			IBlockState prevBlock = world.getBlockState(pos);
-			TileEntity prevTile = world.getTileEntity(pos);
-			IBlockState possibleState = possibleBlock.onBlockPlaced(world, pos, result.sideHit, (float)hitPos.xCoord, (float)hitPos.yCoord, (float)hitPos.zCoord, stack.getMetadata(), player);
-			if(prevBlock.getBlock() instanceof BlockMultipart)
-				attemptToPlace(world, pos, player, stack, Lists.newArrayList(), result, possibleEntry, possibleState);
-			else if((prevEntry = CTMultipart_API.getMultipart(prevBlock.getBlock().getRegistryName())) != null)
+			ItemStack stack = event.getItemStack();
+			EntityPlayer player = event.getEntityPlayer();
+			RayTraceResult result = player.rayTrace(player.capabilities.isCreativeMode ? 5D : 4.5D, 1F);
+			World world = event.getWorld();
+			BlockPos pos = result.getBlockPos().offset(result.sideHit);
+			Block possibleBlock = Block.getBlockFromItem(stack.getItem());
+			if(possibleBlock == null) possibleBlock = ForgeRegistries.BLOCKS.getValue(stack.getItem().getRegistryName());
+			Multipart prevEntry;
+			Multipart possibleEntry;
+			if(possibleBlock != null && (possibleEntry = MultipartAPI.getMultipartRegistry().getObject(stack.getItem().getRegistryName())) != MultipartAPI.getMultipartRegistry().getDefaultValue())
 			{
-				List<BlockSnapshot> snapshots = BlockHelper.setBlockStateWithSnapshots(world, pos, mod.getObjectHolder().multipart.getDefaultState());
-				((TileEntityMultiblock)world.getTileEntity(pos)).addMultipartInfoToList(prevEntry, prevBlock, prevTile);
-				attemptToPlace(world, pos, player, stack, snapshots, result, possibleEntry, possibleState);
+				Vec3d hitPos = result.hitVec.subtract(pos.getX(), pos.getY(), pos.getZ());
+				IBlockState prevBlock = world.getBlockState(pos);
+				TileEntity prevTile = world.getTileEntity(pos);
+				IBlockState possibleState = possibleBlock.onBlockPlaced(world, pos, result.sideHit, (float)hitPos.xCoord, (float)hitPos.yCoord, (float)hitPos.zCoord, stack.getMetadata(), player);
+				if(prevBlock.getBlock() instanceof BlockMultiblock)
+					attemptToPlace(world, pos, player, stack, Lists.newArrayList(), result, possibleEntry, possibleState);
+				else if((prevEntry = MultipartAPI.getMultipartRegistry().getObject(prevBlock.getBlock().getRegistryName())) != null)
+				{
+					List<BlockSnapshot> snapshots = BlockHooks.setBlockStateWithSnapshots(world, pos, mod.getObjectHolder().multipart.getDefaultState());
+					((TileEntityMultiblock)world.getTileEntity(pos)).addMultipartInfoToList(prevEntry, prevBlock, prevTile);
+					attemptToPlace(world, pos, player, stack, snapshots, result, possibleEntry, possibleState);
+				}
 			}
 		}
 	}
 	
 	public static Boolean attemptToPlace(World world, BlockPos pos, EntityPlayer player, ItemStack stack, List<BlockSnapshot> snapshots, RayTraceResult result, Multipart multipart, IBlockState state)
 	{
-		TileEntity tileEntity1 = world.getTileEntity(pos);
-		if(tileEntity1 instanceof TileEntityMultiblock)
+		TileEntity entity = world.getTileEntity(pos);
+		TileEntityMultiblock multiblock;
+		if(MultipartAPI.apiActive() && entity instanceof TileEntityMultiblock && multipart.canPlaceIn(world, pos, state, multiblock = (TileEntityMultiblock)entity, result))
 		{
-			TileEntityMultiblock source = (TileEntityMultiblock)tileEntity1;
-			if(multipart.canPlaceIn(world, pos, state, source, result))
-			{
-				TileEntity entity = state.getBlock().createTileEntity(world, state);
-				setTileNBT(world, player, pos, stack, source, entity);
-				source.addMultipartInfoToList(multipart, state, entity).onPlaced(player, stack);
-				if(player instanceof EntityPlayerMP) ((EntityPlayerMP)player).connection.sendPacket(source.getUpdatePacket());
-				SoundType sound = state.getBlock().getSoundType();
-				world.playSound(player, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
-				player.swingArm(EnumHand.MAIN_HAND);
-				world.checkLight(pos);
-				world.markBlockRangeForRenderUpdate(pos.add(-8, -8, -8), pos.add(8, 8, 8));
-				if(!player.capabilities.isCreativeMode) --stack.stackSize;
-				return true;
-			}
-			else
-				BlockHelper.restoreBlockSnapshots(world, snapshots);
+			TileEntity entity1 = state.getBlock().createTileEntity(world, state);
+			setTileNBT(world, player, pos, stack, multiblock, entity1);
+			multiblock.addMultipartInfoToList(multipart, state, entity1).onPlaced(player, stack);
+			if(player instanceof EntityPlayerMP) ((EntityPlayerMP)player).connection.sendPacket(multiblock.getUpdatePacket());
+			SoundType sound = state.getBlock().getSoundType(mod.getObjectHolder().multipart.getDefaultState(), world, pos, player);
+			world.playSound(player, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
+			player.swingArm(EnumHand.MAIN_HAND);
+			world.checkLight(pos);
+			world.markBlockRangeForRenderUpdate(pos.add(-8, -8, -8), pos.add(8, 8, 8));
+			if(!player.capabilities.isCreativeMode) --stack.stackSize;
+			return true;
 		}
 		else
-			BlockHelper.restoreBlockSnapshots(world, snapshots);
+			BlockHooks.restoreBlockSnapshots(world, snapshots);
 		return false;
 	}
 	
@@ -183,7 +177,7 @@ public class Multipart_EH
 	}
 	
 	@SubscribeEvent
-	public void onExceptionsGet(AABBExceptionsEvent event)
+	public void onExceptionsGet(continuum.api.multipart.MultipartEvent.AABBExceptionsEvent event)
 	{
 		if(event.getMultipart() instanceof IMicroblock)
 		{
@@ -483,22 +477,7 @@ public class Multipart_EH
 		tess.draw();
 	}
 	
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void onBlockBreak(BlockEvent.BreakEvent event)
-	{
-		EntityPlayer player = event.getPlayer();
-		Double reach = player.isCreative() ? 5D : 4D;
-		Vec3d vec1 = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
-		Vec3d vec2 = player.getLook(1F);
-		Vec3d vec3 = vec1.addVector(vec2.xCoord * reach, vec2.yCoord * reach, vec2.zCoord * reach);
-		RayTraceResult result = event.getWorld().rayTraceBlocks(vec1, vec3, false, false, true);
-		if(result != null && result.hitInfo instanceof MultipartInfo)
-		{
-			BlockMultipart.currentData = (MultipartInfo)result.hitInfo;
-		}
-	}
-	
-	static void setMod(Multipart_Mod mod)
+	static void setMod(CTMod<Multipart_OH, Multipart_EH> mod)
 	{
 		Multipart_EH.mod = mod;
 	}

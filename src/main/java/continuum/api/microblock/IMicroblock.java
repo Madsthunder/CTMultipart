@@ -1,10 +1,11 @@
-package continuum.api.multipart.implementations;
+package continuum.api.microblock;
 
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Triple;
 
-import continuum.api.multipart.registry.MicroblockTextureEntry;
+import continuum.api.multipart.MicroblockTextureEntry;
+import continuum.api.multipart.Multipart;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;

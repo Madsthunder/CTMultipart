@@ -6,9 +6,9 @@ import java.util.List;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
-import continuum.api.multipart.BlockMultipart;
+import continuum.api.multipart.MultiblockStateImpl;
 import continuum.api.multipart.MultipartInfo;
-import continuum.api.multipart.state.MultiblockStateImpl;
+import continuum.multipart.blocks.BlockMultiblock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
@@ -73,6 +74,7 @@ public class ModelMultipart implements IModel
 			if(state instanceof MultiblockStateImpl)
 			{
 				MultiblockStateImpl impl = (MultiblockStateImpl)state;
+				System.out.println(impl.getSource());
 				IBakedModel model;
 				for(MultipartInfo info : impl.getSource())
 					if((model = minecraft.getBlockRendererDispatcher().getModelForState(info.getState())) != null) quads.addAll(model.getQuads(info.getExtendedState(true), side, rand));
@@ -101,7 +103,7 @@ public class ModelMultipart implements IModel
 		@Override
 		public TextureAtlasSprite getParticleTexture()
 		{
-			return BlockMultipart.currentData == null ? minecraft.getTextureMapBlocks().getMissingSprite() : minecraft.getBlockRendererDispatcher().getModelForState(BlockMultipart.currentData.getState()).getParticleTexture();
+			return minecraft.getBlockRendererDispatcher().getModelForState(Blocks.STONE.getDefaultState()).getParticleTexture();
 		}
 		
 		@Override

@@ -2,9 +2,9 @@ package continuum.multipart.items;
 
 import java.util.List;
 
-import continuum.api.multipart.CTMultipart_API;
-import continuum.api.multipart.implementations.IMicroblock;
-import continuum.api.multipart.registry.MicroblockTextureEntry;
+import continuum.api.microblock.IMicroblock;
+import continuum.api.multipart.MicroblockTextureEntry;
+import continuum.api.multipart.MultipartAPI;
 import continuum.essentials.mod.CTMod;
 import continuum.multipart.blocks.BlockLayered;
 import continuum.multipart.enums.EnumMicroblockType;
@@ -35,8 +35,8 @@ public class ItemMicroblock extends ItemBlock
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List list)
 	{
-		MicroblockTextureEntry defaultEntry = CTMultipart_API.microblockTextureRegistry.getDefaultValue();
-		for(MicroblockTextureEntry entry : CTMultipart_API.microblockTextureRegistry)
+		MicroblockTextureEntry defaultEntry = MultipartAPI.microblockTextureRegistry.getDefaultValue();
+		for(MicroblockTextureEntry entry : MultipartAPI.microblockTextureRegistry)
 			if(entry != defaultEntry)
 			{
 				ItemStack stack = new ItemStack(item);
@@ -49,7 +49,7 @@ public class ItemMicroblock extends ItemBlock
 	public String getItemStackDisplayName(ItemStack stack)
 	{
 		MicroblockTextureEntry entry = MicroblockTextureEntry.readFromNBT(stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound());
-		return entry == CTMultipart_API.microblockTextureRegistry.getDefaultValue() ? "Default" : entry.getDisplayName() + " " + I18n.translateToLocal("microblock." + ((IMicroblock)this.block).getType().getName().toLowerCase());
+		return entry == MultipartAPI.microblockTextureRegistry.getDefaultValue() ? "Default" : entry.getDisplayName() + " " + I18n.translateToLocal("microblock." + ((IMicroblock)this.block).getType().getName().toLowerCase());
 	}
 	
 	public IBlockState getRenderState()

@@ -2,14 +2,11 @@ package continuum.multipart.mod;
 
 import java.util.HashMap;
 
-import continuum.api.multipart.BlockMultipart;
-import continuum.core.mod.Core_EH;
-import continuum.core.mod.Core_OH;
-import continuum.essentials.mod.CTMod;
 import continuum.essentials.mod.ObjectHolder;
 import continuum.multipart.blocks.BlockAxised;
 import continuum.multipart.blocks.BlockCornered;
 import continuum.multipart.blocks.BlockLayered;
+import continuum.multipart.blocks.BlockMultiblock;
 import continuum.multipart.client.models.ModelMicroblock;
 import continuum.multipart.client.models.ModelMultipart;
 import continuum.multipart.client.state.StateMapperMicroblock;
@@ -17,6 +14,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -24,12 +22,12 @@ public class Multipart_OH implements ObjectHolder
 {
 	private static Multipart_OH holder;
 	
-	static Multipart_OH getHolder()
+	static Multipart_OH getHolder(ModContainer mod)
 	{
-		return holder == null ? new Multipart_OH(Multipart_Mod.class.getAnnotation(Mod.class)) : holder;
+		return holder == null ? new Multipart_OH(mod) : holder;
 	}
 	
-	private Multipart_OH(Mod mod)
+	private Multipart_OH(ModContainer mod)
 	{
 		this.mod = mod;
 	}
@@ -37,24 +35,24 @@ public class Multipart_OH implements ObjectHolder
 	@Override
 	public String getModid()
 	{
-		return this.mod.modid();
+		return this.mod.getModId();
 	}
 	
 	@Override
 	public String getName()
 	{
-		return this.mod.name();
+		return this.mod.getName();
 	}
 	
 	@Override
 	public String getVersion()
 	{
-		return this.mod.version();
+		return this.mod.getVersion();
 	}
 	
-	public final Mod mod;
+	public final ModContainer mod;
 	public CreativeTabs microblocks;
-	public BlockMultipart multipart;
+	public BlockMultiblock multipart;
 	public BlockLayered slab;
 	public BlockLayered panel;
 	public BlockLayered cover;

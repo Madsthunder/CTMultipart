@@ -1,4 +1,4 @@
-package continuum.api.multipart.implementations;
+package continuum.api.microblock;
 
 import continuum.essentials.block.ICuboid;
 import net.minecraft.block.state.IBlockState;

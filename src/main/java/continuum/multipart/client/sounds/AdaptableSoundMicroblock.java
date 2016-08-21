@@ -1,11 +1,10 @@
 package continuum.multipart.client.sounds;
 
-import continuum.api.multipart.CTMultipart_API;
-import continuum.essentials.mod.CTMod;
+import continuum.api.microblock.TileEntityMicroblock;
+import continuum.api.multipart.MultipartAPI;
 import continuum.essentials.sounds.AdaptableSoundType;
 import continuum.essentials.sounds.IAdaptableSound;
 import continuum.multipart.multiparts.MultipartMicroblock;
-import continuum.multipart.tileentity.TileEntityMicroblock;
 import net.minecraft.block.SoundType;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -30,7 +29,7 @@ public class AdaptableSoundMicroblock extends SoundEvent implements IAdaptableSo
 	public ISound getSound(ISound fallback, World world, BlockPos pos)
 	{
 		TileEntity entity = world.getTileEntity(pos);
-		SoundType sound = (entity instanceof TileEntityMicroblock ? ((TileEntityMicroblock)entity).getEntry() : MultipartMicroblock.currentEntry == null ? CTMultipart_API.microblockTextureRegistry.getDefaultValue() : MultipartMicroblock.currentEntry).getSound();
+		SoundType sound = (entity instanceof TileEntityMicroblock ? ((TileEntityMicroblock)entity).getEntry() : MultipartMicroblock.currentEntry == null ? MultipartAPI.microblockTextureRegistry.getDefaultValue() : MultipartMicroblock.currentEntry).getSound();
 		return new PositionedSoundRecord(sound.getBreakSound(), fallback.getCategory(), (sound.getVolume() + 1) / 2, sound.getPitch() * 0.8F, pos);
 	}
 	

@@ -1,9 +1,7 @@
-package continuum.api.multipart.event;
+package continuum.api.multipart;
 
 import java.util.List;
 
-import continuum.api.multipart.TileEntityMultiblock;
-import continuum.api.multipart.implementations.Multipart;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

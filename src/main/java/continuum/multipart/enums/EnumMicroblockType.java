@@ -4,10 +4,10 @@ import java.util.HashMap;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import continuum.api.multipart.CTMultipart_API;
-import continuum.api.multipart.implementations.IMicroblock;
-import continuum.api.multipart.implementations.IMicroblockType;
-import continuum.api.multipart.implementations.Multipart;
+import continuum.api.microblock.IMicroblock;
+import continuum.api.microblock.IMicroblockType;
+import continuum.api.multipart.Multipart;
+import continuum.api.multipart.MultipartAPI;
 import continuum.essentials.block.ICuboid;
 import continuum.essentials.mod.CTMod;
 import continuum.multipart.enums.EnumMicroblockType.EnumPlaceType;
@@ -83,7 +83,7 @@ public enum EnumMicroblockType implements IMicroblockType<EnumPlaceType>
 	
 	public Multipart getMultipart()
 	{
-		return CTMultipart_API.getMultipart(new ResourceLocation("ctmultipart", this.getName()));
+		return MultipartAPI.apiActive() ? MultipartAPI.getMultipartRegistry().getObject(new ResourceLocation("ctmultipart", this.getName())) : null;
 	}
 	
 	@Override

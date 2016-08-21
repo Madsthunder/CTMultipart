@@ -1,20 +1,19 @@
-package continuum.multipart.tileentity;
+package continuum.api.microblock;
 
 import java.util.HashMap;
 
-import continuum.api.multipart.CTMultipart_API;
-import continuum.api.multipart.registry.MicroblockTextureEntry;
-import continuum.essentials.tileentity.CTTileEntity;
+import continuum.api.multipart.MicroblockTextureEntry;
+import continuum.api.multipart.MultipartAPI;
+import continuum.essentials.tileentity.TileEntitySyncable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityMicroblock extends CTTileEntity
+public class TileEntityMicroblock extends TileEntitySyncable
 {
-	private MicroblockTextureEntry entry = CTMultipart_API.microblockTextureRegistry.getDefaultValue();
+	private MicroblockTextureEntry entry = MultipartAPI.microblockTextureRegistry.getDefaultValue();
 	public static final HashMap<BlockPos, MicroblockTextureEntry> cache = new HashMap<BlockPos, MicroblockTextureEntry>();
 	
 	public TileEntityMicroblock()
@@ -38,12 +37,12 @@ public class TileEntityMicroblock extends CTTileEntity
 	@Override
 	public void readItemsFromNBT(NBTTagCompound compound)
 	{
-		this.setEntry(CTMultipart_API.microblockTextureRegistry.getObject(new ResourceLocation(compound.getString("entry"))));
+		this.setEntry(MultipartAPI.microblockTextureRegistry.getObject(new ResourceLocation(compound.getString("entry"))));
 	}
 	
 	public void onDataPacket(NetworkManager manager, SPacketUpdateTileEntity packet)
 	{
-		if(this.shouldSyncPackets)
+		if(this.shouldSyncTags)
 		{
 			super.onDataPacket(manager, packet);
 			if(this.worldObj != null && this.worldObj.isRemote && this.pos != null) this.worldObj.markBlockRangeForRenderUpdate(this.pos, this.pos);

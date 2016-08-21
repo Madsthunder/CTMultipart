@@ -3,8 +3,6 @@ package continuum.api.multipart;
 import java.util.List;
 import java.util.UUID;
 
-import continuum.api.multipart.implementations.Multipart;
-import continuum.api.multipart.state.MultiblockStateImpl;
 import continuum.essentials.block.ICuboid;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -33,7 +31,7 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 	private final UUID uuid;
 	private final TileEntityMultiblock source;
 	private final Multipart multipart;
-	private Integer meta;
+	private int meta;
 	private TileEntity entity;
 	
 	public MultipartInfo(UUID uuid, TileEntityMultiblock multiblock, Multipart multipart, IBlockState state)
@@ -41,7 +39,7 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 		this(uuid, multiblock, multipart, state.getBlock().getMetaFromState(state));
 	}
 	
-	public MultipartInfo(UUID uuid, TileEntityMultiblock multiblock, Multipart multipart, Integer meta)
+	public MultipartInfo(UUID uuid, TileEntityMultiblock multiblock, Multipart multipart, int meta)
 	{
 		this(uuid, multiblock, multipart, meta, null);
 	}
@@ -51,7 +49,7 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 		this(uuid, multiblock, multipart, state.getBlock().getMetaFromState(state), entity);
 	}
 	
-	public MultipartInfo(UUID uuid, TileEntityMultiblock sourceTile, Multipart multipart, Integer meta, TileEntity entity)
+	public MultipartInfo(UUID uuid, TileEntityMultiblock sourceTile, Multipart multipart, int meta, TileEntity entity)
 	{
 		this.uuid = uuid;
 		this.source = sourceTile;
@@ -75,7 +73,7 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 		return this.getActualState(false);
 	}
 	
-	public IBlockState getActualState(Boolean addImpl)
+	public IBlockState getActualState(boolean addImpl)
 	{
 		IBlockState state = this.getMultipart().getMultipartState(this);
 		if(addImpl && state instanceof StateImplementation) state = new MultiblockStateImpl((StateImplementation)state, this.source, this);
@@ -87,7 +85,7 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 		return this.getExtendedState(false);
 	}
 	
-	public IBlockState getExtendedState(Boolean addImpl)
+	public IBlockState getExtendedState(boolean addImpl)
 	{
 		IBlockState state = this.getMultipart().getMultipartRenderState(this);
 		if(addImpl && state instanceof StateImplementation) state = new MultiblockStateImpl((StateImplementation)state, this.source, this);
@@ -99,7 +97,7 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 		this.getMultipart().onMultipartPlaced(this, entity, stack);
 	}
 	
-	public Boolean onActivated(EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onActivated(EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		return this.getMultipart().onMultipartActivated(this, player, hand, stack, side, hitX, hitY, hitZ);
 	}
@@ -114,12 +112,12 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 		this.getMultipart().breakMultipart(this, player);
 	}
 	
-	public Integer getLightValue()
+	public int getLightValue()
 	{
 		return this.getMultipart().getLightValue(this);
 	}
 	
-	public Boolean isSideSolid(EnumFacing side)
+	public boolean isSideSolid(EnumFacing side)
 	{
 		return this.getMultipart().isSideSolid(this, side);
 	}
@@ -134,12 +132,12 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 		return this.getMultipart().getMaterial(this);
 	}
 	
-	public Float getHardness()
+	public float getHardness()
 	{
 		return this.getMultipart().getHardness(this);
 	}
 	
-	public Integer getHarvestLevel()
+	public int getHarvestLevel()
 	{
 		return this.getMultipart().getHarvestLevel(this);
 	}
@@ -149,19 +147,19 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 		return this.getMultipart().getTool(this);
 	}
 	
-	public Boolean addLandingEffects(EntityLivingBase entity, Integer particles)
+	public boolean addLandingEffects(EntityLivingBase entity, int particles)
 	{
 		return this.getMultipart().addLandingEffects(this, entity, particles);
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public Boolean addHitEffects(RayTraceResult result, ParticleManager manager)
+	public boolean addHitEffects(RayTraceResult result, ParticleManager manager)
 	{
 		return this.getMultipart().addHitEffects(this, result, manager);
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public Boolean addDestroyEffects(ParticleManager manager)
+	public boolean addDestroyEffects(ParticleManager manager)
 	{
 		return this.getMultipart().addDestroyEffects(this, manager);
 	}
@@ -206,12 +204,12 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 		return this.getMultipart().getBlock();
 	}
 	
-	public Integer getMetadata()
+	public int getMetadata()
 	{
 		return this.meta;
 	}
 	
-	public Integer setMetadata(Integer meta)
+	public int setMetadata(int meta)
 	{
 		this.meta = meta;
 		return meta;
@@ -233,7 +231,7 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 		return this.entity;
 	}
 	
-	public Boolean hasTileEntity()
+	public boolean hasTileEntity()
 	{
 		return this.getTileEntity() != null;
 	}
@@ -247,7 +245,7 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 			compound.setString("multipart", this.getMultipart().getRegistryName().toString());
 			compound.setUniqueId("uuid", this.getUUID());
 			compound.setTag("nbt", this.hasTileEntity() ? this.getTileEntity().writeToNBT(new NBTTagCompound()) : new NBTTagCompound());
-			compound.setByte("metadata", this.getMetadata().byteValue());
+			compound.setByte("metadata", (byte)this.getMetadata());
 			return compound;
 		}
 		catch(Exception e)
@@ -259,13 +257,13 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 	
 	public static MultipartInfo readFromNBT(TileEntityMultiblock source, NBTTagCompound compound)
 	{
-		if(compound.hasUniqueId("uuid"))
+		if(MultipartAPI.apiActive() && compound.hasUniqueId("uuid"))
 		{
 			UUID uuid = compound.getUniqueId("uuid");
-			Multipart multipart = CTMultipart_API.getMultipart(new ResourceLocation(compound.getString("multipart")));
-			if(multipart != CTMultipart_API.getDefaultMultipart())
+			Multipart multipart = MultipartAPI.getMultipartRegistry().getObject(new ResourceLocation(compound.getString("multipart")));
+			if(multipart != MultipartAPI.getMultipartRegistry().getDefaultValue())
 			{
-				Integer meta = compound.getInteger("metadata");
+				int meta = compound.getInteger("metadata");
 				NBTTagCompound nbt = compound.getCompoundTag("nbt");
 				if(nbt.hasKey("id"))
 					return new MultipartInfo(uuid, source, multipart, meta, TileEntity.func_190200_a(source.getWorld(), nbt));

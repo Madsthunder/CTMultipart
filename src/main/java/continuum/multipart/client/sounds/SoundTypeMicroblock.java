@@ -1,8 +1,5 @@
 package continuum.multipart.client.sounds;
 
-import continuum.essentials.mod.CTMod;
-import continuum.multipart.blocks.BlockMicroblockBase;
-import continuum.multipart.mod.Multipart_EH;
 import continuum.multipart.mod.Multipart_OH;
 import continuum.multipart.multiparts.MultipartMicroblock;
 import net.minecraft.block.SoundType;

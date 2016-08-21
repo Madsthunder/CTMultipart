@@ -13,11 +13,11 @@ import org.lwjgl.util.vector.Vector3f;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
-import continuum.api.multipart.CTMultipart_API;
-import continuum.api.multipart.implementations.IMicroblock;
-import continuum.api.multipart.registry.MicroblockTextureEntry;
-import continuum.api.multipart.state.MicroblockStateImpl;
-import continuum.api.multipart.state.MultiblockStateImpl;
+import continuum.api.microblock.IMicroblock;
+import continuum.api.microblock.MicroblockStateImpl;
+import continuum.api.multipart.MicroblockTextureEntry;
+import continuum.api.multipart.MultiblockStateImpl;
+import continuum.api.multipart.MultipartAPI;
 import continuum.essentials.mod.CTMod;
 import continuum.multipart.enums.EnumMicroblockType;
 import continuum.multipart.enums.EnumMicroblockType.EnumPlaceType;
@@ -74,7 +74,7 @@ public class ModelMicroblock implements IModel
 	public Collection<ResourceLocation> getTextures()
 	{
 		ArrayList<ResourceLocation> textures = Lists.newArrayList();
-		for(MicroblockTextureEntry entry : CTMultipart_API.microblockTextureRegistry.getValues())
+		for(MicroblockTextureEntry entry : MultipartAPI.microblockTextureRegistry.getValues())
 		{
 			textures.add(entry.getParticleLocation());
 			for(EnumFacing direction : EnumFacing.values())
@@ -136,7 +136,7 @@ public class ModelMicroblock implements IModel
 			this.function = baseModel.function;
 			this.iol = baseModel.iol;
 			IBlockState state = ((ItemMicroblock)stack.getItem()).getRenderState();
-			this.itemData = Pair.of((IMicroblock)state.getBlock(), this.createQuads((IMicroblock)state.getBlock(), state, null, CTMultipart_API.microblockTextureRegistry.getObject(new ResourceLocation(stack.getTagCompound().getCompoundTag("BlockEntityTag").getString("entry")))));
+			this.itemData = Pair.of((IMicroblock)state.getBlock(), this.createQuads((IMicroblock)state.getBlock(), state, null, MultipartAPI.microblockTextureRegistry.getObject(new ResourceLocation(stack.getTagCompound().getCompoundTag("BlockEntityTag").getString("entry")))));
 		}
 		
 		@Override

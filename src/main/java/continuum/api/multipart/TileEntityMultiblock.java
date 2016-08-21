@@ -7,11 +7,9 @@ import java.util.UUID;
 
 import com.google.common.collect.Lists;
 
-import continuum.api.multipart.boundingboxes.MultipartAABB;
-import continuum.api.multipart.event.MultipartEvent.AABBExceptionsEvent;
-import continuum.api.multipart.implementations.Multipart;
-import continuum.essentials.helpers.NBTHelper;
-import continuum.essentials.tileentity.CTTileEntity;
+import continuum.api.multipart.MultipartEvent.AABBExceptionsEvent;
+import continuum.essentials.hooks.NBTHooks;
+import continuum.essentials.tileentity.TileEntitySyncable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,7 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
-public class TileEntityMultiblock extends CTTileEntity implements Iterable<MultipartInfo>
+public class TileEntityMultiblock extends TileEntitySyncable implements Iterable<MultipartInfo>
 {
 	private final List<MultipartInfo> info = Lists.newArrayList();
 	
@@ -40,25 +38,26 @@ public class TileEntityMultiblock extends CTTileEntity implements Iterable<Multi
 			if(info.hasTileEntity()) info.getTileEntity().setWorldObj(world);
 	}
 	
-	public Boolean boxIntersectsMultipart(Multipart exclude, AxisAlignedBB box, Boolean useExclude, Boolean useExceptions)
+	public boolean boxIntersectsMultipart(Multipart exclude, AxisAlignedBB box, boolean useExclude, boolean useExceptions)
 	{
+		System.out.println("bim");
 		if(useExceptions)
 		{
-			AABBExceptionsEvent event = new AABBExceptionsEvent(this, new ArrayList<AxisAlignedBB>(), exclude, box);
+			AABBExceptionsEvent event = new AABBExceptionsEvent(this, Lists.newArrayList(), exclude, box);
 			MinecraftForge.EVENT_BUS.post(event);
 			return this.boxIntersectsMultipart(exclude, box, useExclude, event.allowed);
 		}
 		for(Multipart multipart : this.getStoredMultiparts())
 			if(!useExclude || multipart != exclude) for(AxisAlignedBB aabb : this.getCollisionBoxes(multipart))
-				if((aabb instanceof MultipartAABB ? ((MultipartAABB)aabb).permanent : true) && box.intersectsWith(aabb)) return true;
+				if((aabb instanceof PermanentAABB ? ((PermanentAABB)aabb).permanent : true) && box.intersectsWith(aabb)) return true;
 		return false;
 	}
 	
-	public Boolean boxIntersectsMultipart(Multipart exclude, AxisAlignedBB box, Boolean useExclude, List<AxisAlignedBB> allowed)
+	public boolean boxIntersectsMultipart(Multipart exclude, AxisAlignedBB box, boolean useExclude, List<AxisAlignedBB> allowed)
 	{
 		for(Multipart multipart : this.getStoredMultiparts())
 			if(!useExclude || multipart != exclude) for(AxisAlignedBB aabb : this.getCollisionBoxes(multipart))
-				if(!allowed.contains(aabb) && (aabb instanceof MultipartAABB ? ((MultipartAABB)aabb).permanent : true) && box.intersectsWith(aabb)) return true;
+				if(!allowed.contains(aabb) && (aabb instanceof PermanentAABB ? ((PermanentAABB)aabb).permanent : true) && box.intersectsWith(aabb)) return true;
 		return false;
 	}
 	
@@ -104,13 +103,13 @@ public class TileEntityMultiblock extends CTTileEntity implements Iterable<Multi
 	@Override
 	public NBTTagCompound writeItemsToNBT()
 	{
-		return NBTHelper.writeList(NBTTagCompound.class, "multiparts", this);
+		return NBTHooks.writeList(NBTTagCompound.class, "multiparts", this);
 	}
 	
 	@Override
 	public void readItemsFromNBT(NBTTagCompound compound)
 	{
-		for(NBTTagCompound compound1 : NBTHelper.increment(NBTTagCompound.class, compound.getTagList("multiparts", 10)))
+		for(NBTTagCompound compound1 : NBTHooks.increment(NBTTagCompound.class, compound.getTagList("multiparts", 10)))
 			this.info.add(MultipartInfo.readFromNBT(this, compound1));
 	}
 	
@@ -191,7 +190,7 @@ public class TileEntityMultiblock extends CTTileEntity implements Iterable<Multi
 	@Override
 	public void onDataPacket(NetworkManager manager, SPacketUpdateTileEntity packet)
 	{
-		if(this.shouldSyncPackets) this.info.clear();
+		if(this.shouldSyncTags) this.info.clear();
 		super.onDataPacket(manager, packet);
 	}
 	

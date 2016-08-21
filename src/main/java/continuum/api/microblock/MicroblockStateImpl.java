@@ -1,9 +1,6 @@
-package continuum.api.multipart.state;
+package continuum.api.microblock;
 
-import continuum.api.multipart.registry.MicroblockTextureEntry;
-import continuum.essentials.mod.CTMod;
-import continuum.multipart.mod.Multipart_EH;
-import continuum.multipart.mod.Multipart_OH;
+import continuum.api.multipart.MicroblockTextureEntry;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer.StateImplementation;
 import net.minecraft.block.state.IBlockState;

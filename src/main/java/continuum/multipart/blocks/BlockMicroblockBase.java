@@ -4,17 +4,15 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import continuum.api.multipart.implementations.IMicroblock;
-import continuum.api.multipart.implementations.IMicroblockType;
-import continuum.api.multipart.implementations.Multipart;
-import continuum.api.multipart.registry.MicroblockTextureEntry;
-import continuum.api.multipart.state.MicroblockStateImpl;
-import continuum.essentials.mod.CTMod;
+import continuum.api.microblock.IMicroblock;
+import continuum.api.microblock.IMicroblockType;
+import continuum.api.microblock.MicroblockStateImpl;
+import continuum.api.microblock.TileEntityMicroblock;
+import continuum.api.multipart.MicroblockTextureEntry;
+import continuum.api.multipart.Multipart;
 import continuum.multipart.client.sounds.SoundTypeMicroblock;
-import continuum.multipart.mod.Multipart_EH;
 import continuum.multipart.mod.Multipart_OH;
 import continuum.multipart.multiparts.MultipartMicroblock;
-import continuum.multipart.tileentity.TileEntityMicroblock;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer.StateImplementation;

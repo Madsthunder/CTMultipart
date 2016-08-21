@@ -5,21 +5,19 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import continuum.api.microblock.IMicroblock;
+import continuum.api.microblock.IMicroblockType;
+import continuum.api.microblock.MicroblockStateImpl;
+import continuum.api.microblock.TileEntityMicroblock;
+import continuum.api.multipart.MicroblockTextureEntry;
+import continuum.api.multipart.MultiblockStateImpl;
+import continuum.api.multipart.Multipart;
 import continuum.api.multipart.MultipartInfo;
 import continuum.api.multipart.TileEntityMultiblock;
-import continuum.api.multipart.implementations.IMicroblock;
-import continuum.api.multipart.implementations.IMicroblockType;
-import continuum.api.multipart.implementations.Multipart;
-import continuum.api.multipart.registry.MicroblockTextureEntry;
-import continuum.api.multipart.state.MicroblockStateImpl;
-import continuum.api.multipart.state.MultiblockStateImpl;
 import continuum.essentials.block.ICuboid;
-import continuum.essentials.mod.CTMod;
 import continuum.multipart.blocks.BlockAxised;
 import continuum.multipart.items.ItemMicroblock;
 import continuum.multipart.mod.Multipart_EH;
-import continuum.multipart.mod.Multipart_OH;
-import continuum.multipart.tileentity.TileEntityMicroblock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -39,6 +37,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.BlockSnapshot;
 
+
 public class MultipartMicroblock<MB> extends Multipart
 {
 	public static MicroblockTextureEntry currentEntry;
@@ -54,6 +53,7 @@ public class MultipartMicroblock<MB> extends Multipart
 	@Override
 	public boolean canPlaceIn(IBlockAccess access, BlockPos pos, IBlockState state, TileEntityMultiblock multipart, RayTraceResult result)
 	{
+		System.out.println(multipart);
 		return !multipart.boxIntersectsMultipart(this, this.getCuboidFromState(state).getSelectableCuboid(), false, true);
 	}
 	
@@ -141,11 +141,6 @@ public class MultipartMicroblock<MB> extends Multipart
 	@Override
 	public SoundType getSoundType(MultipartInfo info)
 	{
-		if(info.getTileEntity() instanceof TileEntityMicroblock)
-		{
-			new Throwable().printStackTrace();
-			return (currentEntry = ((TileEntityMicroblock)info.getTileEntity()).getEntry()).getSound();
-		}
 		return this.getBlock().getSoundType();
 	}
 	

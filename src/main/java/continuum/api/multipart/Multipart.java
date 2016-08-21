@@ -1,11 +1,11 @@
-package continuum.api.multipart.implementations;
+package continuum.api.multipart;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Lists;
 
-import continuum.api.multipart.MultipartInfo;
-import continuum.api.multipart.TileEntityMultiblock;
 import continuum.essentials.block.ICuboid;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -125,7 +125,6 @@ public abstract class Multipart implements IForgeRegistryEntry<Multipart>
 	@Override
 	public final Multipart setRegistryName(ResourceLocation name)
 	{
-		//NOOP
 		return this;
 	}
 	
@@ -143,7 +142,7 @@ public abstract class Multipart implements IForgeRegistryEntry<Multipart>
 	
 	public abstract Block getBlock();
 	
-	public SoundType getSoundType(MultipartInfo info)
+	public SoundType getSoundType(@Nullable MultipartInfo info)
 	{
 		return info.getBlock().getSoundType();
 	}

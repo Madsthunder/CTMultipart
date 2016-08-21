@@ -7,12 +7,10 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import com.google.common.collect.Lists;
 
+import continuum.api.multipart.MicroblockTextureEntry;
+import continuum.api.multipart.MultiblockStateImpl;
 import continuum.api.multipart.MultipartInfo;
-import continuum.api.multipart.registry.MicroblockTextureEntry;
-import continuum.api.multipart.state.MultiblockStateImpl;
-import continuum.essentials.mod.CTMod;
 import continuum.multipart.enums.EnumMicroblockType;
-import continuum.multipart.mod.Multipart_EH;
 import continuum.multipart.mod.Multipart_OH;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;

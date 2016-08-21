@@ -3,10 +3,8 @@ package continuum.multipart.client.state;
 import java.util.HashMap;
 import java.util.Map;
 
-import continuum.api.multipart.CTMultipart_API;
-import continuum.api.multipart.registry.MicroblockTextureEntry;
-import continuum.essentials.mod.CTMod;
-import continuum.multipart.mod.Multipart_EH;
+import continuum.api.multipart.MicroblockTextureEntry;
+import continuum.api.multipart.MultipartAPI;
 import continuum.multipart.mod.Multipart_OH;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -28,7 +26,7 @@ public class StateMapperMicroblock implements IStateMapper, ItemMeshDefinition
 	public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block block)
 	{
 		for(IBlockState state : block.getBlockState().getValidStates())
-			for(MicroblockTextureEntry entry : CTMultipart_API.microblockTextureRegistry)
+			for(MicroblockTextureEntry entry : MultipartAPI.microblockTextureRegistry)
 				this.locations.put(state, new ModelResourceLocation(this.objectHolder.getModid() + ":microblock", "normal"));
 		return this.locations;
 	}

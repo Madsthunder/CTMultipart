@@ -5,10 +5,10 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import continuum.api.multipart.CollidableAABB;
+import continuum.api.multipart.Multipart;
 import continuum.api.multipart.MultipartInfo;
 import continuum.api.multipart.TileEntityMultiblock;
-import continuum.api.multipart.boundingboxes.CollidableAABB;
-import continuum.api.multipart.implementations.Multipart;
 import continuum.essentials.block.ICuboid;
 import continuum.essentials.block.StaticCuboid;
 import net.minecraft.block.Block;
