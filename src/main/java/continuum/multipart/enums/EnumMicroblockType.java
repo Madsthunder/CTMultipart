@@ -7,7 +7,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import continuum.api.microblock.IMicroblock;
 import continuum.api.microblock.IMicroblockType;
 import continuum.api.multipart.Multipart;
-import continuum.api.multipart.MultipartAPI;
+import continuum.api.multipart.MultipartApi;
 import continuum.essentials.block.ICuboid;
 import continuum.essentials.mod.CTMod;
 import continuum.multipart.enums.EnumMicroblockType.EnumPlaceType;
@@ -83,11 +83,11 @@ public enum EnumMicroblockType implements IMicroblockType<EnumPlaceType>
 	
 	public Multipart getMultipart()
 	{
-		return MultipartAPI.apiActive() ? MultipartAPI.getMultipartRegistry().getObject(new ResourceLocation("ctmultipart", this.getName())) : null;
+		return MultipartApi.apiActive() ? MultipartApi.getMultipartRegistry().getObject(new ResourceLocation("ctmultipart", this.getName())) : null;
 	}
 	
 	@Override
-	public Boolean getRender(Integer index1, Integer index2, AxisAlignedBB subject, IBlockState state)
+	public boolean getRender(int index1, int index2, AxisAlignedBB subject, IBlockState state)
 	{
 		if(state.getBlock() instanceof IMicroblock)
 		{

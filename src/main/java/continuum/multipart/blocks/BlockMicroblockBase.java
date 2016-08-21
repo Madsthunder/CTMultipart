@@ -8,16 +8,17 @@ import continuum.api.microblock.IMicroblock;
 import continuum.api.microblock.IMicroblockType;
 import continuum.api.microblock.MicroblockStateImpl;
 import continuum.api.microblock.TileEntityMicroblock;
-import continuum.api.multipart.MicroblockTextureEntry;
+import continuum.api.microblocktexture.MicroblockTextureEntry;
 import continuum.api.multipart.Multipart;
-import continuum.multipart.client.sounds.SoundTypeMicroblock;
 import continuum.multipart.mod.Multipart_OH;
 import continuum.multipart.multiparts.MultipartMicroblock;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer.StateImplementation;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -45,7 +46,6 @@ public abstract class BlockMicroblockBase<MT extends IMicroblockType> extends Bl
 	public BlockMicroblockBase(Multipart_OH objectHolder, MT type)
 	{
 		super(Material.ROCK);
-		this.setSoundType(new SoundTypeMicroblock(objectHolder));
 		this.multipart = new MultipartMicroblock(this, this);
 		this.type = type;
 		this.setRegistryName("microblock" + this.type.getName());
@@ -59,6 +59,15 @@ public abstract class BlockMicroblockBase<MT extends IMicroblockType> extends Bl
 			return super.getMaterial(state);
 		else
 			return this.tempMaterial;
+	}
+	
+	@Override
+	public SoundType getSoundType(IBlockState state, World world, BlockPos pos, Entity entity)
+	{
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile instanceof TileEntityMicroblock)
+			return ((TileEntityMicroblock)tile).getEntry().getSound();
+		return super.getSoundType(state, world, pos, entity);
 	}
 	
 	@Override

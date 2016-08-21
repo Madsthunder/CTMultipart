@@ -12,7 +12,7 @@ public interface IMicroblockType<V>
 	
 	public ICuboid[] getCuboids();
 	
-	public Boolean getRender(Integer index1, Integer index2, AxisAlignedBB subject, IBlockState state);
+	public boolean getRender(int index1, int index2, AxisAlignedBB subject, IBlockState state);
 	
 	public AxisAlignedBB getAABBFromFacings(EnumFacing... facings);
 	

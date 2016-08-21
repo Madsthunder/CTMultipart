@@ -3,7 +3,7 @@ package continuum.multipart.mod;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
-import continuum.api.multipart.MultipartAPI;
+import continuum.api.multipart.MultipartApi;
 import continuum.essentials.mod.CTMod;
 import net.minecraftforge.fml.common.DummyModContainer;
 import net.minecraftforge.fml.common.LoadController;
@@ -24,7 +24,7 @@ public class Multipart_Mod extends DummyModContainer
 		metadata.modId = "ctmultipart";
 		metadata.name = "Continuum: Multipart";
 		metadata.version = "0.1.0";
-		System.out.println(MultipartAPI.apiActive());
+		System.out.println("multiparts=" + MultipartApi.apiActive());
 	}
 	
     @Override

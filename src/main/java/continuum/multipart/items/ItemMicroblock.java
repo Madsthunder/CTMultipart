@@ -3,13 +3,14 @@ package continuum.multipart.items;
 import java.util.List;
 
 import continuum.api.microblock.IMicroblock;
-import continuum.api.multipart.MicroblockTextureEntry;
-import continuum.api.multipart.MultipartAPI;
+import continuum.api.microblocktexture.MicroblockTextureApi;
+import continuum.api.microblocktexture.MicroblockTextureEntry;
 import continuum.essentials.mod.CTMod;
 import continuum.multipart.blocks.BlockLayered;
 import continuum.multipart.enums.EnumMicroblockType;
 import continuum.multipart.mod.Multipart_EH;
 import continuum.multipart.mod.Multipart_OH;
+import continuum.multipart.plugins.MultipartAPI_Variables;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -35,9 +36,9 @@ public class ItemMicroblock extends ItemBlock
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List list)
 	{
-		MicroblockTextureEntry defaultEntry = MultipartAPI.microblockTextureRegistry.getDefaultValue();
-		for(MicroblockTextureEntry entry : MultipartAPI.microblockTextureRegistry)
-			if(entry != defaultEntry)
+		if(MicroblockTextureApi.apiActive())
+		for(MicroblockTextureEntry entry : MicroblockTextureApi.getMicroblockTextureRegistry())
+			if(entry != MicroblockTextureEntry.defaultTexture)
 			{
 				ItemStack stack = new ItemStack(item);
 				stack.setTagCompound(MicroblockTextureEntry.writeToNBT(entry));
@@ -49,7 +50,7 @@ public class ItemMicroblock extends ItemBlock
 	public String getItemStackDisplayName(ItemStack stack)
 	{
 		MicroblockTextureEntry entry = MicroblockTextureEntry.readFromNBT(stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound());
-		return entry == MultipartAPI.microblockTextureRegistry.getDefaultValue() ? "Default" : entry.getDisplayName() + " " + I18n.translateToLocal("microblock." + ((IMicroblock)this.block).getType().getName().toLowerCase());
+		return entry == MicroblockTextureEntry.defaultTexture ? "Default" : entry.getDisplayName() + " " + I18n.translateToLocal("microblock." + ((IMicroblock)this.block).getType().getName().toLowerCase());
 	}
 	
 	public IBlockState getRenderState()

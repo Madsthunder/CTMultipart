@@ -8,6 +8,7 @@ import continuum.core.plugins.transformers.ApiPlugin;
 import net.minecraftforge.fml.relauncher.IFMLCallHook;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
+@IFMLLoadingPlugin.SortingIndex(1000)
 @IFMLLoadingPlugin.Name("CTMultipart")
 @IFMLLoadingPlugin.MCVersion("1.10.2")
 @IFMLLoadingPlugin.TransformerExclusions({ "org", "com", "joptsimple", "oshi" })
@@ -46,8 +47,9 @@ public class Multipart_Plugins implements IFMLLoadingPlugin, IFMLCallHook
 	@Override
 	public Void call() throws Exception
 	{
-		ApiPlugin.putAPIPackage("continuum.api.multipart", Sets.newHashSet("continuum.multipart.plugins.MultipartAPI_Methods"));
-		ApiPlugin.putAPIClass("MultipartAPI", "continuum.api.multipart.MultipartAPI");
+		ApiPlugin.putAPIPackages(Sets.newHashSet("continuum.api.multipart", "continuum.api.microblocktexture"), Sets.newHashSet("continuum.multipart.plugins.MultipartAPI_Methods"));
+		ApiPlugin.putAPIClass("MultipartApi", "continuum.api.multipart.MultipartApi");
+		ApiPlugin.putAPIClass("MicroblockTextureApi", "continuum.api.microblocktexture.MicroblockTextureApi");
 		return null;
 	}
 }

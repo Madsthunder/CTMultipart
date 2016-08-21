@@ -8,12 +8,12 @@ import com.google.common.collect.Lists;
 
 import continuum.api.multipart.CollidableAABB;
 import continuum.api.multipart.MultiblockStateImpl;
-import continuum.api.multipart.MultipartAPI;
 import continuum.api.multipart.MultipartInfo;
 import continuum.api.multipart.TileEntityMultiblock;
 import continuum.essentials.block.CuboidSelector;
 import continuum.essentials.block.IBlockBoundable;
 import continuum.essentials.block.ICuboid;
+import continuum.essentials.hooks.BlockHooks;
 import continuum.essentials.hooks.ObjectHooks;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -29,11 +29,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -59,14 +56,20 @@ public class BlockMultiblock extends Block implements IBlockBoundable
 	@Override
 	public SoundType getSoundType(IBlockState state, World world, BlockPos pos, Entity entity)
 	{
-		RayTraceResult result = entity instanceof EntityLivingBase ? ForgeHooks.rayTraceEyes((EntityLivingBase)entity, 16D) : null;
-		SoundType resultSound = result != null && result.getBlockPos().equals(pos) && result.hitInfo instanceof MultipartInfo ? ((MultipartInfo)result.hitInfo).getSoundType() : SoundType.STONE;
-		Vec3d vec = new Vec3d(entity.posX, entity.posY, entity.posZ);
-		SoundType blockSound = (result = world.rayTraceBlocks(vec, vec.subtract(0, 3, 0))) != null && result.getBlockPos().equals(pos) && result.hitInfo instanceof MultipartInfo ? ((MultipartInfo)result.hitInfo).getSoundType() : SoundType.STONE;
-		ItemStack stack = entity instanceof EntityLivingBase ? ((EntityLivingBase)entity).getActiveItemStack() : null;
-		Block block = Block.getBlockFromItem(stack == null ? null : stack.getItem());
-		SoundEvent placeEvent = MultipartAPI.getMultipartRegistry().getObject(block.getRegistryName()).getSoundType(null).getPlaceSound();
-		return new SoundType(1F, 1F, resultSound.getBreakSound(), blockSound.getStepSound(), placeEvent, resultSound.getHitSound(), blockSound.getFallSound());
+		RayTraceResult result = null;//entity instanceof EntityLivingBase ? ForgeHooks.rayTraceEyes((EntityLivingBase)entity, 5D) : null;
+		try
+		{
+			result = Minecraft.getMinecraft().objectMouseOver;
+			result = result.getBlockPos().equals(pos) ? result : null;
+		}
+		catch(Exception e)
+		{
+			
+		}
+		SoundType resultSound = result != null && result.hitInfo instanceof MultipartInfo ? ((MultipartInfo)result.hitInfo).getSoundType() : SoundType.STONE;
+		Vec3d vec = entity == null ? null : new Vec3d(entity.posX, entity.posY, entity.posZ);
+		SoundType blockSound = vec != null && (result = world.rayTraceBlocks(vec, vec.subtract(0, 3, 0))) != null && result.getBlockPos().equals(pos) && result.hitInfo instanceof MultipartInfo ? ((MultipartInfo)result.hitInfo).getSoundType() : SoundType.STONE;
+		return new SoundType(result == null ? blockSound.getPitch() : resultSound.getPitch(), result == null ? blockSound.getPitch() : resultSound.getPitch(), resultSound.getBreakSound(), blockSound.getStepSound(), super.getSoundType().getPlaceSound(), resultSound.getHitSound(), blockSound.getFallSound());
 	}
 	
 	@Override
@@ -88,8 +91,8 @@ public class BlockMultiblock extends Block implements IBlockBoundable
 		if(result != null && result.hitInfo instanceof MultipartInfo)
 		{
 			MultipartInfo info = (MultipartInfo)result.hitInfo;
-			if(!info.addLandingEffects(entity, particles))
-				((WorldServer)world).spawnParticle(EnumParticleTypes.BLOCK_DUST, entity.posX, entity.posY, entity.posZ, particles, 0, 0, 0, 0.15000000596046448D, Block.getStateId(info.getActualState()));
+			if(!info.addLandingEffects(world, entity, particles))
+				BlockHooks.createLandingEffects(world, new Vec3d(entity.posX, entity.posY, entity.posZ), info.getActualState(), particles);
 			return true;
 		}
 		return super.addLandingEffects(state, world, pos, uselessState, entity, particles);
@@ -103,39 +106,7 @@ public class BlockMultiblock extends Block implements IBlockBoundable
 		{
 			MultipartInfo info = (MultipartInfo)result.hitInfo;
 			if(!info.addHitEffects(result, manager))
-			{
-				BlockPos pos = result.getBlockPos();
-				EnumFacing direction = result.sideHit;
-				Random random = new Random();
-				AxisAlignedBB aabb = info.getSelectableBoxes().get(0).getSelectableCuboid();
-				double d0 = .20000000298023224;
-				double d1 = .10000000149011612;
-				double x = pos.getX() + random.nextDouble() * (aabb.maxX - aabb.minX - d0) + d1 + aabb.minX;
-				double y = pos.getY() + random.nextDouble() * (aabb.maxY - aabb.minY - d0) + d1 + aabb.minY;
-				double z = pos.getZ() + random.nextDouble() * (aabb.maxZ - aabb.minZ - d0) + d1 + aabb.minZ;
-				switch(direction)
-				{
-					case DOWN :
-						y = pos.getY() + aabb.minY - d1;
-						break;
-					case UP :
-						y = pos.getY() + aabb.maxY + d1;
-						break;
-					case NORTH :
-						z = pos.getZ() + aabb.minZ - d1;
-						break;
-					case SOUTH :
-						z = pos.getZ() + aabb.maxZ + d1;
-						break;
-					case WEST :
-						x = pos.getX() + aabb.minX - d1;
-						break;
-					case EAST :
-						x = pos.getX() + aabb.maxX + d1;
-						break;
-				}
-				manager.addEffect(((ParticleDigging)new ParticleDigging.Factory().getEntityFX(0, world, x, y, z, 0, 0, 0, Block.getStateId(info.getActualState()))).setBlockPos(pos).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
-			}
+				BlockHooks.createHitEffects(manager, world, result, info.getSelectableBoxes().get(0).getSelectableCuboid(), state);
 			return true;
 		}
 		return super.addHitEffects(state, world, result, manager);
@@ -150,15 +121,7 @@ public class BlockMultiblock extends Block implements IBlockBoundable
 		{
 			MultipartInfo info = (MultipartInfo)result.hitInfo;
 			if(!info.addDestroyEffects(manager))
-				for(int j : ObjectHooks.increment(4))
-					for(int k : ObjectHooks.increment(4))
-						for(int l : ObjectHooks.increment(4))
-						{
-							double x = pos.getX() + (j + .5) / 4;
-							double y = pos.getY() + (k + .5) / 4;
-							double z = pos.getZ() + (l + .5) / 4;
-							manager.addEffect(((ParticleDigging)new ParticleDigging.Factory().getEntityFX(0, world, x, y, z, x - pos.getX() - 0.5D, y - pos.getY() - 0.5D, z - pos.getZ() - 0.5D, Block.getStateId(info.getActualState()))).setBlockPos(pos));
-						}
+				BlockHooks.createDestroyEffects(manager, world, pos, info.getActualState());
 			return true;
 		}
 		return false;

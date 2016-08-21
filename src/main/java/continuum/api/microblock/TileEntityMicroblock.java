@@ -2,9 +2,10 @@ package continuum.api.microblock;
 
 import java.util.HashMap;
 
-import continuum.api.multipart.MicroblockTextureEntry;
-import continuum.api.multipart.MultipartAPI;
+import continuum.api.microblocktexture.MicroblockTextureApi;
+import continuum.api.microblocktexture.MicroblockTextureEntry;
 import continuum.essentials.tileentity.TileEntitySyncable;
+import continuum.multipart.plugins.MultipartAPI_Variables;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -13,7 +14,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class TileEntityMicroblock extends TileEntitySyncable
 {
-	private MicroblockTextureEntry entry = MultipartAPI.microblockTextureRegistry.getDefaultValue();
+	private MicroblockTextureEntry entry = MicroblockTextureEntry.defaultTexture;
 	public static final HashMap<BlockPos, MicroblockTextureEntry> cache = new HashMap<BlockPos, MicroblockTextureEntry>();
 	
 	public TileEntityMicroblock()
@@ -37,7 +38,7 @@ public class TileEntityMicroblock extends TileEntitySyncable
 	@Override
 	public void readItemsFromNBT(NBTTagCompound compound)
 	{
-		this.setEntry(MultipartAPI.microblockTextureRegistry.getObject(new ResourceLocation(compound.getString("entry"))));
+		this.setEntry(new ResourceLocation(compound.getString("entry")));
 	}
 	
 	public void onDataPacket(NetworkManager manager, SPacketUpdateTileEntity packet)
@@ -54,8 +55,11 @@ public class TileEntityMicroblock extends TileEntitySyncable
 		return this.entry;
 	}
 	
-	public void setEntry(MicroblockTextureEntry entry)
+	public void setEntry(ResourceLocation name)
 	{
-		this.entry = entry;
+		if(MicroblockTextureApi.apiActive())
+			this.entry = MicroblockTextureApi.getMicroblockTextureRegistry().getObject(name);
+		else
+			this.entry = MicroblockTextureEntry.defaultTexture;
 	}
 }

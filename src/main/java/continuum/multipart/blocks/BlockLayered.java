@@ -7,7 +7,7 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import com.google.common.collect.Lists;
 
-import continuum.api.multipart.MicroblockTextureEntry;
+import continuum.api.microblocktexture.MicroblockTextureEntry;
 import continuum.api.multipart.MultiblockStateImpl;
 import continuum.api.multipart.MultipartInfo;
 import continuum.multipart.enums.EnumMicroblockType;

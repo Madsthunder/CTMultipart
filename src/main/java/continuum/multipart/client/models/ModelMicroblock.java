@@ -15,9 +15,9 @@ import com.google.common.collect.Lists;
 
 import continuum.api.microblock.IMicroblock;
 import continuum.api.microblock.MicroblockStateImpl;
-import continuum.api.multipart.MicroblockTextureEntry;
+import continuum.api.microblocktexture.MicroblockTextureApi;
+import continuum.api.microblocktexture.MicroblockTextureEntry;
 import continuum.api.multipart.MultiblockStateImpl;
-import continuum.api.multipart.MultipartAPI;
 import continuum.essentials.mod.CTMod;
 import continuum.multipart.enums.EnumMicroblockType;
 import continuum.multipart.enums.EnumMicroblockType.EnumPlaceType;
@@ -25,6 +25,7 @@ import continuum.multipart.items.ItemMicroblock;
 import continuum.multipart.mod.Multipart_EH;
 import continuum.multipart.mod.Multipart_OH;
 import continuum.multipart.multiparts.MultipartMicroblock;
+import continuum.multipart.plugins.MultipartAPI_Variables;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -74,7 +75,8 @@ public class ModelMicroblock implements IModel
 	public Collection<ResourceLocation> getTextures()
 	{
 		ArrayList<ResourceLocation> textures = Lists.newArrayList();
-		for(MicroblockTextureEntry entry : MultipartAPI.microblockTextureRegistry.getValues())
+		if(MicroblockTextureApi.apiActive())
+		for(MicroblockTextureEntry entry : MicroblockTextureApi.getMicroblockTextureRegistry())
 		{
 			textures.add(entry.getParticleLocation());
 			for(EnumFacing direction : EnumFacing.values())
@@ -136,7 +138,7 @@ public class ModelMicroblock implements IModel
 			this.function = baseModel.function;
 			this.iol = baseModel.iol;
 			IBlockState state = ((ItemMicroblock)stack.getItem()).getRenderState();
-			this.itemData = Pair.of((IMicroblock)state.getBlock(), this.createQuads((IMicroblock)state.getBlock(), state, null, MultipartAPI.microblockTextureRegistry.getObject(new ResourceLocation(stack.getTagCompound().getCompoundTag("BlockEntityTag").getString("entry")))));
+			this.itemData = Pair.of((IMicroblock)state.getBlock(), this.createQuads((IMicroblock)state.getBlock(), state, null, MicroblockTextureEntry.readFromNBT(stack.getTagCompound())));
 		}
 		
 		@Override

@@ -74,7 +74,6 @@ public class ModelMultipart implements IModel
 			if(state instanceof MultiblockStateImpl)
 			{
 				MultiblockStateImpl impl = (MultiblockStateImpl)state;
-				System.out.println(impl.getSource());
 				IBakedModel model;
 				for(MultipartInfo info : impl.getSource())
 					if((model = minecraft.getBlockRendererDispatcher().getModelForState(info.getState())) != null) quads.addAll(model.getQuads(info.getExtendedState(true), side, rand));

@@ -1,10 +1,12 @@
-package continuum.api.multipart;
+package continuum.api.microblocktexture;
 
 import com.google.common.reflect.TypeToken;
 
+import continuum.multipart.plugins.MultipartAPI_Variables;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,6 +21,7 @@ import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 
 public class MicroblockTextureEntry implements IForgeRegistryEntry<MicroblockTextureEntry>
 {
+	public static final MicroblockTextureEntry defaultTexture = new MicroblockTextureEntry("air", Blocks.AIR, "missingno");
 	private final IBlockState baseState;
 	private final ItemStack baseStack;
 	private ResourceLocation particle = new ResourceLocation("missingno");
@@ -153,7 +156,7 @@ public class MicroblockTextureEntry implements IForgeRegistryEntry<MicroblockTex
 	
 	public static MicroblockTextureEntry readFromNBT(NBTTagCompound compound)
 	{
-		return MultipartAPI.microblockTextureRegistry.getObject(new ResourceLocation(compound.getCompoundTag("BlockEntityTag").getString("entry")));
+		return compound != null && MicroblockTextureApi.apiActive() ? MicroblockTextureApi.getMicroblockTextureRegistry().getObject(new ResourceLocation(compound.getCompoundTag("BlockEntityTag").getString("entry"))) : MicroblockTextureEntry.defaultTexture;
 	}
 	
 	public static NBTTagCompound writeToNBT(MicroblockTextureEntry entry)

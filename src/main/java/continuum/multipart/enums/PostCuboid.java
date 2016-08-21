@@ -2,6 +2,8 @@ package continuum.multipart.enums;
 
 import java.util.HashMap;
 
+import com.google.common.collect.Maps;
+
 import continuum.essentials.block.ICuboid;
 import continuum.essentials.block.StaticCuboid;
 import net.minecraft.util.EnumFacing;
@@ -25,7 +27,7 @@ public enum PostCuboid implements IPillaredCuboid
 	POST_Z_DE(12D, 0D, 0D, 16D, 4D, 16D, Axis.Z, EnumFacing.DOWN, EnumFacing.EAST),
 	POST_Z_UW(0D, 12D, 0D, 4D, 16D, 16D, Axis.Z, EnumFacing.UP, EnumFacing.WEST),
 	POST_Z_UE(12D, 12D, 0D, 16D, 16D, 16D, Axis.Z, EnumFacing.UP, EnumFacing.EAST);
-	private static final HashMap<EnumFacing, HashMap<EnumFacing, PillarCuboid>> values = new HashMap<EnumFacing, HashMap<EnumFacing, PillarCuboid>>();
+	private static final HashMap<EnumFacing, HashMap<EnumFacing, PostCuboid>> values = Maps.newHashMap();
 	private final AxisAlignedBB cuboid;
 	private final Axis axis;
 	private final EnumFacing facing1;
@@ -84,20 +86,20 @@ public enum PostCuboid implements IPillaredCuboid
 		return new StaticCuboid(this);
 	}
 	
-	public static PillarCuboid getCuboidFromFacings(EnumFacing facing1, EnumFacing facing2)
+	public static PostCuboid getCuboidFromFacings(EnumFacing facing1, EnumFacing facing2)
 	{
 		return values.get(facing1).get(facing2);
 	}
 	
 	static
 	{
-		for(PillarCuboid cuboid : PillarCuboid.values())
+		for(PostCuboid cuboid : PostCuboid.values())
 		{
 			EnumFacing facing1 = cuboid.getFacing1();
 			EnumFacing facing2 = cuboid.getFacing2();
 			if(!values.containsKey(facing1))
 			{
-				HashMap<EnumFacing, PillarCuboid> map = new HashMap<EnumFacing, PillarCuboid>();
+				HashMap<EnumFacing, PostCuboid> map = Maps.newHashMap();
 				map.put(facing2, cuboid);
 				values.put(facing1, map);
 			}

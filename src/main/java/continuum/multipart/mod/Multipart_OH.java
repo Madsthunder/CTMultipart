@@ -69,5 +69,4 @@ public class Multipart_OH implements ObjectHolder
 	@SideOnly(value = Side.CLIENT)
 	public ModelMicroblock microblockModel;
 	public ModelMultipart multipartModel;
-	public SoundEvent microblockSound;
 }

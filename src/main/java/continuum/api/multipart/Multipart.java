@@ -22,6 +22,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -105,7 +106,7 @@ public abstract class Multipart implements IForgeRegistryEntry<Multipart>
 		return info.getBlock().getHarvestTool(info.getActualState());
 	}
 	
-	public boolean addLandingEffects(MultipartInfo info, EntityLivingBase entity, int particles)
+	public boolean addLandingEffects(MultipartInfo info, WorldServer world, EntityLivingBase entity, int particles)
 	{
 		return false;
 	}
@@ -142,8 +143,13 @@ public abstract class Multipart implements IForgeRegistryEntry<Multipart>
 	
 	public abstract Block getBlock();
 	
-	public SoundType getSoundType(@Nullable MultipartInfo info)
+	public SoundType getSoundType(MultipartInfo info)
 	{
 		return info.getBlock().getSoundType();
+	}
+	
+	public SoundType getSoundType(@Nullable ItemStack stack)
+	{
+		return this.getBlock().getSoundType();
 	}
 }

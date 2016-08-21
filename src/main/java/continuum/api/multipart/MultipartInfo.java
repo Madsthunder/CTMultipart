@@ -22,6 +22,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -147,9 +148,9 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 		return this.getMultipart().getTool(this);
 	}
 	
-	public boolean addLandingEffects(EntityLivingBase entity, int particles)
+	public boolean addLandingEffects(WorldServer world, EntityLivingBase entity, int particles)
 	{
-		return this.getMultipart().addLandingEffects(this, entity, particles);
+		return this.getMultipart().addLandingEffects(this, world, entity, particles);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -257,11 +258,11 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 	
 	public static MultipartInfo readFromNBT(TileEntityMultiblock source, NBTTagCompound compound)
 	{
-		if(MultipartAPI.apiActive() && compound.hasUniqueId("uuid"))
+		if(MultipartApi.apiActive() && compound.hasUniqueId("uuid"))
 		{
 			UUID uuid = compound.getUniqueId("uuid");
-			Multipart multipart = MultipartAPI.getMultipartRegistry().getObject(new ResourceLocation(compound.getString("multipart")));
-			if(multipart != MultipartAPI.getMultipartRegistry().getDefaultValue())
+			Multipart multipart = MultipartApi.getMultipartRegistry().getObject(new ResourceLocation(compound.getString("multipart")));
+			if(multipart != MultipartApi.getMultipartRegistry().getDefaultValue())
 			{
 				int meta = compound.getInteger("metadata");
 				NBTTagCompound nbt = compound.getCompoundTag("nbt");

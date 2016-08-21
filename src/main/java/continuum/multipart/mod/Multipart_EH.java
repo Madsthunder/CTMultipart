@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 import continuum.api.microblock.IMicroblock;
 import continuum.api.multipart.Multipart;
 import continuum.api.multipart.MultipartInfo;
-import continuum.api.multipart.MultipartAPI;
+import continuum.api.multipart.MultipartApi;
 import continuum.api.multipart.TileEntityMultiblock;
 import continuum.essentials.events.DebugInfoEvent;
 import continuum.essentials.hooks.BlockHooks;
@@ -95,7 +95,7 @@ public class Multipart_EH
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onItemRightClick(RightClickItem event)
 	{
-		if(MultipartAPI.apiActive())
+		if(MultipartApi.apiActive())
 		{
 			ItemStack stack = event.getItemStack();
 			EntityPlayer player = event.getEntityPlayer();
@@ -106,7 +106,7 @@ public class Multipart_EH
 			if(possibleBlock == null) possibleBlock = ForgeRegistries.BLOCKS.getValue(stack.getItem().getRegistryName());
 			Multipart prevEntry;
 			Multipart possibleEntry;
-			if(possibleBlock != null && (possibleEntry = MultipartAPI.getMultipartRegistry().getObject(stack.getItem().getRegistryName())) != MultipartAPI.getMultipartRegistry().getDefaultValue())
+			if(possibleBlock != null && (possibleEntry = MultipartApi.getMultipartRegistry().getObject(stack.getItem().getRegistryName())) != MultipartApi.getMultipartRegistry().getDefaultValue())
 			{
 				Vec3d hitPos = result.hitVec.subtract(pos.getX(), pos.getY(), pos.getZ());
 				IBlockState prevBlock = world.getBlockState(pos);
@@ -114,7 +114,7 @@ public class Multipart_EH
 				IBlockState possibleState = possibleBlock.onBlockPlaced(world, pos, result.sideHit, (float)hitPos.xCoord, (float)hitPos.yCoord, (float)hitPos.zCoord, stack.getMetadata(), player);
 				if(prevBlock.getBlock() instanceof BlockMultiblock)
 					attemptToPlace(world, pos, player, stack, Lists.newArrayList(), result, possibleEntry, possibleState);
-				else if((prevEntry = MultipartAPI.getMultipartRegistry().getObject(prevBlock.getBlock().getRegistryName())) != null)
+				else if((prevEntry = MultipartApi.getMultipartRegistry().getObject(prevBlock.getBlock().getRegistryName())) != null)
 				{
 					List<BlockSnapshot> snapshots = BlockHooks.setBlockStateWithSnapshots(world, pos, mod.getObjectHolder().multipart.getDefaultState());
 					((TileEntityMultiblock)world.getTileEntity(pos)).addMultipartInfoToList(prevEntry, prevBlock, prevTile);
@@ -128,13 +128,13 @@ public class Multipart_EH
 	{
 		TileEntity entity = world.getTileEntity(pos);
 		TileEntityMultiblock multiblock;
-		if(MultipartAPI.apiActive() && entity instanceof TileEntityMultiblock && multipart.canPlaceIn(world, pos, state, multiblock = (TileEntityMultiblock)entity, result))
+		if(MultipartApi.apiActive() && entity instanceof TileEntityMultiblock && multipart.canPlaceIn(world, pos, state, multiblock = (TileEntityMultiblock)entity, result))
 		{
 			TileEntity entity1 = state.getBlock().createTileEntity(world, state);
 			setTileNBT(world, player, pos, stack, multiblock, entity1);
 			multiblock.addMultipartInfoToList(multipart, state, entity1).onPlaced(player, stack);
 			if(player instanceof EntityPlayerMP) ((EntityPlayerMP)player).connection.sendPacket(multiblock.getUpdatePacket());
-			SoundType sound = state.getBlock().getSoundType(mod.getObjectHolder().multipart.getDefaultState(), world, pos, player);
+			SoundType sound = multipart.getSoundType(stack);
 			world.playSound(player, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
 			player.swingArm(EnumHand.MAIN_HAND);
 			world.checkLight(pos);
