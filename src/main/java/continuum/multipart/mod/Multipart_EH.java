@@ -60,7 +60,23 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class Multipart_EH
 {
-	private static CTMod<Multipart_OH, Multipart_EH> mod;
+	private static Multipart_EH eventHandler;
+	
+	public static Multipart_EH getEventHandler()
+	{
+		return eventHandler == null ? eventHandler = new Multipart_EH() : eventHandler;
+	}
+	private Multipart_Mod ctmultipart;
+
+	private Multipart_EH()
+	{
+		
+	}
+	
+	void setCTMultipart(Multipart_Mod ctmultipart)
+	{
+		this.ctmultipart = ctmultipart;
+	}
 	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -70,7 +86,7 @@ public class Multipart_EH
 		if(event.getInfoSide() == DebugInfoEvent.EnumSide.RIGHT && result != null && result.typeOfHit == Type.BLOCK && result.getBlockPos() != null && result.hitInfo instanceof MultipartInfo)
 		{
 			List<String> list = event.getDebugInfo();
-			if(list.remove(mod.getObjectHolder().multipart.getRegistryName().toString()))
+			if(list.remove(this.ctmultipart.getObjectHolder().multipart.getRegistryName().toString()))
 			{
 				MultipartInfo info = (MultipartInfo)result.hitInfo;
 				World world = Minecraft.getMinecraft().theWorld;
@@ -116,7 +132,7 @@ public class Multipart_EH
 					attemptToPlace(world, pos, player, stack, Lists.newArrayList(), result, possibleEntry, possibleState);
 				else if((prevEntry = MultipartApi.getMultipartRegistry().getObject(prevBlock.getBlock().getRegistryName())) != null)
 				{
-					List<BlockSnapshot> snapshots = BlockHooks.setBlockStateWithSnapshots(world, pos, mod.getObjectHolder().multipart.getDefaultState());
+					List<BlockSnapshot> snapshots = BlockHooks.setBlockStateWithSnapshots(world, pos, ctmultipart.getObjectHolder().multipart.getDefaultState());
 					((TileEntityMultiblock)world.getTileEntity(pos)).addMultipartInfoToList(prevEntry, prevBlock, prevTile);
 					attemptToPlace(world, pos, player, stack, snapshots, result, possibleEntry, possibleState);
 				}
@@ -428,7 +444,7 @@ public class Multipart_EH
 							/* Up East */ drawZ(tess, z, boxZ.maxX - 0.5, boxZ.maxY - 0.5, boxZ.maxX, boxZ.maxY);
 							break;
 						default :
-							mod.getLogger().warn(side == null ? result + " has no side?" : result + " has no axis?");
+							ctmultipart.getLogger().warn(side == null ? result + " has no side?" : result + " has no axis?");
 					}
 				}
 				GlStateManager.depthMask(true);
@@ -475,10 +491,5 @@ public class Multipart_EH
 		vb.pos(maxX, minY, z).endVertex();
 		vb.pos(minX, minY, z).endVertex();
 		tess.draw();
-	}
-	
-	static void setMod(CTMod<Multipart_OH, Multipart_EH> mod)
-	{
-		Multipart_EH.mod = mod;
 	}
 }

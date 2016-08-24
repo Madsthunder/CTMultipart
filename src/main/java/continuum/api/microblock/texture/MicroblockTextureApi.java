@@ -1,4 +1,4 @@
-package continuum.api.microblocktexture;
+package continuum.api.microblock.texture;
 
 import continuum.essentials.mod.APIMethodMirrorable;
 import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;

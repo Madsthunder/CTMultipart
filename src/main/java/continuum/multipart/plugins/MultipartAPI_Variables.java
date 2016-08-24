@@ -1,6 +1,6 @@
 package continuum.multipart.plugins;
 
-import continuum.api.microblocktexture.MicroblockTextureEntry;
+import continuum.api.microblock.texture.MicroblockTextureEntry;
 import continuum.api.multipart.Multipart;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;

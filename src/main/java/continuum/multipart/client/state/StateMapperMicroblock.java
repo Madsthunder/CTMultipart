@@ -3,8 +3,8 @@ package continuum.multipart.client.state;
 import java.util.HashMap;
 import java.util.Map;
 
-import continuum.api.microblocktexture.MicroblockTextureApi;
-import continuum.api.microblocktexture.MicroblockTextureEntry;
+import continuum.api.microblock.texture.MicroblockTextureApi;
+import continuum.api.microblock.texture.MicroblockTextureEntry;
 import continuum.multipart.mod.Multipart_OH;
 import continuum.multipart.plugins.MultipartAPI_Variables;
 import net.minecraft.block.Block;

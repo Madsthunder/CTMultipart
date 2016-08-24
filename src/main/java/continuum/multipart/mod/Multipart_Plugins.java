@@ -23,7 +23,7 @@ public class Multipart_Plugins implements IFMLLoadingPlugin, IFMLCallHook
 	@Override
 	public String getModContainerClass()
 	{
-		return "continuum.multipart.mod.Multipart_Mod";
+		return null;
 	}
 
 	@Override
@@ -47,9 +47,9 @@ public class Multipart_Plugins implements IFMLLoadingPlugin, IFMLCallHook
 	@Override
 	public Void call() throws Exception
 	{
-		ApiPlugin.putAPIPackages(Sets.newHashSet("continuum.api.multipart", "continuum.api.microblocktexture"), Sets.newHashSet("continuum.multipart.plugins.MultipartAPI_Methods"));
+		ApiPlugin.putAPIPackages(Sets.newHashSet("continuum.api.multipart", "continuum.api.microblock.texture"), Sets.newHashSet("continuum.multipart.plugins.MultipartAPI_Methods"));
 		ApiPlugin.putAPIClass("MultipartApi", "continuum.api.multipart.MultipartApi");
-		ApiPlugin.putAPIClass("MicroblockTextureApi", "continuum.api.microblocktexture.MicroblockTextureApi");
+		ApiPlugin.putAPIClass("MicroblockTextureApi", "continuum.api.microblock.texture.MicroblockTextureApi");
 		return null;
 	}
 }

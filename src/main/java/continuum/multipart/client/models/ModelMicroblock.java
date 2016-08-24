@@ -15,8 +15,8 @@ import com.google.common.collect.Lists;
 
 import continuum.api.microblock.IMicroblock;
 import continuum.api.microblock.MicroblockStateImpl;
-import continuum.api.microblocktexture.MicroblockTextureApi;
-import continuum.api.microblocktexture.MicroblockTextureEntry;
+import continuum.api.microblock.texture.MicroblockTextureApi;
+import continuum.api.microblock.texture.MicroblockTextureEntry;
 import continuum.api.multipart.MultiblockStateImpl;
 import continuum.essentials.mod.CTMod;
 import continuum.multipart.enums.EnumMicroblockType;

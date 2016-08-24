@@ -2,8 +2,8 @@ package continuum.api.microblock;
 
 import java.util.HashMap;
 
-import continuum.api.microblocktexture.MicroblockTextureApi;
-import continuum.api.microblocktexture.MicroblockTextureEntry;
+import continuum.api.microblock.texture.MicroblockTextureApi;
+import continuum.api.microblock.texture.MicroblockTextureEntry;
 import continuum.essentials.tileentity.TileEntitySyncable;
 import continuum.multipart.plugins.MultipartAPI_Variables;
 import net.minecraft.nbt.NBTTagCompound;

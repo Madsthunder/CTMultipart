@@ -3,60 +3,43 @@ package continuum.multipart.mod;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
-import continuum.api.multipart.MultipartApi;
 import continuum.essentials.mod.CTMod;
-import net.minecraftforge.fml.common.DummyModContainer;
 import net.minecraftforge.fml.common.LoadController;
-import net.minecraftforge.fml.common.ModMetadata;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-public class Multipart_Mod extends DummyModContainer
+@Mod(modid = "ctmultipart", name = "Continuum: Multipart", version = "0.1.0")
+public class Multipart_Mod extends CTMod<Multipart_OH, Multipart_EH>
 {
-	private CTMod<Multipart_OH, Multipart_EH> mod;
-	
 	public Multipart_Mod()
 	{
-		super(new ModMetadata());
-		ModMetadata metadata = this.getMetadata();
-		metadata.modId = "ctmultipart";
-		metadata.name = "Continuum: Multipart";
-		metadata.version = "0.1.0";
-		System.out.println("multiparts=" + MultipartApi.apiActive());
+		super(Multipart_OH.getObjectHolder(), Multipart_EH.getEventHandler(), Multipart_Loaders.getObjectLoaders());
 	}
-	
-    @Override
-    public boolean registerBus(EventBus bus, LoadController controller)
-    {
-    	bus.register(this);
-    	return true;
-    }
     
-    @Subscribe
+    @Mod.EventHandler
     public void construction(FMLConstructionEvent event)
     {
-    	this.mod = new CTMod(Multipart_OH.getHolder(this), new Multipart_EH(), Multipart_Loaders.getLoaders());
-    	this.mod.getEventHandler().setMod(this.mod);
-    	this.mod.construction(event);
+    	super.construction(event);
     }
-    
-    @Subscribe
+
+    @Mod.EventHandler
     public void pre(FMLPreInitializationEvent event)
     {
-    	this.mod.pre(event);
+    	super.pre(event);
     }
-    
-    @Subscribe
+
+    @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
-    	this.mod.init(event);
+    	super.init(event);
     }
-    
-    @Subscribe
+
+    @Mod.EventHandler
     public void post(FMLPostInitializationEvent event)
     {
-    	this.mod.post(event);
+    	super.post(event);
     }
 }

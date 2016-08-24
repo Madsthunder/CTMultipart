@@ -22,35 +22,47 @@ public class Multipart_OH implements ObjectHolder
 {
 	private static Multipart_OH holder;
 	
-	static Multipart_OH getHolder(ModContainer mod)
+	public static Multipart_OH getObjectHolder()
 	{
-		return holder == null ? new Multipart_OH(mod) : holder;
+		return holder == null ? new Multipart_OH() : holder;
 	}
 	
-	private Multipart_OH(ModContainer mod)
+	private final Mod mod;
+	private Multipart_Mod ctmultipart;
+	
+	private Multipart_OH()
 	{
-		this.mod = mod;
+		this.mod = Multipart_Mod.class.getAnnotation(Mod.class);
+	}
+	
+	void setCTMultipart(Multipart_Mod ctmultipart)
+	{
+		this.ctmultipart = ctmultipart;
+	}
+	
+	public Multipart_Mod getCTMultipart()
+	{
+		return this.ctmultipart;
 	}
 	
 	@Override
 	public String getModid()
 	{
-		return this.mod.getModId();
+		return this.mod.modid();
 	}
 	
 	@Override
 	public String getName()
 	{
-		return this.mod.getName();
+		return this.mod.name();
 	}
 	
 	@Override
 	public String getVersion()
 	{
-		return this.mod.getVersion();
+		return this.mod.version();
 	}
 	
-	public final ModContainer mod;
 	public CreativeTabs microblocks;
 	public BlockMultiblock multipart;
 	public BlockLayered slab;

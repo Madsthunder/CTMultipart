@@ -8,7 +8,7 @@ import continuum.api.microblock.IMicroblock;
 import continuum.api.microblock.IMicroblockType;
 import continuum.api.microblock.MicroblockStateImpl;
 import continuum.api.microblock.TileEntityMicroblock;
-import continuum.api.microblocktexture.MicroblockTextureEntry;
+import continuum.api.microblock.texture.MicroblockTextureEntry;
 import continuum.api.multipart.MultiblockStateImpl;
 import continuum.api.multipart.Multipart;
 import continuum.api.multipart.MultipartInfo;

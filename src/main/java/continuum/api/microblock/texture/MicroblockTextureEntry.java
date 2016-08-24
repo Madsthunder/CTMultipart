@@ -1,4 +1,4 @@
-package continuum.api.microblocktexture;
+package continuum.api.microblock.texture;
 
 import com.google.common.reflect.TypeToken;
 

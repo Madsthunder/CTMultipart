@@ -3,8 +3,8 @@ package continuum.multipart.items;
 import java.util.List;
 
 import continuum.api.microblock.IMicroblock;
-import continuum.api.microblocktexture.MicroblockTextureApi;
-import continuum.api.microblocktexture.MicroblockTextureEntry;
+import continuum.api.microblock.texture.MicroblockTextureApi;
+import continuum.api.microblock.texture.MicroblockTextureEntry;
 import continuum.essentials.mod.CTMod;
 import continuum.multipart.blocks.BlockLayered;
 import continuum.multipart.enums.EnumMicroblockType;

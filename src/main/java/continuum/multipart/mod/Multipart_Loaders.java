@@ -6,12 +6,12 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import continuum.api.microblock.TileEntityMicroblock;
-import continuum.api.microblocktexture.MicroblockTextureApi;
-import continuum.api.microblocktexture.MicroblockTextureEntry;
+import continuum.api.microblock.texture.MicroblockTextureApi;
+import continuum.api.microblock.texture.MicroblockTextureEntry;
 import continuum.api.multipart.Multipart;
 import continuum.api.multipart.MultipartApi;
 import continuum.api.multipart.TileEntityMultiblock;
-import continuum.core.mod.Core_OH;
+import continuum.core.mod.CTCore_OH;
 import continuum.essentials.mod.CTMod;
 import continuum.essentials.mod.ObjectLoader;
 import continuum.essentials.util.CreativeTab;
@@ -47,7 +47,7 @@ public class Multipart_Loaders
 {
 	private static final List<ObjectLoader<Multipart_OH, Multipart_EH>> loaders = Lists.newArrayList(BlockLoader.I, ItemLoader.I, RegistryLoader.I, UtilityLoader.I, ClientLoader.I);
 	
-	static final ObjectLoader<Multipart_OH, Multipart_EH>[] getLoaders()
+	static final ObjectLoader<Multipart_OH, Multipart_EH>[] getObjectLoaders()
 	{
 		return loaders.toArray(new ObjectLoader[0]);
 	}
@@ -105,8 +105,8 @@ public class Multipart_Loaders
 		{
 			Multipart_OH holder = mod.getObjectHolder();
 			holder.microblockSM = new StateMapperMicroblock(holder);
-			Core_OH.models.put(new ResourceLocation(holder.getModid(), "models/block/microblock"), holder.microblockModel = new ModelMicroblock(mod));
-			Core_OH.models.put(new ResourceLocation(holder.getModid(), "models/block/multipart"), holder.multipartModel = new ModelMultipart());
+			CTCore_OH.models.put(new ResourceLocation(holder.getModid(), "models/block/microblock"), holder.microblockModel = new ModelMicroblock(mod));
+			CTCore_OH.models.put(new ResourceLocation(holder.getModid(), "models/block/multipart"), holder.multipartModel = new ModelMultipart());
 			this.setupModels(mod, holder.slab, holder.microblockSM);
 			this.setupModels(mod, holder.panel, holder.microblockSM);
 			this.setupModels(mod, holder.cover, holder.microblockSM);
