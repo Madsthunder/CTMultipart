@@ -182,7 +182,7 @@ public class BlockAxised extends BlockMicroblockBase<EnumMicroblockType>
 		EnumFacing[] fs = EnumFacing.values();
 		if(state instanceof MultiblockStateImpl)
 		{
-			System.out.println("mbsi");
+			
 		}
 		else
 		{

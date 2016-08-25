@@ -40,7 +40,6 @@ public class TileEntityMultiblock extends TileEntitySyncable implements Iterable
 	
 	public boolean boxIntersectsMultipart(Multipart exclude, AxisAlignedBB box, boolean useExclude, boolean useExceptions)
 	{
-		System.out.println("bim");
 		if(useExceptions)
 		{
 			AABBExceptionsEvent event = new AABBExceptionsEvent(this, Lists.newArrayList(), exclude, box);
