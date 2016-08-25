@@ -14,6 +14,9 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 @IFMLLoadingPlugin.TransformerExclusions({ "org", "com", "joptsimple", "oshi" })
 public class Multipart_Plugins implements IFMLLoadingPlugin, IFMLCallHook
 {
+	private static boolean multiparts = true;
+	private static boolean microblocks = true;
+	
 	@Override
 	public String[] getASMTransformerClass()
 	{
@@ -41,15 +44,18 @@ public class Multipart_Plugins implements IFMLLoadingPlugin, IFMLCallHook
 	@Override
 	public void injectData(Map<String, Object> data)
 	{
-		
+		multiparts = !Boolean.valueOf(String.valueOf(data.get("disableMultiparts")));
+		microblocks = !Boolean.valueOf(String.valueOf(data.get("disableMicroblocks")));
 	}
 
 	@Override
 	public Void call() throws Exception
 	{
 		ApiPlugin.putAPIPackages(Sets.newHashSet("continuum.api.multipart", "continuum.api.microblock.texture"), Sets.newHashSet("continuum.multipart.plugins.MultipartAPI_Methods"));
-		ApiPlugin.putAPIClass("MultipartApi", "continuum.api.multipart.MultipartApi");
-		ApiPlugin.putAPIClass("MicroblockTextureApi", "continuum.api.microblock.texture.MicroblockTextureApi");
+		if(multiparts)
+			ApiPlugin.putAPIClass("MultipartApi", "continuum.api.multipart.MultipartApi");
+		if(microblocks)
+			ApiPlugin.putAPIClass("MicroblockTextureApi", "continuum.api.microblock.texture.MicroblockTextureApi");
 		return null;
 	}
 }

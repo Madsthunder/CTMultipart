@@ -183,7 +183,6 @@ public class Multipart_Loaders
 		@Override
 		public void construction(CTMod<Multipart_OH, Multipart_EH> mod)
 		{
-			System.out.println("microblocks=" + MicroblockTextureApi.apiActive());
 			if(MicroblockTextureApi.apiActive())
 				MicroblockTextureApi.getMicroblockTextureRegistry().register(MicroblockTextureEntry.defaultTexture);
 		}

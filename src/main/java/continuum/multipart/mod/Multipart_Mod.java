@@ -1,10 +1,9 @@
 package continuum.multipart.mod;
 
-import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
-
 import continuum.essentials.mod.CTMod;
-import net.minecraftforge.fml.common.LoadController;
+import continuum.multipart.crash.ApiCrashCallable;
+import net.minecraft.crash.CrashReport;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -17,6 +16,7 @@ public class Multipart_Mod extends CTMod<Multipart_OH, Multipart_EH>
 	public Multipart_Mod()
 	{
 		super(Multipart_OH.getObjectHolder(), Multipart_EH.getEventHandler(), Multipart_Loaders.getObjectLoaders());
+		FMLCommonHandler.instance().registerCrashCallable(new ApiCrashCallable());
 	}
     
     @Mod.EventHandler
@@ -28,6 +28,7 @@ public class Multipart_Mod extends CTMod<Multipart_OH, Multipart_EH>
     @Mod.EventHandler
     public void pre(FMLPreInitializationEvent event)
     {
+    	this.getLogger().info(CrashReport.makeCrashReport(new Throwable(), "urmum").getCompleteReport());
     	super.pre(event);
     }
 
