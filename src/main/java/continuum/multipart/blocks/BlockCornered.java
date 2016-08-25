@@ -7,7 +7,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import com.google.common.collect.Lists;
 
 import continuum.api.microblock.IMicroblockType;
-import continuum.api.microblock.texture.MicroblockTextureEntry;
+import continuum.api.microblock.texture.MicroblockMaterial;
 import continuum.multipart.enums.EnumFacingArray;
 import continuum.multipart.enums.EnumMicroblockType;
 import continuum.multipart.mod.Multipart_OH;
@@ -111,7 +111,7 @@ public class BlockCornered extends BlockMicroblockBase<EnumMicroblockType>
 	}
 	
 	@Override
-	public List<Triple<Boolean, AxisAlignedBB, BlockPos>> getRenderList(IBlockState state, MicroblockTextureEntry entry)
+	public List<Triple<Boolean, AxisAlignedBB, BlockPos>> getRenderList(IBlockState state, MicroblockMaterial entry)
 	{
 		IMicroblockType type = this.getType();
 		EnumFacingArray array = new EnumFacingArray(state.getValue(directionX), state.getValue(directionY), state.getValue(directionZ));

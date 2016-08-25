@@ -1,8 +1,5 @@
 package continuum.api.microblock.texture;
 
-import com.google.common.reflect.TypeToken;
-
-import continuum.multipart.plugins.MultipartAPI_Variables;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -12,33 +9,28 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.FMLContainer;
-import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.common.InjectedModContainer;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 
-public class MicroblockTextureEntry implements IForgeRegistryEntry<MicroblockTextureEntry>
+public class MicroblockMaterial implements IForgeRegistryEntry<MicroblockMaterial>
 {
-	public static final MicroblockTextureEntry defaultTexture = new MicroblockTextureEntry("air", Blocks.AIR, "missingno");
+	public static final MicroblockMaterial defaultTexture = new MicroblockMaterial("air", Blocks.AIR, "missingno");
 	private final IBlockState baseState;
 	private final ItemStack baseStack;
 	private ResourceLocation particle = new ResourceLocation("missingno");
 	private final ResourceLocation[] textures = new ResourceLocation[6];
 	private final ResourceLocation name;
 	
-	public MicroblockTextureEntry(String name, Block block, String location)
+	public MicroblockMaterial(String name, Block block, String location)
 	{
 		this(name, block, 0, location);
 	}
 	
-	public MicroblockTextureEntry(String name, Block block, int meta, String location)
+	public MicroblockMaterial(String name, Block block, int meta, String location)
 	{
 		this(name, block.getStateFromMeta(meta), new ItemStack(block, 1, meta), location);
 	}
 	
-	public MicroblockTextureEntry(String name, IBlockState state, ItemStack stack, String location)
+	public MicroblockMaterial(String name, IBlockState state, ItemStack stack, String location)
 	{
 		this.name = new ResourceLocation(name);
 		this.baseState = state;
@@ -49,17 +41,17 @@ public class MicroblockTextureEntry implements IForgeRegistryEntry<MicroblockTex
 			this.textures[direction.ordinal()] = texture;
 	}
 	
-	public MicroblockTextureEntry(String name, Block block, String... locations)
+	public MicroblockMaterial(String name, Block block, String... locations)
 	{
 		this(name, block, 0, locations);
 	}
 	
-	public MicroblockTextureEntry(String name, Block block, Integer meta, String... locations)
+	public MicroblockMaterial(String name, Block block, Integer meta, String... locations)
 	{
 		this(name, block.getStateFromMeta(meta), new ItemStack(block, 1, meta), locations);
 	}
 	
-	public MicroblockTextureEntry(String name, IBlockState state, ItemStack stack, String... locations)
+	public MicroblockMaterial(String name, IBlockState state, ItemStack stack, String... locations)
 	{
 		this.name = new ResourceLocation(name);
 		this.baseState = state;
@@ -138,7 +130,7 @@ public class MicroblockTextureEntry implements IForgeRegistryEntry<MicroblockTex
 		return "MicroblockEntry {" + getRegistryName().toString() + "}";
 	}
 	
-	public final MicroblockTextureEntry setRegistryName(ResourceLocation name)
+	public final MicroblockMaterial setRegistryName(ResourceLocation name)
 	{
 		return this;
 	}
@@ -149,17 +141,17 @@ public class MicroblockTextureEntry implements IForgeRegistryEntry<MicroblockTex
 	}
 	
 	@Override
-	public final Class<? super MicroblockTextureEntry> getRegistryType()
+	public final Class<? super MicroblockMaterial> getRegistryType()
 	{
-		return MicroblockTextureEntry.class;
+		return MicroblockMaterial.class;
 	}
 	
-	public static MicroblockTextureEntry readFromNBT(NBTTagCompound compound)
+	public static MicroblockMaterial readFromNBT(NBTTagCompound compound)
 	{
-		return compound != null && MicroblockTextureApi.apiActive() ? MicroblockTextureApi.getMicroblockTextureRegistry().getObject(new ResourceLocation(compound.getCompoundTag("BlockEntityTag").getString("entry"))) : MicroblockTextureEntry.defaultTexture;
+		return compound != null && MicroblockMaterialApi.apiActive() ? MicroblockMaterialApi.getMicroblockMaterialRegistry().getObject(new ResourceLocation(compound.getCompoundTag("BlockEntityTag").getString("entry"))) : MicroblockMaterial.defaultTexture;
 	}
 	
-	public static NBTTagCompound writeToNBT(MicroblockTextureEntry entry)
+	public static NBTTagCompound writeToNBT(MicroblockMaterial entry)
 	{
 		NBTTagCompound compound = new NBTTagCompound();
 		NBTTagCompound compound1 = new NBTTagCompound();

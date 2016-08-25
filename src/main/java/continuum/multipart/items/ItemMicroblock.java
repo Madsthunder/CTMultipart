@@ -3,14 +3,13 @@ package continuum.multipart.items;
 import java.util.List;
 
 import continuum.api.microblock.IMicroblock;
-import continuum.api.microblock.texture.MicroblockTextureApi;
-import continuum.api.microblock.texture.MicroblockTextureEntry;
+import continuum.api.microblock.texture.MicroblockMaterial;
+import continuum.api.microblock.texture.MicroblockMaterialApi;
 import continuum.essentials.mod.CTMod;
 import continuum.multipart.blocks.BlockLayered;
 import continuum.multipart.enums.EnumMicroblockType;
 import continuum.multipart.mod.Multipart_EH;
 import continuum.multipart.mod.Multipart_OH;
-import continuum.multipart.plugins.MultipartAPI_Variables;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -36,12 +35,12 @@ public class ItemMicroblock extends ItemBlock
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List list)
 	{
-		if(MicroblockTextureApi.apiActive())
-		for(MicroblockTextureEntry entry : MicroblockTextureApi.getMicroblockTextureRegistry())
-			if(entry != MicroblockTextureEntry.defaultTexture)
+		if(MicroblockMaterialApi.apiActive())
+		for(MicroblockMaterial entry : MicroblockMaterialApi.getMicroblockMaterialRegistry())
+			if(entry != MicroblockMaterial.defaultTexture)
 			{
 				ItemStack stack = new ItemStack(item);
-				stack.setTagCompound(MicroblockTextureEntry.writeToNBT(entry));
+				stack.setTagCompound(MicroblockMaterial.writeToNBT(entry));
 				list.add(stack);
 			}
 	}
@@ -49,8 +48,8 @@ public class ItemMicroblock extends ItemBlock
 	@Override
 	public String getItemStackDisplayName(ItemStack stack)
 	{
-		MicroblockTextureEntry entry = MicroblockTextureEntry.readFromNBT(stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound());
-		return entry == MicroblockTextureEntry.defaultTexture ? "Default" : entry.getDisplayName() + " " + I18n.translateToLocal("microblock." + ((IMicroblock)this.block).getType().getName().toLowerCase());
+		MicroblockMaterial entry = MicroblockMaterial.readFromNBT(stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound());
+		return entry == MicroblockMaterial.defaultTexture ? "Default" : entry.getDisplayName() + " " + I18n.translateToLocal("microblock." + ((IMicroblock)this.block).getType().getName().toLowerCase());
 	}
 	
 	public IBlockState getRenderState()

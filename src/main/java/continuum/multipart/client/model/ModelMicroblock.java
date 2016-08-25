@@ -1,4 +1,4 @@
-package continuum.multipart.client.models;
+package continuum.multipart.client.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,8 +15,8 @@ import com.google.common.collect.Lists;
 
 import continuum.api.microblock.IMicroblock;
 import continuum.api.microblock.MicroblockStateImpl;
-import continuum.api.microblock.texture.MicroblockTextureApi;
-import continuum.api.microblock.texture.MicroblockTextureEntry;
+import continuum.api.microblock.texture.MicroblockMaterial;
+import continuum.api.microblock.texture.MicroblockMaterialApi;
 import continuum.api.multipart.MultiblockStateImpl;
 import continuum.essentials.mod.CTMod;
 import continuum.multipart.enums.EnumMicroblockType;
@@ -25,7 +25,6 @@ import continuum.multipart.items.ItemMicroblock;
 import continuum.multipart.mod.Multipart_EH;
 import continuum.multipart.mod.Multipart_OH;
 import continuum.multipart.multiparts.MultipartMicroblock;
-import continuum.multipart.plugins.MultipartAPI_Variables;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -75,8 +74,8 @@ public class ModelMicroblock implements IModel
 	public Collection<ResourceLocation> getTextures()
 	{
 		ArrayList<ResourceLocation> textures = Lists.newArrayList();
-		if(MicroblockTextureApi.apiActive())
-		for(MicroblockTextureEntry entry : MicroblockTextureApi.getMicroblockTextureRegistry())
+		if(MicroblockMaterialApi.apiActive())
+		for(MicroblockMaterial entry : MicroblockMaterialApi.getMicroblockMaterialRegistry())
 		{
 			textures.add(entry.getParticleLocation());
 			for(EnumFacing direction : EnumFacing.values())
@@ -138,7 +137,7 @@ public class ModelMicroblock implements IModel
 			this.function = baseModel.function;
 			this.iol = baseModel.iol;
 			IBlockState state = ((ItemMicroblock)stack.getItem()).getRenderState();
-			this.itemData = Pair.of((IMicroblock)state.getBlock(), this.createQuads((IMicroblock)state.getBlock(), state, null, MicroblockTextureEntry.readFromNBT(stack.getTagCompound())));
+			this.itemData = Pair.of((IMicroblock)state.getBlock(), this.createQuads((IMicroblock)state.getBlock(), state, null, MicroblockMaterial.readFromNBT(stack.getTagCompound())));
 		}
 		
 		@Override
@@ -150,7 +149,7 @@ public class ModelMicroblock implements IModel
 			return Lists.newArrayList();
 		}
 		
-		private List<BakedQuad> createQuads(IMicroblock microblock, IBlockState state, EnumFacing facing, MicroblockTextureEntry entry)
+		private List<BakedQuad> createQuads(IMicroblock microblock, IBlockState state, EnumFacing facing, MicroblockMaterial entry)
 		{
 			List<Triple<Boolean, AxisAlignedBB, BlockPos>> list = microblock.getRenderList(state, entry);
 			return getQuads(facing, list, this.function.apply(entry.getLocationFromIndex(0)), this.function.apply(entry.getLocationFromIndex(1)), this.function.apply(entry.getLocationFromIndex(2)), this.function.apply(entry.getLocationFromIndex(3)), this.function.apply(entry.getLocationFromIndex(4)), this.function.apply(entry.getLocationFromIndex(5)));

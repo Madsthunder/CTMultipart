@@ -1,6 +1,6 @@
 package continuum.api.microblock;
 
-import continuum.api.microblock.texture.MicroblockTextureEntry;
+import continuum.api.microblock.texture.MicroblockMaterial;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer.StateImplementation;
 import net.minecraft.block.state.IBlockState;
@@ -8,9 +8,9 @@ import net.minecraft.block.state.IBlockState;
 public class MicroblockStateImpl extends StateImplementation
 {
 	public final StateImplementation implementation;
-	public final MicroblockTextureEntry entry;
+	public final MicroblockMaterial entry;
 	
-	public MicroblockStateImpl(StateImplementation state, MicroblockTextureEntry entry)
+	public MicroblockStateImpl(StateImplementation state, MicroblockMaterial entry)
 	{
 		super(state.getBlock(), state.getProperties(), state.getPropertyValueTable());
 		this.implementation = state;

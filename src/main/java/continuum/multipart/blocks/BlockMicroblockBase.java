@@ -8,7 +8,7 @@ import continuum.api.microblock.IMicroblock;
 import continuum.api.microblock.IMicroblockType;
 import continuum.api.microblock.MicroblockStateImpl;
 import continuum.api.microblock.TileEntityMicroblock;
-import continuum.api.microblock.texture.MicroblockTextureEntry;
+import continuum.api.microblock.texture.MicroblockMaterial;
 import continuum.api.multipart.Multipart;
 import continuum.multipart.mod.Multipart_OH;
 import continuum.multipart.multiparts.MultipartMicroblock;
@@ -130,7 +130,7 @@ public abstract class BlockMicroblockBase<MT extends IMicroblockType> extends Bl
 		if(MultipartMicroblock.currentEntry != null)
 		{
 			ItemStack stack = new ItemStack(this);
-			stack.setTagCompound(MicroblockTextureEntry.writeToNBT(MultipartMicroblock.currentEntry));
+			stack.setTagCompound(MicroblockMaterial.writeToNBT(MultipartMicroblock.currentEntry));
 			list.add(stack);
 		}
 		return list;

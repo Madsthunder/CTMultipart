@@ -1,4 +1,4 @@
-package continuum.multipart.client.models;
+package continuum.multipart.client.model;
 
 import java.util.Collection;
 import java.util.List;

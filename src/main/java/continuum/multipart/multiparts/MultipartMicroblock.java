@@ -8,7 +8,7 @@ import continuum.api.microblock.IMicroblock;
 import continuum.api.microblock.IMicroblockType;
 import continuum.api.microblock.MicroblockStateImpl;
 import continuum.api.microblock.TileEntityMicroblock;
-import continuum.api.microblock.texture.MicroblockTextureEntry;
+import continuum.api.microblock.texture.MicroblockMaterial;
 import continuum.api.multipart.MultiblockStateImpl;
 import continuum.api.multipart.Multipart;
 import continuum.api.multipart.MultipartInfo;
@@ -44,7 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MultipartMicroblock<MB> extends Multipart
 {
-	public static MicroblockTextureEntry currentEntry;
+	public static MicroblockMaterial currentEntry;
 	private final Block block;
 	private final IMicroblock microblock;
 	
@@ -174,7 +174,7 @@ public class MultipartMicroblock<MB> extends Multipart
 	@Override
 	public SoundType getSoundType(ItemStack stack)
 	{
-		return stack != null ? MicroblockTextureEntry.readFromNBT(stack.getTagCompound()).getSound() : SoundType.STONE;
+		return stack != null ? MicroblockMaterial.readFromNBT(stack.getTagCompound()).getSound() : SoundType.STONE;
 	}
 	
 	@Override

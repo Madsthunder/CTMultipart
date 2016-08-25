@@ -3,10 +3,10 @@ package continuum.api.microblock.texture;
 import continuum.essentials.mod.APIMethodMirrorable;
 import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 
-public class MicroblockTextureApi
+public class MicroblockMaterialApi
 {
 	@APIMethodMirrorable
-	public static FMLControlledNamespacedRegistry<MicroblockTextureEntry> getMicroblockTextureRegistry()
+	public static FMLControlledNamespacedRegistry<MicroblockMaterial> getMicroblockMaterialRegistry()
 	{
 		return null;
 	}

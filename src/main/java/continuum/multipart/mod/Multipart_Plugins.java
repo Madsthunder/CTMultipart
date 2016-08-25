@@ -51,11 +51,11 @@ public class Multipart_Plugins implements IFMLLoadingPlugin, IFMLCallHook
 	@Override
 	public Void call() throws Exception
 	{
-		ApiPlugin.putAPIPackages(Sets.newHashSet("continuum.api.multipart", "continuum.api.microblock.texture"), Sets.newHashSet("continuum.multipart.plugins.MultipartAPI_Methods"));
+		ApiPlugin.putAPIPackages(Sets.newHashSet("continuum.api.multipart", "continuum.api.microblock.texture"), Sets.newHashSet("continuum.multipart.plugins.MultipartApis"));
 		if(multiparts)
 			ApiPlugin.putAPIClass("MultipartApi", "continuum.api.multipart.MultipartApi");
 		if(microblocks)
-			ApiPlugin.putAPIClass("MicroblockTextureApi", "continuum.api.microblock.texture.MicroblockTextureApi");
+			ApiPlugin.putAPIClass("MicroblockMaterialApi", "continuum.api.microblock.texture.MicroblockMaterialApi");
 		return null;
 	}
 }

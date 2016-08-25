@@ -6,8 +6,8 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import continuum.api.microblock.TileEntityMicroblock;
-import continuum.api.microblock.texture.MicroblockTextureApi;
-import continuum.api.microblock.texture.MicroblockTextureEntry;
+import continuum.api.microblock.texture.MicroblockMaterialApi;
+import continuum.api.microblock.texture.MicroblockMaterial;
 import continuum.api.multipart.Multipart;
 import continuum.api.multipart.MultipartApi;
 import continuum.api.multipart.TileEntityMultiblock;
@@ -19,14 +19,14 @@ import continuum.multipart.blocks.BlockAxised;
 import continuum.multipart.blocks.BlockCornered;
 import continuum.multipart.blocks.BlockLayered;
 import continuum.multipart.blocks.BlockMultiblock;
-import continuum.multipart.client.models.ModelMicroblock;
-import continuum.multipart.client.models.ModelMultipart;
+import continuum.multipart.client.model.ModelMicroblock;
+import continuum.multipart.client.model.ModelMultipart;
+import continuum.multipart.client.renderer.MultipartTESR;
 import continuum.multipart.client.state.StateMapperMicroblock;
 import continuum.multipart.enums.EnumMicroblockType;
 import continuum.multipart.items.ItemMicroblock;
 import continuum.multipart.multiparts.MultipartFlowerPot;
 import continuum.multipart.multiparts.MutipartTorch;
-import continuum.multipart.renderer.MultipartTESR;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
@@ -183,8 +183,8 @@ public class Multipart_Loaders
 		@Override
 		public void construction(CTMod<Multipart_OH, Multipart_EH> mod)
 		{
-			if(MicroblockTextureApi.apiActive())
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(MicroblockTextureEntry.defaultTexture);
+			if(MicroblockMaterialApi.apiActive())
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(MicroblockMaterial.defaultTexture);
 		}
 		
 		@Override
@@ -206,46 +206,46 @@ public class Multipart_Loaders
 				registry.register(holder.corner.getMultipart());
 				registry.register(holder.nook.getMultipart());
 			}
-			if(MicroblockTextureApi.apiActive())
+			if(MicroblockMaterialApi.apiActive())
 			{
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("stone", Blocks.STONE, "blocks/stone"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("granite", Blocks.STONE, 1, "blocks/stone_granite"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("granite_smooth", Blocks.STONE, 2, "blocks/stone_granite_smooth"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("diorite", Blocks.STONE, 3, "blocks/stone_diorite"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("diorite_smooth", Blocks.STONE, 4, "blocks/stone_diorite_smooth"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("andesite", Blocks.STONE, 5, "blocks/stone_andesite"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("andeite_smooth", Blocks.STONE, 6, "blocks/stone_andesite_smooth"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("dirt", Blocks.DIRT, "blocks/dirt"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("coarse_dirt", Blocks.DIRT, 1, "blocks/coarse_dirt"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("podzol", Blocks.DIRT, 2, "blocks/dirt_podzol_side", "blocks/dirt", "blocks/dirt_podzol_top"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("cobblestone", Blocks.COBBLESTONE, "blocks/cobblestone"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("mossy_cobblestone", Blocks.MOSSY_COBBLESTONE, "blocks/cobblestone_mossy"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("oak_planks", Blocks.PLANKS, "blocks/planks_oak"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("spruce_planks", Blocks.PLANKS, 1, "blocks/planks_spruce"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("birch_planks", Blocks.PLANKS, 2, "blocks/planks_birch"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("jungle_planks", Blocks.PLANKS, 3, "blocks/planks_jungle"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("acacia_planks", Blocks.PLANKS, 4, "blocks/planks_acacia"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("dark_oak_planks", Blocks.PLANKS, 5, "blocks/planks_big_oak"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("sand", Blocks.SAND, "blocks/sand"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("red_sand", Blocks.SAND, 1, "blocks/red_sand"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("gravel", Blocks.GRAVEL, "blocks/gravel"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("coal_ore", Blocks.COAL_ORE, "blocks/coal_ore"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("iron_ore", Blocks.IRON_ORE, "blocks/iron_ore"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("lapis_ore", Blocks.LAPIS_ORE, "blocks/lapis_ore"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("gold_ore", Blocks.GOLD_ORE, "blocks/gold_ore"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("redstone_ore", Blocks.REDSTONE_ORE, "blocks/redstone_ore"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("emerald_ore", Blocks.EMERALD_ORE, "blocks/emerald_ore"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("diamond_ore", Blocks.DIAMOND_ORE, "blocks/diamond_ore"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("nether_quartz_ore", Blocks.QUARTZ_ORE, "blocks/quartz_ore"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("oak_log", Blocks.LOG, "blocks/log_oak", "blocks/log_oak_top", "blocks/log_oak_top"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("spruce_log", Blocks.LOG, 1, "blocks/log_spruce", "blocks/log_spruce_top", "blocks/log_spruce_top"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("birch_log", Blocks.LOG, 2, "blocks/log_birch", "blocks/log_birch_top", "blocks/log_birch_top"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("jungle_log", Blocks.LOG, 3, "blocks/log_jungle", "blocks/log_jungle_top", "blocks/log_jungle_top"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("acacia_log", Blocks.LOG2, "blocks/log_acacia", "blocks/log_acacia_top", "blocks/log_acacia_top"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("dark_oak_log", Blocks.LOG2, 1, "blocks/log_big_oak", "blocks/log_big_oak_top", "blocks/log_big_oak_top"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("sponge", Blocks.SPONGE, "blocks/sponge"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("wet_sponge", Blocks.SPONGE, 1, "blocks/sponge_wet"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("glass", Blocks.GLASS, "blocks/glass"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("stone", Blocks.STONE, "blocks/stone"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("granite", Blocks.STONE, 1, "blocks/stone_granite"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("granite_smooth", Blocks.STONE, 2, "blocks/stone_granite_smooth"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("diorite", Blocks.STONE, 3, "blocks/stone_diorite"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("diorite_smooth", Blocks.STONE, 4, "blocks/stone_diorite_smooth"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("andesite", Blocks.STONE, 5, "blocks/stone_andesite"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("andeite_smooth", Blocks.STONE, 6, "blocks/stone_andesite_smooth"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("dirt", Blocks.DIRT, "blocks/dirt"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("coarse_dirt", Blocks.DIRT, 1, "blocks/coarse_dirt"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("podzol", Blocks.DIRT, 2, "blocks/dirt_podzol_side", "blocks/dirt", "blocks/dirt_podzol_top"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("cobblestone", Blocks.COBBLESTONE, "blocks/cobblestone"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("mossy_cobblestone", Blocks.MOSSY_COBBLESTONE, "blocks/cobblestone_mossy"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("oak_planks", Blocks.PLANKS, "blocks/planks_oak"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("spruce_planks", Blocks.PLANKS, 1, "blocks/planks_spruce"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("birch_planks", Blocks.PLANKS, 2, "blocks/planks_birch"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("jungle_planks", Blocks.PLANKS, 3, "blocks/planks_jungle"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("acacia_planks", Blocks.PLANKS, 4, "blocks/planks_acacia"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("dark_oak_planks", Blocks.PLANKS, 5, "blocks/planks_big_oak"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("sand", Blocks.SAND, "blocks/sand"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("red_sand", Blocks.SAND, 1, "blocks/red_sand"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("gravel", Blocks.GRAVEL, "blocks/gravel"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("coal_ore", Blocks.COAL_ORE, "blocks/coal_ore"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("iron_ore", Blocks.IRON_ORE, "blocks/iron_ore"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("lapis_ore", Blocks.LAPIS_ORE, "blocks/lapis_ore"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("gold_ore", Blocks.GOLD_ORE, "blocks/gold_ore"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("redstone_ore", Blocks.REDSTONE_ORE, "blocks/redstone_ore"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("emerald_ore", Blocks.EMERALD_ORE, "blocks/emerald_ore"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("diamond_ore", Blocks.DIAMOND_ORE, "blocks/diamond_ore"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("nether_quartz_ore", Blocks.QUARTZ_ORE, "blocks/quartz_ore"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("oak_log", Blocks.LOG, "blocks/log_oak", "blocks/log_oak_top", "blocks/log_oak_top"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("spruce_log", Blocks.LOG, 1, "blocks/log_spruce", "blocks/log_spruce_top", "blocks/log_spruce_top"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("birch_log", Blocks.LOG, 2, "blocks/log_birch", "blocks/log_birch_top", "blocks/log_birch_top"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("jungle_log", Blocks.LOG, 3, "blocks/log_jungle", "blocks/log_jungle_top", "blocks/log_jungle_top"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("acacia_log", Blocks.LOG2, "blocks/log_acacia", "blocks/log_acacia_top", "blocks/log_acacia_top"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("dark_oak_log", Blocks.LOG2, 1, "blocks/log_big_oak", "blocks/log_big_oak_top", "blocks/log_big_oak_top"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("sponge", Blocks.SPONGE, "blocks/sponge"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("wet_sponge", Blocks.SPONGE, 1, "blocks/sponge_wet"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("glass", Blocks.GLASS, "blocks/glass"));
 				// Maybe Another Day
 				/**mod.holder.microblockRegistry.register(new MicroblockEntry("white_glass", Blocks.stained_glass.getStateFromMeta(0), new ResourceLocation("minecraft", "blocks/glass_white")));
 				mod.holder.microblockRegistry.register(new MicroblockEntry("orange_glass", Blocks.stained_glass.getStateFromMeta(1), new ResourceLocation("minecraft", "blocks/glass_orange")));
@@ -263,52 +263,52 @@ public class Multipart_Loaders
 				mod.holder.microblockRegistry.register(new MicroblockEntry("green_glass", Blocks.stained_glass.getStateFromMeta(13), new ResourceLocation("minecraft", "blocks/glass_green")));
 				mod.holder.microblockRegistry.register(new MicroblockEntry("red_glass", Blocks.stained_glass.getStateFromMeta(14), new ResourceLocation("minecraft", "blocks/glass_red")));
 				mod.holder.microblockRegistry.register(new MicroblockEntry("black_glass", Blocks.stained_glass.getStateFromMeta(15), new ResourceLocation("minecraft", "blocks/glass_black")));*/
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("coal_block", Blocks.COAL_BLOCK, "blocks/coal_block"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("iron_block", Blocks.IRON_BLOCK, "blocks/iron_block"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("lapis_block", Blocks.LAPIS_BLOCK, "blocks/lapis_block"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("gold_block", Blocks.GOLD_BLOCK, "blocks/gold_block"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("redstone_block", Blocks.REDSTONE_BLOCK, "blocks/redstone_block"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("emerald_block", Blocks.EMERALD_BLOCK, "blocks/emerald_block"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("diamond_block", Blocks.DIAMOND_BLOCK, "blocks/diamond_block"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("sandstone", Blocks.SANDSTONE, "blocks/sandstone_normal", "blocks/sandstone_bottom", "blocks/sandstone_top"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("chiseled_sandstone", Blocks.SANDSTONE, 1, "blocks/sandstone_carved", "blocks/sandstone_bottom", "blocks/sandstone_bottom"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("smooth_sandstone", Blocks.SANDSTONE, 2, "blocks/sandstone_smooth", "blocks/sandstone_bottom", "blocks/sandstone_bottom"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("red_sandstone", Blocks.RED_SANDSTONE, "blocks/red_sandstone_normal", "blocks/red_sandstone_bottom", "blocks/red_sandstone_top"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("red_chiseled_sandstone", Blocks.RED_SANDSTONE, 1, "blocks/red_sandstone_carved", "blocks/red_sandstone_bottom", "blocks/red_sandstone_bottom"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("red_smooth_sandstone", Blocks.RED_SANDSTONE, 2, "blocks/red_sandstone_smooth", "blocks/red_sandstone_bottom", "blocks/red_sandstone_bottom"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("white_wool", Blocks.WOOL, "blocks/wool_colored_white"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("orange_wool", Blocks.WOOL, 1, "blocks/wool_colored_orange"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("magenta_wool", Blocks.WOOL, 2, "blocks/wool_colored_magenta"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("light_blue_wool", Blocks.WOOL, 3, "blocks/wool_colored_light_blue"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("yellow_wool", Blocks.WOOL, 4, "blocks/wool_colored_yellow"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("lime_wool", Blocks.WOOL, 5, "blocks/wool_colored_lime"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("pink_wool", Blocks.WOOL, 6, "blocks/wool_colored_pink"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("gray_wool", Blocks.WOOL, 7, "blocks/wool_colored_gray"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("light_gray_wool", Blocks.WOOL, 8, "blocks/wool_colored_silver"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("cyan_wool", Blocks.WOOL, 9, "blocks/wool_colored_cyan"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("purple_wool", Blocks.WOOL, 10, "blocks/wool_colored_purple"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("blue_wool", Blocks.WOOL, 11, "blocks/wool_colored_blue"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("brown_wool", Blocks.WOOL, 12, "blocks/wool_colored_brown"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("green_wool", Blocks.WOOL, 13, "blocks/wool_colored_green"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("red_wool", Blocks.WOOL, 14, "blocks/wool_colored_red"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("black_wool", Blocks.WOOL, 15, "blocks/wool_colored_black"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("coal_block", Blocks.COAL_BLOCK, "blocks/coal_block"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("iron_block", Blocks.IRON_BLOCK, "blocks/iron_block"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("lapis_block", Blocks.LAPIS_BLOCK, "blocks/lapis_block"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("gold_block", Blocks.GOLD_BLOCK, "blocks/gold_block"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("redstone_block", Blocks.REDSTONE_BLOCK, "blocks/redstone_block"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("emerald_block", Blocks.EMERALD_BLOCK, "blocks/emerald_block"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("diamond_block", Blocks.DIAMOND_BLOCK, "blocks/diamond_block"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("sandstone", Blocks.SANDSTONE, "blocks/sandstone_normal", "blocks/sandstone_bottom", "blocks/sandstone_top"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("chiseled_sandstone", Blocks.SANDSTONE, 1, "blocks/sandstone_carved", "blocks/sandstone_bottom", "blocks/sandstone_bottom"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("smooth_sandstone", Blocks.SANDSTONE, 2, "blocks/sandstone_smooth", "blocks/sandstone_bottom", "blocks/sandstone_bottom"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("red_sandstone", Blocks.RED_SANDSTONE, "blocks/red_sandstone_normal", "blocks/red_sandstone_bottom", "blocks/red_sandstone_top"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("red_chiseled_sandstone", Blocks.RED_SANDSTONE, 1, "blocks/red_sandstone_carved", "blocks/red_sandstone_bottom", "blocks/red_sandstone_bottom"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("red_smooth_sandstone", Blocks.RED_SANDSTONE, 2, "blocks/red_sandstone_smooth", "blocks/red_sandstone_bottom", "blocks/red_sandstone_bottom"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("white_wool", Blocks.WOOL, "blocks/wool_colored_white"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("orange_wool", Blocks.WOOL, 1, "blocks/wool_colored_orange"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("magenta_wool", Blocks.WOOL, 2, "blocks/wool_colored_magenta"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("light_blue_wool", Blocks.WOOL, 3, "blocks/wool_colored_light_blue"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("yellow_wool", Blocks.WOOL, 4, "blocks/wool_colored_yellow"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("lime_wool", Blocks.WOOL, 5, "blocks/wool_colored_lime"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("pink_wool", Blocks.WOOL, 6, "blocks/wool_colored_pink"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("gray_wool", Blocks.WOOL, 7, "blocks/wool_colored_gray"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("light_gray_wool", Blocks.WOOL, 8, "blocks/wool_colored_silver"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("cyan_wool", Blocks.WOOL, 9, "blocks/wool_colored_cyan"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("purple_wool", Blocks.WOOL, 10, "blocks/wool_colored_purple"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("blue_wool", Blocks.WOOL, 11, "blocks/wool_colored_blue"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("brown_wool", Blocks.WOOL, 12, "blocks/wool_colored_brown"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("green_wool", Blocks.WOOL, 13, "blocks/wool_colored_green"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("red_wool", Blocks.WOOL, 14, "blocks/wool_colored_red"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("black_wool", Blocks.WOOL, 15, "blocks/wool_colored_black"));
 				// mod.holder.microblockRegistry.register(new MicroblockEntry("ice",
 				// Blocks.ice, "blocks/ice"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("packed_ice", Blocks.PACKED_ICE, "blocks/ice_packed"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("snow", Blocks.SNOW, "blocks/snow"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("clay", Blocks.CLAY, "blocks/clay"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("pumpkin", Blocks.PUMPKIN, "blocks/pumpkin_side", "blocks/pumpkin_top", "blocks/pumpkin_top", "blocks/pumpkin_face_off"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("lit_pumpkin", Blocks.LIT_PUMPKIN, "blocks/pumpkin_side", "blocks/pumpkin_top", "blocks/pumpkin_top", "blocks/pumpkin_face_on"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("netherrack", Blocks.NETHERRACK, "blocks/netherrack"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("soul_sand", Blocks.SOUL_SAND, "blocks/soul_sand"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("glowstone", Blocks.GLOWSTONE, "blocks/glowstone"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("stone_bricks", Blocks.STONEBRICK, "blocks/stonebrick"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("mossy_stone_bricks", Blocks.STONEBRICK, 1, "blocks/stonebrick_mossy"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("cracked_stone_bricks", Blocks.STONEBRICK, 2, "blocks/stonebrick_cracked"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("chiseled_stone_bricks", Blocks.STONEBRICK, 3, "blocks/stonebrick_carved"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("mycelium", Blocks.MYCELIUM, "blocks/mycelium_side", "blocks/dirt", "blocks/mycelium_top"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("nether_bricks", Blocks.NETHER_BRICK, "blocks/nether_brick"));
-				MicroblockTextureApi.getMicroblockTextureRegistry().register(new MicroblockTextureEntry("end_stone", Blocks.END_STONE, "blocks/end_stone"));}
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("packed_ice", Blocks.PACKED_ICE, "blocks/ice_packed"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("snow", Blocks.SNOW, "blocks/snow"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("clay", Blocks.CLAY, "blocks/clay"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("pumpkin", Blocks.PUMPKIN, "blocks/pumpkin_side", "blocks/pumpkin_top", "blocks/pumpkin_top", "blocks/pumpkin_face_off"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("lit_pumpkin", Blocks.LIT_PUMPKIN, "blocks/pumpkin_side", "blocks/pumpkin_top", "blocks/pumpkin_top", "blocks/pumpkin_face_on"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("netherrack", Blocks.NETHERRACK, "blocks/netherrack"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("soul_sand", Blocks.SOUL_SAND, "blocks/soul_sand"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("glowstone", Blocks.GLOWSTONE, "blocks/glowstone"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("stone_bricks", Blocks.STONEBRICK, "blocks/stonebrick"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("mossy_stone_bricks", Blocks.STONEBRICK, 1, "blocks/stonebrick_mossy"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("cracked_stone_bricks", Blocks.STONEBRICK, 2, "blocks/stonebrick_cracked"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("chiseled_stone_bricks", Blocks.STONEBRICK, 3, "blocks/stonebrick_carved"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("mycelium", Blocks.MYCELIUM, "blocks/mycelium_side", "blocks/dirt", "blocks/mycelium_top"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("nether_bricks", Blocks.NETHER_BRICK, "blocks/nether_brick"));
+				MicroblockMaterialApi.getMicroblockMaterialRegistry().register(new MicroblockMaterial("end_stone", Blocks.END_STONE, "blocks/end_stone"));}
 		}
 		
 		@Override
@@ -325,14 +325,14 @@ public class Multipart_Loaders
 		@Override
 		public void pre(CTMod<Multipart_OH, Multipart_EH> mod)
 		{
-			if(MicroblockTextureApi.apiActive())
+			if(MicroblockMaterialApi.apiActive())
 			{
 				Multipart_OH holder = mod.getObjectHolder();
 				ItemStack stack = new ItemStack(holder.slab, 1);
 				if(stack.hasTagCompound())
-						stack.getTagCompound().merge(MicroblockTextureEntry.writeToNBT(MicroblockTextureApi.getMicroblockTextureRegistry().getObjectById(1)));
+						stack.getTagCompound().merge(MicroblockMaterial.writeToNBT(MicroblockMaterialApi.getMicroblockMaterialRegistry().getObjectById(1)));
 				else
-					stack.setTagCompound(MicroblockTextureEntry.writeToNBT(MicroblockTextureApi.getMicroblockTextureRegistry().getObjectById(1)));
+					stack.setTagCompound(MicroblockMaterial.writeToNBT(MicroblockMaterialApi.getMicroblockMaterialRegistry().getObjectById(1)));
 				holder.microblocks = new CreativeTab("ctmicroblocks", stack);
 				holder.slab.setCreativeTab(holder.microblocks);
 				holder.panel.setCreativeTab(holder.microblocks);

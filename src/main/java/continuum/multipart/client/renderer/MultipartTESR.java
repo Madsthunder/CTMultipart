@@ -1,4 +1,4 @@
-package continuum.multipart.renderer;
+package continuum.multipart.client.renderer;
 
 import continuum.api.multipart.MultipartInfo;
 import continuum.api.multipart.TileEntityMultiblock;
@@ -14,15 +14,9 @@ import net.minecraft.util.math.RayTraceResult;
 
 public class MultipartTESR extends TileEntitySpecialRenderer<TileEntityMultiblock>
 {
-	public final Minecraft minecraft;
-	public final BlockRendererDispatcher dispatcher;
+	private static final Minecraft mc = Minecraft.getMinecraft();
+	private final BlockRendererDispatcher dispatcher = mc.getBlockRendererDispatcher();
 	public final TextureAtlasSprite[] destroyStages = new TextureAtlasSprite[10];
-	
-	public MultipartTESR()
-	{
-		this.minecraft = Minecraft.getMinecraft();
-		this.dispatcher = this.minecraft.getBlockRendererDispatcher();
-	}
 	
 	@Override
 	public void renderTileEntityAt(TileEntityMultiblock multiblock, double x, double y, double z, float partialTicks, int destroyStage)

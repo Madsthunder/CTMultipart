@@ -7,7 +7,7 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import com.google.common.collect.Lists;
 
-import continuum.api.microblock.texture.MicroblockTextureEntry;
+import continuum.api.microblock.texture.MicroblockMaterial;
 import continuum.api.multipart.MultiblockStateImpl;
 import continuum.api.multipart.MultipartInfo;
 import continuum.multipart.enums.EnumMicroblockType;
@@ -107,7 +107,7 @@ public class BlockLayered extends BlockMicroblockBase<EnumMicroblockType>
 	}
 	
 	@Override
-	public List<Triple<Boolean, AxisAlignedBB, BlockPos>> getRenderList(IBlockState state, MicroblockTextureEntry entry)
+	public List<Triple<Boolean, AxisAlignedBB, BlockPos>> getRenderList(IBlockState state, MicroblockMaterial entry)
 	{
 		ArrayList<Triple<Boolean, AxisAlignedBB, BlockPos>> renderList = Lists.newArrayList();
 		EnumMicroblockType type = this.getType();

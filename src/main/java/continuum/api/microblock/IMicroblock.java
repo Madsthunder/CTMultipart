@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.tuple.Triple;
 
-import continuum.api.microblock.texture.MicroblockTextureEntry;
+import continuum.api.microblock.texture.MicroblockMaterial;
 import continuum.api.multipart.Multipart;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -17,7 +17,7 @@ public interface IMicroblock<MT extends IMicroblockType>
 	public IMicroblockType getType();
 	
 	@SideOnly(Side.CLIENT)
-	public List<Triple<Boolean, AxisAlignedBB, BlockPos>> getRenderList(IBlockState state, MicroblockTextureEntry entry);
+	public List<Triple<Boolean, AxisAlignedBB, BlockPos>> getRenderList(IBlockState state, MicroblockMaterial entry);
 	
 	public Multipart getMultipart();
 }
