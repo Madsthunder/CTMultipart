@@ -7,6 +7,7 @@ import com.google.common.base.Predicate;
 import continuum.api.microblock.Microblock;
 import continuum.api.multipart.MultipartState;
 import continuum.essentials.mod.APIMethodMirrorable;
+import continuum.multipart.multiparts.MultipartMicroblock;
 
 public class MultipartCompat
 {

@@ -8,12 +8,12 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 
 import continuum.api.microblock.Microblock;
-import continuum.api.microblock.compat.MultipartMicroblock;
 import continuum.api.microblock.texture.MicroblockMaterial;
 import continuum.api.multipart.Multipart;
 import continuum.api.multipart.MultipartState;
 import continuum.essentials.mod.APIMethodReflectable;
 import continuum.essentials.mod.MirrorType;
+import continuum.multipart.multiparts.MultipartMicroblock;
 import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.IForgeRegistry;
 

@@ -6,10 +6,10 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 import continuum.api.microblock.Microblock;
-import continuum.api.microblock.compat.MultipartMicroblock;
 import continuum.api.multipart.Multipart;
 import continuum.api.multipart.MultipartUtils;
 import continuum.multipart.items.ItemMicroblock;
+import continuum.multipart.multiparts.MultipartMicroblock;
 import continuum.multipart.registry.MicroblockOverlapRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

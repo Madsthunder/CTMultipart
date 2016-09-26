@@ -1,4 +1,4 @@
-package continuum.api.microblock.compat;
+package continuum.multipart.multiparts;
 
 import java.util.List;
 
