@@ -1,18 +1,25 @@
 package continuum.api.microblock;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 
-public final class MicroblockOverlap implements IForgeRegistryEntry<MicroblockOverlap>
+public final class MicroblockOverlap extends Pair<Microblock, Microblock> implements IForgeRegistryEntry<MicroblockOverlap>
 {
 	public static final ResourceLocation OVERLAPREGISTRY = new ResourceLocation("ctmultipart", "microblockoverlapregistry");
 	private final Microblock microblock;
 	private final Microblock overlapped;
 	private final Predicate<Pair> predicate;
+	
+	public MicroblockOverlap(Microblock microblock, Microblock overlapped)
+	{
+		this(microblock, overlapped, Predicates.alwaysTrue());
+	}
 	
 	public MicroblockOverlap(Microblock microblock, Microblock overlapped, Predicate<Pair> predicate)
 	{
@@ -57,5 +64,23 @@ public final class MicroblockOverlap implements IForgeRegistryEntry<MicroblockOv
 	public Class<? super MicroblockOverlap> getRegistryType()
 	{
 		return MicroblockOverlap.class;
+	}
+
+	@Override
+	public Microblock setValue(Microblock value)
+	{
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Microblock getLeft()
+	{
+		return this.microblock;
+	}
+
+	@Override
+	public Microblock getRight()
+	{
+		return this.overlapped;
 	}
 }

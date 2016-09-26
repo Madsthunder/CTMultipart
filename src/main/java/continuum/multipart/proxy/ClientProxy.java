@@ -3,6 +3,7 @@ package continuum.multipart.proxy;
 import com.google.common.base.Functions;
 
 import continuum.api.microblock.Microblock;
+import continuum.api.microblock.MicroblockOverlap;
 import continuum.api.multipart.TESRMultiblockBase;
 import continuum.api.multipart.TileEntityMultiblock;
 import continuum.core.mod.CTCore_OH;
@@ -10,6 +11,8 @@ import continuum.essentials.client.state.StateMapperStatic;
 import continuum.multipart.client.model.ModelMicroblock;
 import continuum.multipart.client.model.ModelMultiblock;
 import continuum.multipart.client.state.StateMapperMicroblock;
+import continuum.multipart.enums.DefaultMicroblock;
+import continuum.multipart.mod.Multipart_Callbacks;
 import continuum.multipart.mod.Multipart_Mod;
 import continuum.multipart.mod.Multipart_OH;
 import net.minecraft.block.Block;
@@ -46,6 +49,9 @@ public class ClientProxy extends CommonProxy
 				if(item != null)
 					ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(new ResourceLocation(holder.getModid(), "microblock"), "normal"));
 			}
+			IForgeRegistry<MicroblockOverlap> microblockOverlapRegistry = microblockRegistry.getSlaveMap(Multipart_Callbacks.MICROBLOCK_OVERLAPS, IForgeRegistry.class);
+			if(microblockOverlapRegistry != null)
+				microblockOverlapRegistry.register(new MicroblockOverlap(DefaultMicroblock.STRIP, DefaultMicroblock.COVER));
 		}
 		if(holder.multiblock != null)
 			ModelLoader.setCustomStateMapper(holder.multiblock, StateMapperStatic.create(new ModelResourceLocation(new ResourceLocation(holder.getModid(), "multiblock"), "normal")));

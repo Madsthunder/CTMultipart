@@ -9,8 +9,12 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.mojang.realmsclient.util.Pair;
 
 import continuum.api.microblock.MicroblockOverlap;
+import continuum.api.multipart.MultipartState;
+import continuum.multipart.multiparts.MultipartMicroblock;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
@@ -97,5 +101,22 @@ public class MicroblockOverlapRegistry implements IForgeRegistry<MicroblockOverl
 	public <T> T getSlaveMap(ResourceLocation slaveMapName, Class<T> type)
 	{
 		return null;
+	}
+	
+	public boolean overlaps(MultipartState<MultipartMicroblock> microblock, MultipartState<MultipartMicroblock> overlapped)
+	{
+		if(overlapped.canRenderInLayer(BlockRenderLayer.TRANSLUCENT) && !microblock.canRenderInLayer(BlockRenderLayer.TRANSLUCENT))
+			return true;
+		if((overlapped.canRenderInLayer(BlockRenderLayer.CUTOUT) || overlapped.canRenderInLayer(BlockRenderLayer.CUTOUT_MIPPED)) && !microblock.canRenderInLayer(BlockRenderLayer.CUTOUT) && !microblock.canRenderInLayer(BlockRenderLayer.CUTOUT_MIPPED))
+			return true;
+		String microblockName = microblock.getMultipart().getMicroblock().getRegistryName().toString().replace(':', '|');
+		String overlappedName = overlapped.getMultipart().getMicroblock().getRegistryName().toString().replace(':', '|');
+		MicroblockOverlap overlap = this.overlaps.get(new ResourceLocation(microblockName, overlappedName));
+		if(overlap != null)
+			return overlap.overlaps(microblock, overlapped);
+		overlap = this.overlaps.get(new ResourceLocation(overlappedName, microblockName));
+				if(overlap != null)
+					return !overlap.overlaps(overlapped, microblock);
+		return microblock.getIndex() > overlapped.getIndex();
 	}
 }

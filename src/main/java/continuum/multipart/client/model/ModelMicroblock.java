@@ -17,7 +17,6 @@ import com.google.common.collect.Sets;
 
 import continuum.api.microblock.Microblock;
 import continuum.api.microblock.MicroblockStateImpl;
-import continuum.api.microblock.compat.MultipartCompat;
 import continuum.api.microblock.texture.MicroblockMaterial;
 import continuum.api.multipart.MultiblockStateImpl;
 import continuum.api.multipart.MultipartState;
@@ -28,6 +27,7 @@ import continuum.multipart.items.ItemMicroblock;
 import continuum.multipart.mod.Multipart_EH;
 import continuum.multipart.mod.Multipart_OH;
 import continuum.multipart.multiparts.MultipartMicroblock;
+import continuum.multipart.registry.MicroblockOverlapRegistry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -291,7 +291,7 @@ public class ModelMicroblock implements IModel
 				@Override
 				public boolean apply(MultipartState<MultipartMicroblock> info)
 				{
-					return MultipartCompat.microblockOverlaps(info, msi.getInfo());
+					return MicroblockOverlapRegistry.INSTANCE.overlaps(info, msi.getInfo());
 				}
 			}, new Function<MultipartState<MultipartMicroblock>, Iterable<AxisAlignedBB>>()
 			{
