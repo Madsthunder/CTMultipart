@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -24,44 +25,46 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MultipartInfo implements INBTSerializable<NBTTagCompound>
+public class MultipartState<M extends Multipart> implements INBTSerializable<NBTTagCompound>
 {
 	private final UUID uuid;
-	private final TileEntityMultiblock source;
-	private final Multipart multipart;
+	private final MultipartStateList infoList;
+	private final M multipart;
 	private int meta;
 	private TileEntity entity;
 	
-	public MultipartInfo(UUID uuid, TileEntityMultiblock multiblock, Multipart multipart, IBlockState state)
+	public MultipartState(UUID uuid, MultipartStateList infoList, M multipart, IBlockState state)
 	{
-		this(uuid, multiblock, multipart, state.getBlock().getMetaFromState(state));
+		this(uuid, infoList, multipart, state.getBlock().getMetaFromState(state));
 	}
 	
-	public MultipartInfo(UUID uuid, TileEntityMultiblock multiblock, Multipart multipart, int meta)
+	public MultipartState(UUID uuid, MultipartStateList infoList, M multipart, int meta)
 	{
-		this(uuid, multiblock, multipart, meta, null);
+		this(uuid, infoList, multipart, meta, null);
 	}
 	
-	public MultipartInfo(UUID uuid, TileEntityMultiblock multiblock, Multipart multipart, IBlockState state, TileEntity entity)
+	public MultipartState(UUID uuid, MultipartStateList infoList, M multipart, IBlockState state, TileEntity entity)
 	{
-		this(uuid, multiblock, multipart, state.getBlock().getMetaFromState(state), entity);
+		this(uuid, infoList, multipart, state.getBlock().getMetaFromState(state), entity);
 	}
 	
-	public MultipartInfo(UUID uuid, TileEntityMultiblock sourceTile, Multipart multipart, int meta, TileEntity entity)
+	public MultipartState(UUID uuid, MultipartStateList infoList, M multipart, int meta, TileEntity entity)
 	{
 		this.uuid = uuid;
-		this.source = sourceTile;
+		this.infoList = infoList;
 		this.multipart = multipart;
 		this.meta = meta;
 		this.entity = entity;
 	}
 	
-	public List<ICuboid> getSelectableBoxes()
+	public List<ICuboid> getSelectableCuboids()
 	{
-		return this.getMultipart().getCuboids(this);
+		return this.getMultipart().getSelectableCuboids(this);
 	}
 	
 	public List<AxisAlignedBB> getCollisonBoxes()
@@ -77,7 +80,7 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 	public IBlockState getActualState(boolean addImpl)
 	{
 		IBlockState state = this.getMultipart().getMultipartState(this);
-		if(addImpl && state instanceof StateImplementation) state = new MultiblockStateImpl((StateImplementation)state, this.source, this);
+		if(addImpl && state instanceof StateImplementation) state = new MultiblockStateImpl((StateImplementation)state, this.infoList, this);
 		return state;
 	}
 	
@@ -89,7 +92,7 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 	public IBlockState getExtendedState(boolean addImpl)
 	{
 		IBlockState state = this.getMultipart().getMultipartRenderState(this);
-		if(addImpl && state instanceof StateImplementation) state = new MultiblockStateImpl((StateImplementation)state, this.source, this);
+		if(addImpl && state instanceof StateImplementation) state = new MultiblockStateImpl((StateImplementation)state, this.infoList, this);
 		return state;
 	}
 	
@@ -175,19 +178,19 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 		return this.getWorld().getBlockState(this.getPos());
 	}
 	
-	public TileEntityMultiblock getSourceTile()
+	public MultipartStateList getInfoList()
 	{
-		return this.source;
+		return this.infoList;
 	}
 	
 	public World getWorld()
 	{
-		return this.getSourceTile().getWorld();
+		return this.getInfoList().getWorld();
 	}
 	
 	public BlockPos getPos()
 	{
-		return this.getSourceTile().getPos();
+		return this.getInfoList().getPos();
 	}
 	
 	public UUID getUUID()
@@ -195,7 +198,7 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 		return this.uuid;
 	}
 	
-	public Multipart getMultipart()
+	public M getMultipart()
 	{
 		return this.multipart;
 	}
@@ -237,6 +240,11 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 		return this.getTileEntity() != null;
 	}
 	
+	public boolean canRenderInLayer(BlockRenderLayer layer)
+	{
+		return this.getMultipart().canRenderInLayer(this, layer);
+	}
+	
 	@Override
 	public NBTTagCompound serializeNBT()
 	{
@@ -256,20 +264,21 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 		}
 	}
 	
-	public static MultipartInfo readFromNBT(TileEntityMultiblock source, NBTTagCompound compound)
+	public static MultipartState readFromNBT(MultipartStateList infoList, NBTTagCompound compound)
 	{
-		if(MultipartApi.apiActive() && compound.hasUniqueId("uuid"))
+		IForgeRegistry<Multipart> multipartRegistry = GameRegistry.findRegistry(Multipart.class);
+		if(multipartRegistry != null && compound.hasUniqueId("uuid"))
 		{
 			UUID uuid = compound.getUniqueId("uuid");
-			Multipart multipart = MultipartApi.getMultipartRegistry().getObject(new ResourceLocation(compound.getString("multipart")));
-			if(multipart != MultipartApi.getMultipartRegistry().getDefaultValue())
+			Multipart multipart = multipartRegistry.getValue(new ResourceLocation(compound.getString("multipart")));
+			if(multipart != null)
 			{
 				int meta = compound.getInteger("metadata");
 				NBTTagCompound nbt = compound.getCompoundTag("nbt");
 				if(nbt.hasKey("id"))
-					return new MultipartInfo(uuid, source, multipart, meta, TileEntity.func_190200_a(source.getWorld(), nbt));
+					return new MultipartState(uuid, infoList, multipart, meta, TileEntity.func_190200_a(infoList.getWorld(), nbt));
 				else
-					return new MultipartInfo(uuid, source, multipart, meta);
+					return new MultipartState(uuid, infoList, multipart, meta);
 			}
 		}
 		return null;
@@ -278,11 +287,16 @@ public class MultipartInfo implements INBTSerializable<NBTTagCompound>
 	@Override
 	public String toString()
 	{
-		return "MultipartData:{source=" + this.getSourceTile() + ", multipart=" + this.getMultipart() + ", uuid=" + this.getUUID() + ", meta=" + this.getMetadata() + ", tile=" + this.getTileEntity() + "}";
+		return "MultipartData:{source=" + this.getInfoList() + ", multipart=" + this.getMultipart() + ", uuid=" + this.getUUID() + ", meta=" + this.getMetadata() + ", tile=" + this.getTileEntity() + "}";
 	}
 	
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt)
 	{
+	}
+	
+	public int getIndex()
+	{
+		return this.getInfoList().indexOf(this);
 	}
 }

@@ -1,16 +1,8 @@
 package continuum.multipart.blocks;
 
-import java.util.List;
-
-import org.apache.commons.lang3.tuple.Triple;
-
 import com.google.common.collect.Lists;
 
-import continuum.api.microblock.IMicroblockType;
-import continuum.api.microblock.texture.MicroblockMaterial;
-import continuum.multipart.enums.EnumFacingArray;
-import continuum.multipart.enums.EnumMicroblockType;
-import continuum.multipart.mod.Multipart_OH;
+import continuum.api.microblock.Microblock;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.BlockStateContainer.Builder;
@@ -19,19 +11,18 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockCornered extends BlockMicroblockBase<EnumMicroblockType>
+public class BlockCornered extends BlockMicroblockBase
 {
 	public static final PropertyDirection directionX = PropertyDirection.create("x", Lists.newArrayList(EnumFacing.WEST, EnumFacing.EAST));
 	public static final PropertyDirection directionY = PropertyDirection.create("y", Lists.newArrayList(EnumFacing.DOWN, EnumFacing.UP));
 	public static final PropertyDirection directionZ = PropertyDirection.create("z", Lists.newArrayList(EnumFacing.NORTH, EnumFacing.SOUTH));
 	
-	public BlockCornered(Multipart_OH objectHolder, EnumMicroblockType type)
+	public BlockCornered(Microblock microblock)
 	{
-		super(objectHolder, type);
+		super(microblock);
 		this.setDefaultState(this.getDefaultState().withProperty(directionY, EnumFacing.DOWN).withProperty(directionZ, EnumFacing.NORTH).withProperty(directionX, EnumFacing.WEST));
 	}
 	
@@ -108,16 +99,5 @@ public class BlockCornered extends BlockMicroblockBase<EnumMicroblockType>
 	public IBlockState withMirror(IBlockState state, Mirror mirror)
 	{
 		return state.withProperty(directionY, state.getValue(directionY).getOpposite());
-	}
-	
-	@Override
-	public List<Triple<Boolean, AxisAlignedBB, BlockPos>> getRenderList(IBlockState state, MicroblockMaterial entry)
-	{
-		IMicroblockType type = this.getType();
-		EnumFacingArray array = new EnumFacingArray(state.getValue(directionX), state.getValue(directionY), state.getValue(directionZ));
-		EnumFacing[] facings = array.toArray();
-		if(type == EnumMicroblockType.CORNER) facings = array.toArray(array);
-		if(type == EnumMicroblockType.NOOK) facings = array.toArray(array, array);
-		return Lists.newArrayList(Triple.of(true, type.getAABBFromFacings(facings), type.getRelativePos(facings)));
 	}
 }

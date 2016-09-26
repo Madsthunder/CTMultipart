@@ -3,62 +3,61 @@ package continuum.api.microblock;
 import java.util.HashMap;
 
 import continuum.api.microblock.texture.MicroblockMaterial;
-import continuum.api.microblock.texture.MicroblockMaterialApi;
 import continuum.essentials.tileentity.TileEntitySyncable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
 public class TileEntityMicroblock extends TileEntitySyncable
 {
-	private MicroblockMaterial entry = MicroblockMaterial.defaultTexture;
-	public static final HashMap<BlockPos, MicroblockMaterial> cache = new HashMap<BlockPos, MicroblockMaterial>();
+	private MicroblockMaterial material = MicroblockMaterial.defaultMaterial;
 	
 	public TileEntityMicroblock()
 	{
-		super(true);
+		
 	}
 	
-	public TileEntityMicroblock(MicroblockMaterial entry)
+	public TileEntityMicroblock(MicroblockMaterial material)
 	{
-		this.entry = entry;
+		this.material = material;
 	}
 	
 	@Override
 	public NBTTagCompound writeItemsToNBT()
 	{
 		NBTTagCompound compound = new NBTTagCompound();
-		if(entry != null) compound.setString("entry", this.entry.getRegistryName().toString());
+		if(material != null) compound.setString("material", this.material.getRegistryName().toString());
 		return compound;
 	}
 	
 	@Override
 	public void readItemsFromNBT(NBTTagCompound compound)
 	{
-		this.setEntry(new ResourceLocation(compound.getString("entry")));
+		this.setMaterial(new ResourceLocation(compound.getString("material")));
 	}
 	
 	public void onDataPacket(NetworkManager manager, SPacketUpdateTileEntity packet)
 	{
-		if(this.shouldSyncTags)
+		if(this.syncTags)
 		{
 			super.onDataPacket(manager, packet);
 			if(this.worldObj != null && this.worldObj.isRemote && this.pos != null) this.worldObj.markBlockRangeForRenderUpdate(this.pos, this.pos);
 		}
 	}
 	
-	public MicroblockMaterial getEntry()
+	public MicroblockMaterial getMaterial()
 	{
-		return this.entry;
+		return this.material;
 	}
 	
-	public void setEntry(ResourceLocation name)
+	public void setMaterial(ResourceLocation name)
 	{
-		if(MicroblockMaterialApi.apiActive())
-			this.entry = MicroblockMaterialApi.getMicroblockMaterialRegistry().getObject(name);
-		else
-			this.entry = MicroblockMaterial.defaultTexture;
+		IForgeRegistry<MicroblockMaterial> microblockMaterialRegistry = GameRegistry.findRegistry(MicroblockMaterial.class);
+		MicroblockMaterial material = microblockMaterialRegistry == null ? MicroblockMaterial.defaultMaterial : microblockMaterialRegistry.getValue(name);
+		this.material = material == null ? MicroblockMaterial.defaultMaterial : material;
 	}
 }

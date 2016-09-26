@@ -1,5 +1,12 @@
 package continuum.api.microblock;
 
+import java.util.Map.Entry;
+
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableTable;
+import com.google.common.collect.Table;
+
 import continuum.api.microblock.texture.MicroblockMaterial;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer.StateImplementation;
@@ -7,20 +14,37 @@ import net.minecraft.block.state.IBlockState;
 
 public class MicroblockStateImpl extends StateImplementation
 {
-	public final StateImplementation implementation;
-	public final MicroblockMaterial entry;
+	private final IBlockState state;
+	private final Microblock microblock;
+	private final MicroblockMaterial material;
 	
-	public MicroblockStateImpl(StateImplementation state, MicroblockMaterial entry)
+	public MicroblockStateImpl(IBlockState state, Microblock microblock, MicroblockMaterial material)
 	{
-		super(state.getBlock(), state.getProperties(), state.getPropertyValueTable());
-		this.implementation = state;
-		this.entry = entry;
+		super(state.getBlock(), state.getProperties());
+		this.state = state;
+		this.microblock = microblock;
+		this.material = material;
 	}
 	
 	@Override
 	public <T extends Comparable<T>, V extends T> IBlockState withProperty(IProperty<T> property, V value)
 	{
-		IBlockState state = this.implementation.withProperty(property, value);
-		return new MicroblockStateImpl((StateImplementation)state, this.entry);
+		IBlockState state = this.state.withProperty(property, value);
+		return new MicroblockStateImpl(state, this.microblock, this.material);
+	}
+
+	public IBlockState getState()
+	{
+		return state;
+	}
+
+	public MicroblockMaterial getMicroblockMaterial()
+	{
+		return material;
+	}
+	
+	public Microblock getMicroblock()
+	{
+		return this.microblock;
 	}
 }

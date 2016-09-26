@@ -10,23 +10,23 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
 
-public enum StripCuboid implements IPillaredCuboid
+public enum StripCuboid implements IAxisedCuboid
 {
-	POST_X_WE(0D, 7D, 7D, 16D, 9D, 9D, Axis.X, EnumFacing.WEST, EnumFacing.EAST),
-	POST_X_DN(0D, 0D, 0D, 16D, 2D, 2D, Axis.X, EnumFacing.DOWN, EnumFacing.NORTH),
-	POST_X_DS(0D, 0D, 14D, 16D, 2D, 16D, Axis.X, EnumFacing.DOWN, EnumFacing.SOUTH),
-	POST_X_UN(0D, 14D, 0D, 16D, 16D, 2D, Axis.X, EnumFacing.UP, EnumFacing.NORTH),
-	POST_X_US(0D, 14D, 14D, 16D, 16D, 16D, Axis.X, EnumFacing.UP, EnumFacing.SOUTH),
-	POST_Y_DU(7D, 0D, 7D, 9D, 16D, 9D, Axis.Y, EnumFacing.DOWN, EnumFacing.UP),
-	POST_Y_NW(0D, 0D, 0D, 2D, 16D, 2D, Axis.Y, EnumFacing.NORTH, EnumFacing.WEST),
-	POST_Y_NE(14D, 0D, 0D, 16D, 16D, 2D, Axis.Y, EnumFacing.NORTH, EnumFacing.EAST),
-	POST_Y_SW(0D, 0D, 14D, 2D, 16D, 16D, Axis.Y, EnumFacing.SOUTH, EnumFacing.WEST),
-	POST_Y_SE(14D, 0D, 14D, 16D, 16D, 16D, Axis.Y, EnumFacing.SOUTH, EnumFacing.EAST),
-	POST_Z_NS(7D, 7D, 0D, 9D, 9D, 16D, Axis.Z, EnumFacing.NORTH, EnumFacing.SOUTH),
-	POST_Z_DW(0D, 0D, 0D, 2D, 2D, 16D, Axis.Z, EnumFacing.DOWN, EnumFacing.WEST),
-	POST_Z_DE(14D, 0D, 0D, 16D, 2D, 16D, Axis.Z, EnumFacing.DOWN, EnumFacing.EAST),
-	POST_Z_UW(0D, 14D, 0D, 2D, 16D, 16D, Axis.Z, EnumFacing.UP, EnumFacing.WEST),
-	POST_Z_UE(12D, 12D, 0D, 16D, 16D, 16D, Axis.Z, EnumFacing.UP, EnumFacing.EAST);
+	STRIP_X_WE(0D, 7D, 7D, 16D, 9D, 9D, Axis.X, EnumFacing.WEST, EnumFacing.EAST),
+	STRIP_X_DN(0D, 0D, 0D, 16D, 2D, 2D, Axis.X, EnumFacing.DOWN, EnumFacing.NORTH),
+	STRIP_X_DS(0D, 0D, 14D, 16D, 2D, 16D, Axis.X, EnumFacing.DOWN, EnumFacing.SOUTH),
+	STRIP_X_UN(0D, 14D, 0D, 16D, 16D, 2D, Axis.X, EnumFacing.UP, EnumFacing.NORTH),
+	STRIP_X_US(0D, 14D, 14D, 16D, 16D, 16D, Axis.X, EnumFacing.UP, EnumFacing.SOUTH),
+	STRIP_Y_DU(7D, 0D, 7D, 9D, 16D, 9D, Axis.Y, EnumFacing.DOWN, EnumFacing.UP),
+	STRIP_Y_NW(0D, 0D, 0D, 2D, 16D, 2D, Axis.Y, EnumFacing.NORTH, EnumFacing.WEST),
+	STRIP_Y_NE(14D, 0D, 0D, 16D, 16D, 2D, Axis.Y, EnumFacing.NORTH, EnumFacing.EAST),
+	STRIP_Y_SW(0D, 0D, 14D, 2D, 16D, 16D, Axis.Y, EnumFacing.SOUTH, EnumFacing.WEST),
+	STRIP_Y_SE(14D, 0D, 14D, 16D, 16D, 16D, Axis.Y, EnumFacing.SOUTH, EnumFacing.EAST),
+	STRIP_Z_NS(7D, 7D, 0D, 9D, 9D, 16D, Axis.Z, EnumFacing.NORTH, EnumFacing.SOUTH),
+	STRIP_Z_DW(0D, 0D, 0D, 2D, 2D, 16D, Axis.Z, EnumFacing.DOWN, EnumFacing.WEST),
+	STRIP_Z_DE(14D, 0D, 0D, 16D, 2D, 16D, Axis.Z, EnumFacing.DOWN, EnumFacing.EAST),
+	STRIP_Z_UW(0D, 14D, 0D, 2D, 16D, 16D, Axis.Z, EnumFacing.UP, EnumFacing.WEST),
+	STRIP_Z_UE(14D, 14D, 0D, 16D, 16D, 16D, Axis.Z, EnumFacing.UP, EnumFacing.EAST);
 	private static final HashMap<EnumFacing, HashMap<EnumFacing, StripCuboid>> values = Maps.newHashMap();
 	private final AxisAlignedBB cuboid;
 	private final Axis axis;

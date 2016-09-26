@@ -4,18 +4,15 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import continuum.api.microblock.IMicroblock;
-import continuum.api.microblock.IMicroblockType;
+import continuum.api.microblock.Microblock;
 import continuum.api.microblock.MicroblockStateImpl;
 import continuum.api.microblock.TileEntityMicroblock;
+import continuum.api.microblock.compat.MultipartMicroblock;
 import continuum.api.microblock.texture.MicroblockMaterial;
-import continuum.api.multipart.Multipart;
-import continuum.multipart.mod.Multipart_OH;
-import continuum.multipart.multiparts.MultipartMicroblock;
+import continuum.essentials.hooks.BlockHooks;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockStateContainer.StateImplementation;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.Entity;
@@ -30,6 +27,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -37,19 +35,17 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class BlockMicroblockBase<MT extends IMicroblockType> extends BlockContainer implements IMicroblock<MT>
+public abstract class BlockMicroblockBase extends BlockContainer
 {
-	private final MultipartMicroblock multipart;
-	public MT type;
+	private final Microblock microblock;
 	private Material tempMaterial;
 	
-	public BlockMicroblockBase(Multipart_OH objectHolder, MT type)
+	public BlockMicroblockBase(Microblock microblock)
 	{
 		super(Material.ROCK);
-		this.multipart = new MultipartMicroblock(this, this);
-		this.type = type;
-		this.setRegistryName("microblock" + this.type.getName());
-		this.setUnlocalizedName("microblock" + this.type.getName());
+		this.microblock = microblock;
+		this.setRegistryName("microblock" + microblock.getName());
+		this.setUnlocalizedName("microblock" + microblock.getName());
 	}
 	
 	@Override
@@ -66,7 +62,7 @@ public abstract class BlockMicroblockBase<MT extends IMicroblockType> extends Bl
 	{
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile instanceof TileEntityMicroblock)
-			return ((TileEntityMicroblock)tile).getEntry().getSound();
+			return ((TileEntityMicroblock)tile).getMaterial().getSound();
 		return super.getSoundType(state, world, pos, entity);
 	}
 	
@@ -74,7 +70,11 @@ public abstract class BlockMicroblockBase<MT extends IMicroblockType> extends Bl
 	public boolean addLandingEffects(IBlockState state, WorldServer world, BlockPos pos, IBlockState uselessState, EntityLivingBase entity, int particles)
 	{
 		TileEntity tile = world.getTileEntity(pos);
-		if(tile instanceof TileEntityMicroblock) MultipartMicroblock.currentEntry = ((TileEntityMicroblock)tile).getEntry();
+		if(tile instanceof TileEntityMicroblock)
+		{
+			BlockHooks.createLandingEffects(world, new Vec3d(entity.posX, entity.posY, entity.posZ), ((TileEntityMicroblock)tile).getMaterial().getBlockState(), particles);
+			return true;
+		}
 		return super.addLandingEffects(state, world, pos, uselessState, entity, particles);
 	}
 	
@@ -82,8 +82,12 @@ public abstract class BlockMicroblockBase<MT extends IMicroblockType> extends Bl
 	@SideOnly(Side.CLIENT)
 	public boolean addHitEffects(IBlockState state, World world, RayTraceResult result, ParticleManager manager)
 	{
-		TileEntity entity = world.getTileEntity(result.getBlockPos());
-		if(entity instanceof TileEntityMicroblock) MultipartMicroblock.currentEntry = ((TileEntityMicroblock)entity).getEntry();
+		TileEntity tile = world.getTileEntity(result.getBlockPos());
+		if(tile instanceof TileEntityMicroblock)
+		{
+			BlockHooks.createHitEffects(manager, world, result, this.microblock.getSelectionBox(state), ((TileEntityMicroblock)tile).getMaterial().getBlockState());
+			return true;
+		}
 		return super.addHitEffects(state, world, result, manager);
 	}
 	
@@ -91,8 +95,12 @@ public abstract class BlockMicroblockBase<MT extends IMicroblockType> extends Bl
 	@SideOnly(Side.CLIENT)
 	public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager)
 	{
-		TileEntity entity = world.getTileEntity(pos);
-		if(entity instanceof TileEntityMicroblock) MultipartMicroblock.currentEntry = ((TileEntityMicroblock)entity).getEntry();
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile instanceof TileEntityMicroblock)
+		{
+			BlockHooks.createDestroyEffects(manager, world, pos, ((TileEntityMicroblock)tile).getMaterial().getBlockState());
+			return true;
+		}
 		return super.addDestroyEffects(world, pos, manager);
 	}
 	
@@ -100,7 +108,6 @@ public abstract class BlockMicroblockBase<MT extends IMicroblockType> extends Bl
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean harvest)
 	{
 		TileEntity entity = world.getTileEntity(pos);
-		if(entity instanceof TileEntityMicroblock) MultipartMicroblock.currentEntry = ((TileEntityMicroblock)entity).getEntry();
 		return super.removedByPlayer(state, world, pos, player, harvest);
 	}
 	
@@ -110,11 +117,11 @@ public abstract class BlockMicroblockBase<MT extends IMicroblockType> extends Bl
 		TileEntity entity = world.getTileEntity(pos);
 		if(entity instanceof TileEntityMicroblock)
 		{
-			MultipartMicroblock.currentEntry = ((TileEntityMicroblock)entity).getEntry();
-			this.tempMaterial = MultipartMicroblock.currentEntry.getBaseState().getMaterial();
-			this.setHardness(MultipartMicroblock.currentEntry.getBaseState().getBlockHardness(world, pos));
-			this.setHarvestLevel(MultipartMicroblock.currentEntry.getTool(), MultipartMicroblock.currentEntry.getHarvestLevel());
-			Float strength = ForgeHooks.blockStrength(state, player, world, pos);
+			MicroblockMaterial material = ((TileEntityMicroblock)entity).getMaterial();
+			this.tempMaterial = material.getBlockState().getMaterial();
+			this.setHardness(material.getBlockState().getBlockHardness(world, pos));
+			this.setHarvestLevel(material.getTool(), material.getHarvestLevel());
+			float strength = ForgeHooks.blockStrength(state, player, world, pos);
 			this.setHarvestLevel(null, 0);
 			this.tempMaterial = null;
 			return strength;
@@ -127,10 +134,10 @@ public abstract class BlockMicroblockBase<MT extends IMicroblockType> extends Bl
 	{
 		List<ItemStack> list = Lists.newArrayList();
 		TileEntity entity = world.getTileEntity(pos);
-		if(MultipartMicroblock.currentEntry != null)
+		if(entity instanceof TileEntityMicroblock)
 		{
 			ItemStack stack = new ItemStack(this);
-			stack.setTagCompound(MicroblockMaterial.writeToNBT(MultipartMicroblock.currentEntry));
+			stack.setTagCompound(MicroblockMaterial.writeToNBT(((TileEntityMicroblock)entity).getMaterial()));
 			list.add(stack);
 		}
 		return list;
@@ -140,7 +147,7 @@ public abstract class BlockMicroblockBase<MT extends IMicroblockType> extends Bl
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess access, BlockPos pos)
 	{
 		TileEntity entity = access.getTileEntity(pos);
-		if(entity instanceof TileEntityMicroblock) state = new MicroblockStateImpl((StateImplementation)state, ((TileEntityMicroblock)entity).getEntry());
+		if(entity instanceof TileEntityMicroblock) state = new MicroblockStateImpl(state, this.microblock, ((TileEntityMicroblock)entity).getMaterial());
 		return state;
 	}
 	
@@ -205,15 +212,8 @@ public abstract class BlockMicroblockBase<MT extends IMicroblockType> extends Bl
 			if(tile instanceof TileEntityMicroblock)
 			{
 				((TileEntityMicroblock)tile).readItemsFromNBT(stack.getTagCompound().getCompoundTag("BlockEntityTag"));
-				MultipartMicroblock.currentEntry = ((TileEntityMicroblock)tile).getEntry();
 			}
 		}
-	}
-	
-	@Override
-	public Multipart getMultipart()
-	{
-		return this.multipart;
 	}
 	
 	@Override
@@ -223,14 +223,13 @@ public abstract class BlockMicroblockBase<MT extends IMicroblockType> extends Bl
 	}
 	
 	@Override
-	public MT getType()
-	{
-		return this.type;
-	}
-	
-	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess access, BlockPos pos)
 	{
-		return this.getType().getCuboids()[state.getBlock().getMetaFromState(state)].getSelectableCuboid();
+		return this.microblock.getSelectionBox(state);
+	}
+	
+	public final Microblock getMicroblock()
+	{
+		return this.microblock;
 	}
 }

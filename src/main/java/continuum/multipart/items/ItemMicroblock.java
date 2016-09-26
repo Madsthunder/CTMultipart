@@ -1,15 +1,11 @@
 package continuum.multipart.items;
 
+
 import java.util.List;
 
-import continuum.api.microblock.IMicroblock;
+import continuum.api.microblock.Microblock;
 import continuum.api.microblock.texture.MicroblockMaterial;
-import continuum.api.microblock.texture.MicroblockMaterialApi;
-import continuum.essentials.mod.CTMod;
 import continuum.multipart.blocks.BlockLayered;
-import continuum.multipart.enums.EnumMicroblockType;
-import continuum.multipart.mod.Multipart_EH;
-import continuum.multipart.mod.Multipart_OH;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,28 +15,30 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
 public class ItemMicroblock extends ItemBlock
 {
-	public CTMod<Multipart_OH, Multipart_EH> mod;
+	private final Microblock microblock;
 	
-	public ItemMicroblock(CTMod<Multipart_OH, Multipart_EH> mod, EnumMicroblockType type)
+	public ItemMicroblock(Microblock microblock)
 	{
-		super((Block)type.getBlock(mod));
-		this.mod = mod;
-		this.setRegistryName(this.block.getRegistryName());
+		super(microblock.getBlock());
+		this.microblock = microblock;
 		this.setUnlocalizedName(this.block.getUnlocalizedName());
 	}
 	
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List list)
 	{
-		if(MicroblockMaterialApi.apiActive())
-		for(MicroblockMaterial entry : MicroblockMaterialApi.getMicroblockMaterialRegistry())
-			if(entry != MicroblockMaterial.defaultTexture)
+		IForgeRegistry<MicroblockMaterial> microblockMaterialRegistry = GameRegistry.findRegistry(MicroblockMaterial.class);
+		if(microblockMaterialRegistry != null)
+		for(MicroblockMaterial material : microblockMaterialRegistry)
+			if(material != MicroblockMaterial.defaultMaterial)
 			{
 				ItemStack stack = new ItemStack(item);
-				stack.setTagCompound(MicroblockMaterial.writeToNBT(entry));
+				stack.setTagCompound(MicroblockMaterial.writeToNBT(material));
 				list.add(stack);
 			}
 	}
@@ -49,7 +47,7 @@ public class ItemMicroblock extends ItemBlock
 	public String getItemStackDisplayName(ItemStack stack)
 	{
 		MicroblockMaterial entry = MicroblockMaterial.readFromNBT(stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound());
-		return entry == MicroblockMaterial.defaultTexture ? "Default" : entry.getDisplayName() + " " + I18n.translateToLocal("microblock." + ((IMicroblock)this.block).getType().getName().toLowerCase());
+		return entry == MicroblockMaterial.defaultMaterial ? "Default" : entry.getDisplayName() + " " + I18n.translateToLocal("microblock." + this.microblock.getName().toLowerCase());
 	}
 	
 	public IBlockState getRenderState()
@@ -58,5 +56,10 @@ public class ItemMicroblock extends ItemBlock
 		IBlockState defaultt = block.getDefaultState();
 		if(block instanceof BlockLayered) return defaultt.withProperty(BlockLayered.direction, EnumFacing.SOUTH);
 		return defaultt;
+	}
+	
+	public Microblock getMicroblock()
+	{
+		return this.microblock;
 	}
 }

@@ -6,25 +6,28 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
-import continuum.api.microblock.IMicroblock;
+import continuum.api.microblock.Microblock;
 import continuum.api.microblock.MicroblockStateImpl;
+import continuum.api.microblock.compat.MultipartCompat;
+import continuum.api.microblock.compat.MultipartMicroblock;
 import continuum.api.microblock.texture.MicroblockMaterial;
-import continuum.api.microblock.texture.MicroblockMaterialApi;
 import continuum.api.multipart.MultiblockStateImpl;
+import continuum.api.multipart.MultipartState;
+import continuum.essentials.hooks.BlockHooks;
+import continuum.essentials.hooks.ObjectHooks;
 import continuum.essentials.mod.CTMod;
-import continuum.multipart.enums.EnumMicroblockType;
-import continuum.multipart.enums.EnumMicroblockType.EnumPlaceType;
 import continuum.multipart.items.ItemMicroblock;
 import continuum.multipart.mod.Multipart_EH;
 import continuum.multipart.mod.Multipart_OH;
-import continuum.multipart.multiparts.MultipartMicroblock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -34,22 +37,22 @@ import net.minecraft.client.renderer.block.model.FaceBakery;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
-import net.minecraft.client.renderer.block.model.ItemTransformVec3f;
 import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.IRetexturableModel;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.IModelState;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
 public class ModelMicroblock implements IModel
 {
@@ -74,13 +77,13 @@ public class ModelMicroblock implements IModel
 	public Collection<ResourceLocation> getTextures()
 	{
 		ArrayList<ResourceLocation> textures = Lists.newArrayList();
-		if(MicroblockMaterialApi.apiActive())
-		for(MicroblockMaterial entry : MicroblockMaterialApi.getMicroblockMaterialRegistry())
-		{
-			textures.add(entry.getParticleLocation());
-			for(EnumFacing direction : EnumFacing.values())
-				textures.add(entry.getLocationFromDirection(direction));
-		}
+		IForgeRegistry<MicroblockMaterial> microblockMaterialRegistry = GameRegistry.findRegistry(MicroblockMaterial.class);
+		if(microblockMaterialRegistry != null)
+			for(MicroblockMaterial material : microblockMaterialRegistry)
+			{
+				textures.add(material.getParticleTexture());
+				textures.addAll(material.getAllTextures());
+			}
 		return textures;
 	}
 	
@@ -88,26 +91,6 @@ public class ModelMicroblock implements IModel
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> function)
 	{
 		return new BakedModelMicroblock(this, format, function);
-	}
-	
-	private void createModels()
-	{
-		this.models.clear();
-		for(EnumMicroblockType type : EnumMicroblockType.values())
-		{
-			String name = type.name().toLowerCase();
-			IRetexturableModel model = null;
-			try
-			{
-				IModel model1 = ModelLoaderRegistry.getModel(this.objectHolder.microblockLocations.get(name));
-				if(model1 instanceof IRetexturableModel) model = (IRetexturableModel)model1;
-			}
-			catch(Exception e)
-			{
-				this.logger.warn("Could Not Find Model For \'" + type.getName() + "\'.");
-			}
-			if(model != null) this.models.put(name, model);
-		}
 	}
 	
 	@Override
@@ -120,54 +103,59 @@ public class ModelMicroblock implements IModel
 	{
 		private final VertexFormat format;
 		private final Function<ResourceLocation, TextureAtlasSprite> function;
-		private final MicroblockIOL iol;
-		private final Pair<IMicroblock, List<BakedQuad>> itemData;
+		private final Pair<Microblock, List<BakedQuad>> itemModel;
 		
 		public BakedModelMicroblock(ModelMicroblock rootClass, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> function)
 		{
 			this.format = format;
 			this.function = function;
-			this.itemData = null;
-			this.iol = new MicroblockIOL(this);
+			this.itemModel = null;
 		}
 		
-		public BakedModelMicroblock(BakedModelMicroblock baseModel, ItemStack stack)
+		public BakedModelMicroblock(BakedModelMicroblock baseModel, ItemMicroblock item, NBTTagCompound compound)
 		{
 			this.format = baseModel.format;
 			this.function = baseModel.function;
-			this.iol = baseModel.iol;
-			IBlockState state = ((ItemMicroblock)stack.getItem()).getRenderState();
-			this.itemData = Pair.of((IMicroblock)state.getBlock(), this.createQuads((IMicroblock)state.getBlock(), state, null, MicroblockMaterial.readFromNBT(stack.getTagCompound())));
+			IBlockState state = item.getRenderState();
+			this.itemModel = Pair.of(item.getMicroblock(), this.createQuads(item.getMicroblock(), state, null, MicroblockMaterial.readFromNBT(compound)));
 		}
 		
 		@Override
 		public List<BakedQuad> getQuads(IBlockState state, EnumFacing facing, long random)
 		{
-			if(state instanceof MultiblockStateImpl) state = ((MultiblockStateImpl)state).getImplementation();
-			if(this.itemData != null) return this.itemData.getRight();
-			if(state instanceof MicroblockStateImpl && state.getBlock() instanceof IMicroblock) return this.createQuads((IMicroblock)state.getBlock(), state, facing, ((MicroblockStateImpl)state).entry);
+			if(this.itemModel != null) return this.itemModel.getRight();
+			IBlockState state1 = state;
+			if(state instanceof MultiblockStateImpl) state1 = ((MultiblockStateImpl)state).getImplementation();
+			if(state1 instanceof MicroblockStateImpl) return this.createQuads(((MicroblockStateImpl)state1).getMicroblock(), state, facing, ((MicroblockStateImpl)state1).getMicroblockMaterial());
 			return Lists.newArrayList();
 		}
 		
-		private List<BakedQuad> createQuads(IMicroblock microblock, IBlockState state, EnumFacing facing, MicroblockMaterial entry)
+		private List<BakedQuad> createQuads(Microblock microblock, IBlockState state, EnumFacing facing, MicroblockMaterial material)
 		{
-			List<Triple<Boolean, AxisAlignedBB, BlockPos>> list = microblock.getRenderList(state, entry);
-			return getQuads(facing, list, this.function.apply(entry.getLocationFromIndex(0)), this.function.apply(entry.getLocationFromIndex(1)), this.function.apply(entry.getLocationFromIndex(2)), this.function.apply(entry.getLocationFromIndex(3)), this.function.apply(entry.getLocationFromIndex(4)), this.function.apply(entry.getLocationFromIndex(5)));
+			return this.getQuads(facing, microblock.getRenderBoxes(state), spliceBoxes(microblock, state, material), ObjectHooks.applyAll(this.function, material.getAllTextures()));
 		}
 		
-		public List<BakedQuad> getQuads(EnumFacing facing, List<Triple<Boolean, AxisAlignedBB, BlockPos>> list, TextureAtlasSprite... textures)
+		public List<BakedQuad> getQuads(EnumFacing facing, Iterable<AxisAlignedBB> originalBoxes, Iterable<AxisAlignedBB> aabbs, List<TextureAtlasSprite> textures)
 		{
 			List<BakedQuad> quads = Lists.newArrayList();
-			for(Triple<Boolean, AxisAlignedBB, BlockPos> t : list)
-				if(t.getLeft())
-				{
+			for(AxisAlignedBB aabb1 : aabbs)
 					for(EnumFacing facing1 : EnumFacing.values())
 					{
-						AxisAlignedBB aabb = getAABB(t.getMiddle(), facing1);
-						Integer i = facing1.ordinal();
-						if(!listContainsPos(t.getRight().offset(facing1), list)) quads.add(bakery.makeBakedQuad(minVec(aabb), maxVec(aabb), createPartFace(facing1, aabb, textures[i]), textures[i], facing1, ModelRotation.X0_Y0, null, true, true));
+						int i = facing1.ordinal();
+						final AxisAlignedBB aabb = BlockHooks.createAABBFromSide(facing1, aabb1);
+						if(Iterables.any(originalBoxes, new Predicate<AxisAlignedBB>()
+								{
+									@Override
+									public boolean apply(AxisAlignedBB aabb2)
+									{
+										return BlockHooks.isFlushWithSide(facing1, aabb2, aabb);
+									}
+								}))
+						{
+							AxisAlignedBB aabb3 = BlockHooks.dialate(aabb, 16);
+							quads.add(bakery.makeBakedQuad(minVec(aabb3), maxVec(aabb3), createPartFace(facing1, aabb3, textures.get(i)), textures.get(i), facing1, ModelRotation.X0_Y0, null, true, true));
+						}
 					}
-				}
 			return quads;
 		}
 		
@@ -229,13 +217,6 @@ public class ModelMicroblock implements IModel
 			return new Vector3f((float)aabb.maxX, (float)aabb.maxY, (float)aabb.maxZ);
 		}
 		
-		public Boolean listContainsPos(BlockPos pos, List<Triple<Boolean, AxisAlignedBB, BlockPos>> list)
-		{
-			for(Triple<Boolean, AxisAlignedBB, BlockPos> triple : list)
-				if(triple.getLeft() && triple.getRight().equals(pos)) return true;
-			return false;
-		}
-		
 		@Override
 		public boolean isAmbientOcclusion()
 		{
@@ -257,41 +238,67 @@ public class ModelMicroblock implements IModel
 		@Override
 		public TextureAtlasSprite getParticleTexture()
 		{
-			return MultipartMicroblock.currentEntry == null ? Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite() : this.function.apply(MultipartMicroblock.currentEntry.getParticleLocation());
+			return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
 		}
 		
 		@Override
 		public ItemCameraTransforms getItemCameraTransforms()
 		{
-			Object placeType = this.itemData == null ? null : this.itemData.getLeft().getType().getPlaceType();
-			return new ItemCameraTransforms(new ItemTransformVec3f(new Vector3f(75, 45, 0), new Vector3f(0, 2.5F, 0), new Vector3f(0.375F, 0.375F, 0.375F)), new ItemTransformVec3f(new Vector3f(75, 45, 0), new Vector3f(0, 2.5F, 0), new Vector3f(0.375F, 0.375F, 0.375F)), new ItemTransformVec3f(new Vector3f(0, 225, 0), new Vector3f(), new Vector3f(0.4F, 0.4F, 0.4F)), new ItemTransformVec3f(new Vector3f(0, 45, 0), new Vector3f(), new Vector3f(0.4F, 0.4F, 0.4F)), ItemTransformVec3f.DEFAULT, new ItemTransformVec3f(new Vector3f(30, 225, 0), placeType == EnumPlaceType.LAYERED ? new Vector3f(0.12F, -0.075F, 0) : placeType == EnumPlaceType.AXISED ? new Vector3f() : placeType == EnumPlaceType.CORNERED ? new Vector3f(-0.2F, 0.15F, 0) : new Vector3f(), new Vector3f(0.625F, 0.625F, 0.625F)), new ItemTransformVec3f(new Vector3f(), new Vector3f(), new Vector3f(0.25F, 0.25F, 0.25F)), new ItemTransformVec3f(new Vector3f(), new Vector3f(), new Vector3f(0.5F, 0.5F, 0.5F)));
+			return this.itemModel.getLeft().getCameraTransforms();
 		}
 		
 		@Override
 		public ItemOverrideList getOverrides()
 		{
-			return new MicroblockIOL(this);
+			return MicroblockIOL.I;
 		}
 	}
 	
 	public static class MicroblockIOL extends ItemOverrideList
 	{
-		private final BakedModelMicroblock model;
+		private static final MicroblockIOL I = new MicroblockIOL();
 		
-		public MicroblockIOL(BakedModelMicroblock model)
+		private MicroblockIOL()
 		{
-			super(new ArrayList());
-			this.model = model;
+			super(Lists.newArrayList());
 		}
 		
 		@Override
 		public IBakedModel handleItemState(IBakedModel model, ItemStack stack, World world, EntityLivingBase entity)
 		{
-			if(stack != null && stack.getItem() instanceof ItemMicroblock && stack.hasTagCompound())
+			MicroblockMaterial material;
+			if(model instanceof BakedModelMicroblock && stack != null && stack.getItem() instanceof ItemMicroblock && (stack.hasTagCompound() && (material = MicroblockMaterial.readFromNBT(stack.getTagCompound())) != null))
 			{
-				return new BakedModelMicroblock(this.model, stack);
+				return new BakedModelMicroblock((BakedModelMicroblock)model, (ItemMicroblock)stack.getItem(), stack.getTagCompound());
 			}
 			return model;
 		}
+	}
+	
+	public static Iterable<AxisAlignedBB> spliceBoxes(Microblock microblock, IBlockState state, MicroblockMaterial material)
+	{
+		Iterable<AxisAlignedBB> set = Sets.newHashSet(microblock.getRenderBoxes(state));
+		if(state instanceof MultiblockStateImpl)
+		{
+			MultiblockStateImpl msi = (MultiblockStateImpl)state;
+			set = BlockHooks.splitAABBs(set, msi.getInfoList().getAllInfoOfMultipartInstance(MultipartMicroblock.class), 
+					new Predicate<MultipartState<MultipartMicroblock>>()
+					{
+						@Override
+						public boolean apply(MultipartState<MultipartMicroblock> info)
+						{
+							return MultipartCompat.microblockOverlaps(info, msi.getInfo());
+						}
+					},
+					new Function<MultipartState<MultipartMicroblock>, Iterable<AxisAlignedBB>>()
+					{
+						@Override
+						public Iterable<AxisAlignedBB> apply(MultipartState<MultipartMicroblock> info)
+						{
+							return ((MultipartMicroblock)info.getMultipart()).getMicroblock().getRenderBoxes(info.getState());
+						}
+					});
+		}
+		return set;
 	}
 }

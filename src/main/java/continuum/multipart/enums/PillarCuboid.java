@@ -8,7 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
 
-public enum PillarCuboid implements IPillaredCuboid
+public enum PillarCuboid implements IAxisedCuboid
 {
 	PILLAR_X_WE(0D, 4D, 4D, 16D, 12D, 12D, Axis.X, EnumFacing.WEST, EnumFacing.EAST),
 	PILLAR_X_DN(0D, 0D, 0D, 16D, 8D, 8D, Axis.X, EnumFacing.DOWN, EnumFacing.NORTH),

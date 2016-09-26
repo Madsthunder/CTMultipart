@@ -5,23 +5,23 @@ import net.minecraft.block.state.BlockStateContainer.StateImplementation;
 public class MultiblockStateImpl extends StateImplementation
 {
 	private final StateImplementation implementation;
-	private final TileEntityMultiblock source;
-	private final MultipartInfo info;
+	private final MultipartStateList infoList;
+	private final MultipartState info;
 	
-	public MultiblockStateImpl(StateImplementation state, TileEntityMultiblock source, MultipartInfo info)
+	public MultiblockStateImpl(StateImplementation state, MultipartStateList infoList, MultipartState info)
 	{
 		super(state.getBlock(), state.getProperties(), state.getPropertyValueTable());
 		this.implementation = state;
-		this.source = source;
+		this.infoList = infoList;
 		this.info = info;
 	}
 	
-	public TileEntityMultiblock getSource()
+	public MultipartStateList getInfoList()
 	{
-		return this.source;
+		return this.infoList;
 	}
 	
-	public MultipartInfo getInfo()
+	public MultipartState getInfo()
 	{
 		return this.info;
 	}

@@ -1,20 +1,16 @@
 package continuum.multipart.mod;
 
-import java.util.HashMap;
-
+import continuum.api.microblock.Microblock;
+import continuum.api.microblock.texture.MicroblockMaterial;
+import continuum.api.multipart.Multipart;
 import continuum.essentials.mod.ObjectHolder;
-import continuum.multipart.blocks.BlockAxised;
-import continuum.multipart.blocks.BlockCornered;
-import continuum.multipart.blocks.BlockLayered;
 import continuum.multipart.blocks.BlockMultiblock;
 import continuum.multipart.client.model.ModelMicroblock;
-import continuum.multipart.client.model.ModelMultipart;
+import continuum.multipart.client.model.ModelMultiblock;
 import continuum.multipart.client.state.StateMapperMicroblock;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -64,21 +60,10 @@ public class Multipart_OH implements ObjectHolder
 	}
 	
 	public CreativeTabs microblocks;
-	public BlockMultiblock multipart;
-	public BlockLayered slab;
-	public BlockLayered panel;
-	public BlockLayered cover;
-	public BlockAxised pillar;
-	public BlockAxised post;
-	public BlockAxised strip;
-	public BlockCornered notch;
-	public BlockCornered corner;
-	public BlockCornered nook;
-	@SideOnly(value = Side.CLIENT)
-	public HashMap<String, ResourceLocation> microblockLocations;
+	public BlockMultiblock multiblock;
 	@SideOnly(value = Side.CLIENT)
 	public StateMapperMicroblock microblockSM;
 	@SideOnly(value = Side.CLIENT)
 	public ModelMicroblock microblockModel;
-	public ModelMultipart multipartModel;
+	public ModelMultiblock multiblockModel;
 }

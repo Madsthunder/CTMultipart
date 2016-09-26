@@ -10,7 +10,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
 
-public enum PostCuboid implements IPillaredCuboid
+public enum PostCuboid implements IAxisedCuboid
 {
 	POST_X_WE(0D, 6D, 6D, 16D, 10D, 10D, Axis.X, EnumFacing.WEST, EnumFacing.EAST),
 	POST_X_DN(0D, 0D, 0D, 16D, 4D, 4D, Axis.X, EnumFacing.DOWN, EnumFacing.NORTH),

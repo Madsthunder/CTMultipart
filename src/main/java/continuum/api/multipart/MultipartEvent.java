@@ -9,22 +9,22 @@ import net.minecraftforge.event.world.WorldEvent;
 
 public class MultipartEvent extends WorldEvent
 {
-	public MultipartEvent(TileEntityMultiblock source)
+	public MultipartEvent(MultipartStateList infoList)
 	{
-		super(source.getWorld());
-		this.source = source;
+		super(infoList.getWorld());
+		this.infoList = infoList;
 	}
 	
-	private TileEntityMultiblock source;
+	private MultipartStateList infoList;
 	
 	public BlockPos getPos()
 	{
-		return this.getSource().getPos();
+		return this.getInfoList().getPos();
 	}
 	
-	public TileEntityMultiblock getSource()
+	public MultipartStateList getInfoList()
 	{
-		return this.source;
+		return this.infoList;
 	}
 	
 	public static class AABBExceptionsEvent extends MultipartEvent
@@ -33,9 +33,9 @@ public class MultipartEvent extends WorldEvent
 		private Multipart multipart;
 		private AxisAlignedBB box;
 		
-		public AABBExceptionsEvent(TileEntityMultiblock source, List<AxisAlignedBB> allowed, Multipart multipart, AxisAlignedBB box)
+		public AABBExceptionsEvent(MultipartStateList infoList, List<AxisAlignedBB> allowed, Multipart multipart, AxisAlignedBB box)
 		{
-			super(source);
+			super(infoList);
 			this.allowed = allowed;
 			this.multipart = multipart;
 			this.box = box;

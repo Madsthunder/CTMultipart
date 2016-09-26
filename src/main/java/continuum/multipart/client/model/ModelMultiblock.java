@@ -5,10 +5,10 @@ import java.util.List;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import continuum.api.multipart.MultiblockStateImpl;
-import continuum.api.multipart.MultipartInfo;
-import continuum.multipart.blocks.BlockMultiblock;
+import continuum.api.multipart.MultipartState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -21,27 +21,24 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.common.model.IModelState;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ModelMultipart implements IModel
+public class ModelMultiblock implements IModel
 {
-	@SideOnly(Side.CLIENT)
-	public static final Minecraft minecraft = Minecraft.getMinecraft();
+	public static final Minecraft mc = Minecraft.getMinecraft();
 	
 	@Override
 	public Collection<ResourceLocation> getDependencies()
 	{
-		return Lists.newArrayList();
+		return Sets.newHashSet();
 	}
 	
 	@Override
 	public Collection<ResourceLocation> getTextures()
 	{
-		return Lists.newArrayList();
+		return Sets.newHashSet();
 	}
 	
 	@Override
@@ -75,8 +72,8 @@ public class ModelMultipart implements IModel
 			{
 				MultiblockStateImpl impl = (MultiblockStateImpl)state;
 				IBakedModel model;
-				for(MultipartInfo info : impl.getSource())
-					if((model = minecraft.getBlockRendererDispatcher().getModelForState(info.getState())) != null) quads.addAll(model.getQuads(info.getExtendedState(true), side, rand));
+				for(MultipartState info : impl.getInfoList().getInfoToRenderInLayer(MinecraftForgeClient.getRenderLayer()))
+					if((model = mc.getBlockRendererDispatcher().getModelForState(info.getState())) != null) quads.addAll(model.getQuads(info.getExtendedState(true), side, rand));
 			}
 			return quads;
 		}
@@ -102,7 +99,7 @@ public class ModelMultipart implements IModel
 		@Override
 		public TextureAtlasSprite getParticleTexture()
 		{
-			return minecraft.getBlockRendererDispatcher().getModelForState(Blocks.STONE.getDefaultState()).getParticleTexture();
+			return mc.getBlockRendererDispatcher().getModelForState(Blocks.STONE.getDefaultState()).getParticleTexture();
 		}
 		
 		@Override

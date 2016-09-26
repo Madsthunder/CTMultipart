@@ -6,4 +6,5 @@ import net.minecraft.util.EnumFacing;
 public interface ILayeredCuboid extends ICuboid
 {
 	public EnumFacing getSide();
+	public int ordinal();
 }

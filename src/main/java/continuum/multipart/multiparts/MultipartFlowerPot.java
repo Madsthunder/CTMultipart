@@ -1,13 +1,12 @@
 package continuum.multipart.multiparts;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
 import continuum.api.multipart.Multipart;
-import continuum.api.multipart.MultipartInfo;
-import continuum.api.multipart.TileEntityMultiblock;
+import continuum.api.multipart.MultipartState;
+import continuum.api.multipart.MultipartStateList;
 import continuum.essentials.block.ICuboid;
 import continuum.essentials.block.StaticCuboid;
 import net.minecraft.block.Block;
@@ -36,29 +35,25 @@ public class MultipartFlowerPot extends Multipart
 	private static final AxisAlignedBB aabb = new AxisAlignedBB(0.3125D, 0.0D, 0.3125D, 0.6875D, 0.375D, 0.6875D);
 	
 	@Override
-	public boolean canPlaceIn(IBlockAccess access, BlockPos pos, IBlockState state, TileEntityMultiblock source, RayTraceResult result)
+	public boolean canPlaceIn(IBlockAccess access, BlockPos pos, IBlockState state, MultipartStateList infoList, RayTraceResult result)
 	{
-		return !source.boxIntersectsMultipart(this, aabb, false, false);
+		return !infoList.boxIntersectsList(this, aabb, false, false);
 	}
 	
 	@Override
-	public List<ICuboid> getCuboids(MultipartInfo info)
+	public List<ICuboid> getSelectableCuboids(MultipartState info)
 	{
-		ArrayList<ICuboid> cuboids = Lists.newArrayList();
-		cuboids.add(new StaticCuboid(aabb));
-		return cuboids;
+		return Lists.newArrayList(new StaticCuboid(aabb));
 	}
 	
 	@Override
-	public List<AxisAlignedBB> getCollisionBoxes(MultipartInfo info)
+	public List<AxisAlignedBB> getCollisionBoxes(MultipartState info)
 	{
-		ArrayList<AxisAlignedBB> list = Lists.newArrayList();
-		list.add(aabb);
-		return list;
+		return Lists.newArrayList(aabb);
 	}
 	
 	@Override
-	public IBlockState getMultipartState(MultipartInfo info)
+	public IBlockState getMultipartState(MultipartState info)
 	{
 		BlockFlowerPot.EnumFlowerType blockflowerpot$enumflowertype = BlockFlowerPot.EnumFlowerType.EMPTY;
 		TileEntity entity = info.getTileEntity();
@@ -177,7 +172,7 @@ public class MultipartFlowerPot extends Multipart
 	}
 	
 	@Override
-	public boolean onMultipartActivated(MultipartInfo info, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onMultipartActivated(MultipartState info, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if(stack != null && stack.getItem() instanceof ItemBlock)
 		{
