@@ -39,7 +39,6 @@ public final class Multipart_Proxies
 		@Override
 		public void pre(Multipart_Mod mod)
 		{
-			Multipart_OH holder = mod.getObjectHolder();
 			IForgeRegistry<Microblock> microblockRegistry = GameRegistry.findRegistry(Microblock.class);
 			IForgeRegistry<MicroblockMaterial> microblockMaterialRegistry = GameRegistry.findRegistry(MicroblockMaterial.class);
 			if(microblockRegistry != null && microblockMaterialRegistry != null)
@@ -51,9 +50,9 @@ public final class Multipart_Proxies
 					stack.getTagCompound().merge(compound);
 				else
 					stack.setTagCompound(compound);
-				holder.microblocks = new CreativeTab("ctmicroblocks", stack);
+				Multipart_OH.I.microblocks = new CreativeTab("ctmicroblocks", stack);
 				for(Microblock microblock : microblockRegistry)
-					microblock.getBlock().setCreativeTab(holder.microblocks);
+					microblock.getBlock().setCreativeTab(Multipart_OH.I.microblocks);
 			}
 		}
 	}
@@ -63,27 +62,26 @@ public final class Multipart_Proxies
 		public void pre(Multipart_Mod mod)
 		{
 			super.pre(mod);
-			Multipart_OH holder = mod.getObjectHolder();
-			holder.microblockSM = new StateMapperMicroblock();
-			CTCore_OH.models.put(new ResourceLocation(holder.getModid(), "models/block/microblock"), Functions.constant(holder.microblockModel = new ModelMicroblock(mod)));
-			CTCore_OH.models.put(new ResourceLocation(holder.getModid(), "models/block/multiblock"), Functions.constant(holder.multiblockModel = new ModelMultiblock()));
+			Multipart_OH.I.microblockSM = new StateMapperMicroblock();
+			CTCore_OH.models.put(new ResourceLocation(Multipart_OH.I.getModid(), "models/block/microblock"), Functions.constant(Multipart_OH.I.microblockModel = new ModelMicroblock()));
+			CTCore_OH.models.put(new ResourceLocation(Multipart_OH.I.getModid(), "models/block/multiblock"), Functions.constant(Multipart_OH.I.multiblockModel = new ModelMultiblock()));
 			IForgeRegistry<Microblock> microblockRegistry = GameRegistry.findRegistry(Microblock.class);
 			if(microblockRegistry != null)
 			{
 				for(Microblock microblock : microblockRegistry)
 				{
 					Block block = microblock.getBlock();
-					ModelLoader.setCustomStateMapper(block, holder.microblockSM);
+					ModelLoader.setCustomStateMapper(block, Multipart_OH.I.microblockSM);
 					Item item = Item.getItemFromBlock(block);
 					if(item != null)
-						ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(new ResourceLocation(holder.getModid(), "microblock"), "normal"));
+						ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(new ResourceLocation(Multipart_OH.I.getModid(), "microblock"), "normal"));
 				}
 				IForgeRegistry<MicroblockOverlap> microblockOverlapRegistry = microblockRegistry.getSlaveMap(Multipart_Callbacks.MICROBLOCK_OVERLAPS, IForgeRegistry.class);
 				if(microblockOverlapRegistry != null)
 					microblockOverlapRegistry.register(new MicroblockOverlap(DefaultMicroblock.STRIP, DefaultMicroblock.COVER));
 			}
-			if(holder.multiblock != null)
-				ModelLoader.setCustomStateMapper(holder.multiblock, StateMapperStatic.create(new ModelResourceLocation(new ResourceLocation(holder.getModid(), "multiblock"), "normal")));
+			if(Multipart_OH.I.multiblock != null)
+				ModelLoader.setCustomStateMapper(Multipart_OH.I.multiblock, StateMapperStatic.create(new ModelResourceLocation(new ResourceLocation(Multipart_OH.I.getModid(), "multiblock"), "normal")));
 		}
 		
 		@Override

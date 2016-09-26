@@ -15,7 +15,7 @@ public class Multipart_Mod extends CTMod<Multipart_OH, Multipart_EH>
 {
 	public Multipart_Mod()
 	{
-		super(Multipart_OH.INSTANCE, new ObjectLoader[0]);
+		super(Multipart_OH.I, new ObjectLoader[0]);
 		this.getObjectHolder().setCTMultipart(this);
 		FMLCommonHandler.instance().registerCrashCallable(new ApiCrashCallable());
 	}

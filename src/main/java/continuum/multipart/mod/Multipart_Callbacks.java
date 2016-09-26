@@ -21,7 +21,6 @@ import net.minecraftforge.fml.common.registry.IForgeRegistry.CreateCallback;
 
 public class Multipart_Callbacks
 {
-	private static final Multipart_OH objectHolder = Multipart_OH.INSTANCE;
 	public static final Object MULTIPARTS = new Multiparts();
 	public static final Object MICROBLOCKS = new Microblocks();
 	public static final ResourceLocation MICROBLOCK_OVERLAPS = new ResourceLocation("ctmultipart", "microblockoverlaps");

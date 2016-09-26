@@ -86,7 +86,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class Multipart_EH
 {
 	private static final Multipart_EH INSTANCE = new Multipart_EH();
-	private static final Multipart_OH objectHolder = Multipart_OH.INSTANCE;
 	public static final ResourceLocation MULTIBLOCK = new ResourceLocation("ctmultipart", "multiblock");
 	
 	@SubscribeEvent
@@ -102,7 +101,7 @@ public class Multipart_EH
 	{
 		if(GameRegistry.findRegistry(Multipart.class) != null)
 		{
-			event.getRegistry().register((objectHolder.multiblock = new BlockMultiblock()).setUnlocalizedName(MULTIBLOCK.getResourcePath()).setRegistryName(MULTIBLOCK));
+			event.getRegistry().register((Multipart_OH.I.multiblock = new BlockMultiblock()).setUnlocalizedName(MULTIBLOCK.getResourcePath()).setRegistryName(MULTIBLOCK));
 			GameRegistry.registerTileEntity(TileEntityMultiblock.class, MULTIBLOCK.toString());
 			CapabilityManager.INSTANCE.register(MultipartStateList.class, new IStorage<MultipartStateList>()
 			{
@@ -260,13 +259,13 @@ public class Multipart_EH
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static <T extends Comparable<T>> void onDebugInfoGet(DebugInfoEvent event)
 	{
-		if(objectHolder.multiblock != null)
+		if(Multipart_OH.I.multiblock != null)
 		{
 			RayTraceResult result = Minecraft.getMinecraft().objectMouseOver;
 			if(event.getInfoSide() == DebugInfoEvent.EnumSide.RIGHT && result != null && result.typeOfHit == Type.BLOCK && result.getBlockPos() != null && result.hitInfo instanceof MultipartState)
 			{
 				List<String> list = event.getDebugInfo();
-				if(list.remove(objectHolder.multiblock.getRegistryName().toString()))
+				if(list.remove(Multipart_OH.I.multiblock.getRegistryName().toString()))
 				{
 					MultipartState info = (MultipartState)result.hitInfo;
 					World world = Minecraft.getMinecraft().theWorld;
@@ -318,7 +317,7 @@ public class Multipart_EH
 				}
 				else if((prevEntry = multipartRegistry.getValue(prevBlock.getBlock().getRegistryName())) != null)
 				{
-					List<BlockSnapshot> snapshots = BlockHooks.setBlockStateWithSnapshots(world, pos, objectHolder.multiblock.getDefaultState());
+					List<BlockSnapshot> snapshots = BlockHooks.setBlockStateWithSnapshots(world, pos, Multipart_OH.I.multiblock.getDefaultState());
 					TileEntity entity = world.getTileEntity(pos);
 					if(entity.hasCapability(MultipartStateList.MULTIPARTINFOLIST, null))
 					{
@@ -648,7 +647,7 @@ public class Multipart_EH
 							/* Up East */ drawZ(tess, z, boxZ.maxX - 0.5, boxZ.maxY - 0.5, boxZ.maxX, boxZ.maxY);
 							break;
 						default:
-							objectHolder.getCTMultipart().getLogger().warn(side == null ? result + " has no side?" : result + " has no axis?");
+							Multipart_OH.I.getCTMultipart().getLogger().warn(side == null ? result + " has no side?" : result + " has no axis?");
 					}
 				}
 				GlStateManager.depthMask(true);

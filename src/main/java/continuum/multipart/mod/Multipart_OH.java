@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class Multipart_OH implements ObjectHolder
 {
-	public static final Multipart_OH INSTANCE = new Multipart_OH();
+	public static final Multipart_OH I = new Multipart_OH();
 	private final Mod mod;
 	private Multipart_Mod ctmultipart;
 	

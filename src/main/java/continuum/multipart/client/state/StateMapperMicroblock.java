@@ -14,19 +14,18 @@ import net.minecraft.item.ItemStack;
 
 public class StateMapperMicroblock implements IStateMapper, ItemMeshDefinition
 {
-	public static final Multipart_OH holder = Multipart_OH.INSTANCE;
 	public final Map<IBlockState, ModelResourceLocation> locations = Maps.newHashMap();
 	
 	public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block block)
 	{
 		for(IBlockState state : block.getBlockState().getValidStates())
-			this.locations.put(state, new ModelResourceLocation(holder.getModid() + ":microblock", "normal"));
+			this.locations.put(state, new ModelResourceLocation(Multipart_OH.I.getModid() + ":microblock", "normal"));
 		return this.locations;
 	}
 	
 	@Override
 	public ModelResourceLocation getModelLocation(ItemStack stack)
 	{
-		return new ModelResourceLocation(holder.getModid() + ":microblock", "normal");
+		return new ModelResourceLocation(Multipart_OH.I.getModid() + ":microblock", "normal");
 	}
 }

@@ -56,16 +56,8 @@ import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
 public class ModelMicroblock implements IModel
 {
-	public final Multipart_OH objectHolder;
-	public final Logger logger;
 	private static final FaceBakery bakery = new FaceBakery();
 	public HashMap<String, IRetexturableModel> models = new HashMap<String, IRetexturableModel>();
-	
-	public ModelMicroblock(CTMod<Multipart_OH, Multipart_EH> mod)
-	{
-		this.objectHolder = mod.getObjectHolder();
-		this.logger = mod.getLogger();
-	}
 	
 	@Override
 	public Collection<ResourceLocation> getDependencies()
