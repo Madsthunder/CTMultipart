@@ -41,7 +41,7 @@ public class DefaultMicroblock extends Microblock
 	public static final ImmutableSet<ICorneredCuboid> CORNERED_CUBOIDS = new ImmutableSet.Builder<ICorneredCuboid>().add(NotchCuboid.values()).add(CornerCuboid.values()).add(NookCuboid.values()).build();
 	public static final ImmutableList<DefaultMicroblock> defaultMicroblocks = new ImmutableList.Builder<DefaultMicroblock>().add(SLAB, PANEL, COVER, PILLAR, POST, STRIP, NOTCH, CORNER, NOOK).build();
 	
-	public static final Multipart_OH holder  = Multipart_OH.getObjectHolder();
+	public static final Multipart_OH holder  = Multipart_OH.INSTANCE;
 	private final String name;
 	private final List<ICuboid> cuboids;
 	private final Block block;

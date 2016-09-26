@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 
 public class StateMapperMicroblock implements IStateMapper, ItemMeshDefinition
 {
-	public static final Multipart_OH holder = Multipart_OH.getObjectHolder();
+	public static final Multipart_OH holder = Multipart_OH.INSTANCE;
 	public final Map<IBlockState, ModelResourceLocation> locations = Maps.newHashMap();
 	
 	public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block block)
