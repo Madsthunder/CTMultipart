@@ -8,7 +8,9 @@ import com.google.common.collect.HashBiMap;
 import continuum.api.microblock.Microblock;
 import continuum.api.microblock.compat.MultipartMicroblock;
 import continuum.api.multipart.Multipart;
+import continuum.api.multipart.MultipartUtils;
 import continuum.multipart.items.ItemMicroblock;
+import continuum.multipart.registry.MicroblockOverlapRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -22,9 +24,7 @@ public class Multipart_Callbacks
 	private static final Multipart_OH objectHolder = Multipart_OH.getObjectHolder();
 	public static final Object MULTIPARTS = new Multiparts();
 	public static final Object MICROBLOCKS = new Microblocks();
-	public static final ResourceLocation BLOCK_TO_MULTIPART = new ResourceLocation("ctmultipart", "blocktomultipart");
-	public static final ResourceLocation ITEM_TO_MULTIPART = new ResourceLocation("ctmultipart", "itemtomultipart");
-	public static final ResourceLocation MICROBLOCKOVERLAPS = new ResourceLocation("ctmultipart", "microblockoverlaps");
+	public static final ResourceLocation MICROBLOCK_OVERLAPS = new ResourceLocation("ctmultipart", "microblockoverlaps");
 	
 	private static class Multiparts implements AddCallback<Multipart>, CreateCallback<Multipart>
 	{		
@@ -32,15 +32,15 @@ public class Multipart_Callbacks
 		public void onCreate(Map<ResourceLocation, ?> slaveset, BiMap<ResourceLocation, ? extends IForgeRegistry<?>> registries)
 		{
 			Map<ResourceLocation, Object> slaves = (Map<ResourceLocation, Object>)slaveset;
-			slaves.put(BLOCK_TO_MULTIPART, HashBiMap.<Block, Multipart>create());
-			slaves.put(ITEM_TO_MULTIPART, HashBiMap.<Item, Multipart>create());
+			slaves.put(MultipartUtils.BLOCK_TO_MULTIPART, HashBiMap.<Block, Multipart>create());
+			slaves.put(MultipartUtils.ITEM_TO_MULTIPART, HashBiMap.<Item, Multipart>create());
 		}
 
 		@Override
 		public void onAdd(Multipart multipart, int id, Map<ResourceLocation, ?> slaveset)
 		{
-			((BiMap<Block, Multipart>)slaveset.get(BLOCK_TO_MULTIPART)).put(multipart.getBlock(), multipart);
-			((BiMap<Item, Multipart>)slaveset.get(ITEM_TO_MULTIPART)).put(multipart.getItem(), multipart);
+			((BiMap<Block, Multipart>)slaveset.get(MultipartUtils.BLOCK_TO_MULTIPART)).put(multipart.getBlock(), multipart);
+			((BiMap<Item, Multipart>)slaveset.get(MultipartUtils.ITEM_TO_MULTIPART)).put(multipart.getItem(), multipart);
 		}
 	}
 	
@@ -49,6 +49,8 @@ public class Multipart_Callbacks
 		@Override
 		public void onCreate(Map<ResourceLocation, ?> slaveset, BiMap<ResourceLocation, ? extends IForgeRegistry<?>> registries)
 		{
+			Map<ResourceLocation, Object> slaves = (Map<ResourceLocation, Object>)slaveset;
+			slaves.put(MICROBLOCK_OVERLAPS, MicroblockOverlapRegistry.INSTANCE);
 		}
 		
 		@Override
