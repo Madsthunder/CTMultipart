@@ -3,7 +3,6 @@ package continuum.multipart.mod;
 import continuum.essentials.mod.CTMod;
 import continuum.essentials.mod.ObjectLoader;
 import continuum.multipart.crash.ApiCrashCallable;
-import continuum.multipart.proxy.CommonProxy;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
@@ -31,20 +30,20 @@ public class Multipart_Mod extends CTMod<Multipart_OH, Multipart_EH>
 	public void pre(FMLPreInitializationEvent event)
 	{
 		super.pre(event);
-		CommonProxy.INSTANCE.pre(this);
+		Multipart_Proxies.INSTANCE.pre(this);
 	}
 	
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event)
 	{
 		super.init(event);
-		CommonProxy.INSTANCE.init(this);
+		Multipart_Proxies.INSTANCE.init(this);
 	}
 	
 	@Mod.EventHandler
 	public void post(FMLPostInitializationEvent event)
 	{
 		super.post(event);
-		CommonProxy.INSTANCE.post(this);
+		Multipart_Proxies.INSTANCE.post(this);
 	}
 }
