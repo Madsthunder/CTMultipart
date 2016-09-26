@@ -3,7 +3,7 @@ package continuum.multipart.items;
 import java.util.List;
 
 import continuum.api.microblock.Microblock;
-import continuum.api.microblock.texture.MicroblockMaterial;
+import continuum.api.microblock.material.MicroblockMaterial;
 import continuum.multipart.blocks.BlockLayered;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

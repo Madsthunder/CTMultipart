@@ -1,6 +1,6 @@
 package continuum.api.microblock;
 
-import continuum.api.microblock.texture.MicroblockMaterial;
+import continuum.api.microblock.material.MicroblockMaterial;
 import continuum.essentials.tileentity.TileEntitySyncable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;

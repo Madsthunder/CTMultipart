@@ -1,6 +1,6 @@
 package continuum.api.microblock;
 
-import continuum.api.microblock.texture.MicroblockMaterial;
+import continuum.api.microblock.material.MicroblockMaterial;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer.StateImplementation;
 import net.minecraft.block.state.IBlockState;

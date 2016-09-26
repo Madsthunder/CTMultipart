@@ -1,4 +1,4 @@
-package continuum.api.microblock.texture;
+package continuum.api.microblock.material;
 
 import java.util.List;
 

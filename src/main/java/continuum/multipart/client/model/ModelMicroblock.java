@@ -17,7 +17,7 @@ import com.google.common.collect.Sets;
 
 import continuum.api.microblock.Microblock;
 import continuum.api.microblock.MicroblockStateImpl;
-import continuum.api.microblock.texture.MicroblockMaterial;
+import continuum.api.microblock.material.MicroblockMaterial;
 import continuum.api.multipart.MultiblockStateImpl;
 import continuum.api.multipart.MultipartState;
 import continuum.essentials.hooks.BlockHooks;

@@ -6,7 +6,7 @@ import com.google.common.collect.Iterables;
 
 import continuum.api.microblock.Microblock;
 import continuum.api.microblock.MicroblockOverlap;
-import continuum.api.microblock.texture.MicroblockMaterial;
+import continuum.api.microblock.material.MicroblockMaterial;
 import continuum.api.multipart.TESRMultiblockBase;
 import continuum.api.multipart.TileEntityMultiblock;
 import continuum.core.mod.CTCore_OH;

@@ -11,7 +11,7 @@ import com.google.common.collect.Lists;
 import continuum.api.microblock.Microblock;
 import continuum.api.microblock.MicroblockOverlap;
 import continuum.api.microblock.TileEntityMicroblock;
-import continuum.api.microblock.texture.MicroblockMaterial;
+import continuum.api.microblock.material.MicroblockMaterial;
 import continuum.api.multipart.Multipart;
 import continuum.api.multipart.MultipartEvent.AABBExceptionsEvent;
 import continuum.api.multipart.MultipartState;

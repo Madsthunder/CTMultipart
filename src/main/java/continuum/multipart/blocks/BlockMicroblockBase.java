@@ -7,7 +7,7 @@ import com.google.common.collect.Lists;
 import continuum.api.microblock.Microblock;
 import continuum.api.microblock.MicroblockStateImpl;
 import continuum.api.microblock.TileEntityMicroblock;
-import continuum.api.microblock.texture.MicroblockMaterial;
+import continuum.api.microblock.material.MicroblockMaterial;
 import continuum.essentials.hooks.BlockHooks;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;

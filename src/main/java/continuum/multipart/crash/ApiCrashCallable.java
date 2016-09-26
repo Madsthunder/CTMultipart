@@ -1,7 +1,7 @@
 package continuum.multipart.crash;
 
 import continuum.api.microblock.Microblock;
-import continuum.api.microblock.texture.MicroblockMaterial;
+import continuum.api.microblock.material.MicroblockMaterial;
 import net.minecraftforge.fml.common.ICrashCallable;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
