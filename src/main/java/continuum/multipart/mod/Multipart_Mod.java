@@ -20,31 +20,31 @@ public class Multipart_Mod extends CTMod<Multipart_OH, Multipart_EH>
 		this.getObjectHolder().setCTMultipart(this);
 		FMLCommonHandler.instance().registerCrashCallable(new ApiCrashCallable());
 	}
-    
-    @Mod.EventHandler
-    public void construction(FMLConstructionEvent event)
-    {
-    	super.construction(event);
-    }
-
-    @Mod.EventHandler
-    public void pre(FMLPreInitializationEvent event)
-    {
-    	super.pre(event);
-    	CommonProxy.INSTANCE.pre(this);
-    }
-
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent event)
-    {
-    	super.init(event);
-    	CommonProxy.INSTANCE.init(this);
-    }
-
-    @Mod.EventHandler
-    public void post(FMLPostInitializationEvent event)
-    {
-    	super.post(event);
-    	CommonProxy.INSTANCE.post(this);
-    }
+	
+	@Mod.EventHandler
+	public void construction(FMLConstructionEvent event)
+	{
+		super.construction(event);
+	}
+	
+	@Mod.EventHandler
+	public void pre(FMLPreInitializationEvent event)
+	{
+		super.pre(event);
+		CommonProxy.INSTANCE.pre(this);
+	}
+	
+	@Mod.EventHandler
+	public void init(FMLInitializationEvent event)
+	{
+		super.init(event);
+		CommonProxy.INSTANCE.init(this);
+	}
+	
+	@Mod.EventHandler
+	public void post(FMLPostInitializationEvent event)
+	{
+		super.post(event);
+		CommonProxy.INSTANCE.post(this);
+	}
 }

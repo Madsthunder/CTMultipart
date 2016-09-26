@@ -1,14 +1,11 @@
 package continuum.api.microblock;
 
-import java.util.HashMap;
-
 import continuum.api.microblock.texture.MicroblockMaterial;
 import continuum.essentials.tileentity.TileEntitySyncable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
@@ -18,7 +15,6 @@ public class TileEntityMicroblock extends TileEntitySyncable
 	
 	public TileEntityMicroblock()
 	{
-		
 	}
 	
 	public TileEntityMicroblock(MicroblockMaterial material)
@@ -30,7 +26,8 @@ public class TileEntityMicroblock extends TileEntitySyncable
 	public NBTTagCompound writeItemsToNBT()
 	{
 		NBTTagCompound compound = new NBTTagCompound();
-		if(material != null) compound.setString("material", this.material.getRegistryName().toString());
+		if(material != null)
+			compound.setString("material", this.material.getRegistryName().toString());
 		return compound;
 	}
 	
@@ -45,7 +42,8 @@ public class TileEntityMicroblock extends TileEntitySyncable
 		if(this.syncTags)
 		{
 			super.onDataPacket(manager, packet);
-			if(this.worldObj != null && this.worldObj.isRemote && this.pos != null) this.worldObj.markBlockRangeForRenderUpdate(this.pos, this.pos);
+			if(this.worldObj != null && this.worldObj.isRemote && this.pos != null)
+				this.worldObj.markBlockRangeForRenderUpdate(this.pos, this.pos);
 		}
 	}
 	

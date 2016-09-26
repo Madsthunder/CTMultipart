@@ -1,9 +1,7 @@
 package continuum.multipart.blocks;
 
 import continuum.api.microblock.Microblock;
-import continuum.api.multipart.MultipartState;
 import continuum.multipart.enums.DefaultMicroblock;
-import continuum.multipart.mod.Multipart_OH;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.BlockStateContainer.Builder;
@@ -40,28 +38,34 @@ public class BlockAxised extends BlockMicroblockBase
 		Boolean xbtc = hitX >= 0.25 && hitX <= 0.75;
 		Boolean ybtc = hitY >= 0.25 && hitY <= 0.75;
 		Boolean zbtc = hitZ >= 0.25 && hitZ <= 0.75;
-		EnumFacing[] fs = new EnumFacing[]
-		{
-				hitY > 0.5 ? EnumFacing.UP : EnumFacing.DOWN, hitZ > 0.5 ? EnumFacing.SOUTH : EnumFacing.NORTH, hitX > 0.5 ? EnumFacing.EAST : EnumFacing.WEST, facing.getOpposite()
-		};
+		EnumFacing[] fs = new EnumFacing[] { hitY > 0.5 ? EnumFacing.UP : EnumFacing.DOWN, hitZ > 0.5 ? EnumFacing.SOUTH : EnumFacing.NORTH, hitX > 0.5 ? EnumFacing.EAST : EnumFacing.WEST, facing.getOpposite() };
 		switch(facing.getAxis())
 		{
 			case X :
-				if(des && ybtc && zbtc) return state.withProperty(direction1, EnumFacing.WEST).withProperty(direction2, EnumFacing.EAST);
-				if(ybtc) return state.withProperty(direction1, fs[1]).withProperty(direction2, fs[3]);
-				if(zbtc) return state.withProperty(direction1, fs[0]).withProperty(direction2, fs[3]);
+				if(des && ybtc && zbtc)
+					return state.withProperty(direction1, EnumFacing.WEST).withProperty(direction2, EnumFacing.EAST);
+				if(ybtc)
+					return state.withProperty(direction1, fs[1]).withProperty(direction2, fs[3]);
+				if(zbtc)
+					return state.withProperty(direction1, fs[0]).withProperty(direction2, fs[3]);
 				return state.withProperty(direction1, fs[0]).withProperty(direction2, fs[1]);
 			case Y :
-				if(des && xbtc && zbtc) return state.withProperty(direction1, EnumFacing.DOWN).withProperty(direction2, EnumFacing.UP);
-				if(xbtc) return state.withProperty(direction1, fs[3]).withProperty(direction2, fs[1]);
-				if(zbtc) return state.withProperty(direction1, fs[3]).withProperty(direction2, fs[2]);
+				if(des && xbtc && zbtc)
+					return state.withProperty(direction1, EnumFacing.DOWN).withProperty(direction2, EnumFacing.UP);
+				if(xbtc)
+					return state.withProperty(direction1, fs[3]).withProperty(direction2, fs[1]);
+				if(zbtc)
+					return state.withProperty(direction1, fs[3]).withProperty(direction2, fs[2]);
 				return state.withProperty(direction1, fs[1]).withProperty(direction2, fs[2]);
 			case Z :
-				if(des && xbtc && ybtc) return state.withProperty(direction1, EnumFacing.NORTH).withProperty(direction2, EnumFacing.SOUTH);
-				if(xbtc) return state.withProperty(direction1, fs[0]).withProperty(direction2, fs[3]);
-				if(ybtc) return state.withProperty(direction1, fs[3]).withProperty(direction2, fs[2]);
+				if(des && xbtc && ybtc)
+					return state.withProperty(direction1, EnumFacing.NORTH).withProperty(direction2, EnumFacing.SOUTH);
+				if(xbtc)
+					return state.withProperty(direction1, fs[0]).withProperty(direction2, fs[3]);
+				if(ybtc)
+					return state.withProperty(direction1, fs[3]).withProperty(direction2, fs[2]);
 				return state.withProperty(direction1, fs[0]).withProperty(direction2, fs[2]);
-			default :
+			default:
 				return state;
 		}
 	}
@@ -70,14 +74,8 @@ public class BlockAxised extends BlockMicroblockBase
 	public int getMetaFromState(IBlockState state)
 	{
 		state = fixBlockState(state);
-		EnumFacing[] ds = new EnumFacing[]
-		{
-				state.getValue(direction1), state.getValue(direction2)
-		};
-		Axis[] as = new Axis[]
-		{
-				ds[0].getAxis(), ds[1].getAxis()
-		};
+		EnumFacing[] ds = new EnumFacing[] { state.getValue(direction1), state.getValue(direction2) };
+		Axis[] as = new Axis[] { ds[0].getAxis(), ds[1].getAxis() };
 		Axis axis = getAxis(as[0], as[1]);
 		return (axis.ordinal() * 5) + (axis == as[0] ? 0 : ((ds[0].ordinal() - (as[0] == Axis.Z ? 2 : 0)) * 2 + (ds[1].ordinal() - (as[1] == Axis.X ? 4 : 2))) + 1);
 	}
@@ -89,7 +87,8 @@ public class BlockAxised extends BlockMicroblockBase
 		else
 		{
 			for(Axis axis : Axis.values())
-				if(axis != axis1 && axis != axis2) return axis;
+				if(axis != axis1 && axis != axis2)
+					return axis;
 		}
 		return null;
 	}
@@ -100,8 +99,10 @@ public class BlockAxised extends BlockMicroblockBase
 		{
 			EnumFacing d1 = state.getValue(direction1);
 			EnumFacing d2 = state.getValue(direction2);
-			if(d1 == d2) return fixBlockState(state.withProperty(direction2, d2.getOpposite()));
-			if(d1.ordinal() > d2.ordinal()) return state.withProperty(direction1, d2).withProperty(direction2, d1);
+			if(d1 == d2)
+				return fixBlockState(state.withProperty(direction2, d2.getOpposite()));
+			if(d1.ordinal() > d2.ordinal())
+				return state.withProperty(direction1, d2).withProperty(direction2, d1);
 		}
 		return state;
 	}
@@ -127,7 +128,8 @@ public class BlockAxised extends BlockMicroblockBase
 		{
 			Integer i = 0;
 			for(EnumFacing facing : EnumFacing.values())
-				if(facing.getAxis() == a) state = state.withProperty(i++ == 0 ? direction1 : direction2, facing);
+				if(facing.getAxis() == a)
+					state = state.withProperty(i++ == 0 ? direction1 : direction2, facing);
 		}
 		else
 		{
@@ -135,7 +137,8 @@ public class BlockAxised extends BlockMicroblockBase
 			EnumFacing[] facings = new EnumFacing[4];
 			Integer i = 0;
 			for(EnumFacing facing : EnumFacing.values())
-				if(facing.getAxis() != a) facings[i++] = facing;
+				if(facing.getAxis() != a)
+					facings[i++] = facing;
 			if(meta >= 2)
 			{
 				state = state.withProperty(direction1, facings[1]);
@@ -154,7 +157,11 @@ public class BlockAxised extends BlockMicroblockBase
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rotation)
 	{
-		return state/**.withProperty(direction, rotation.rotate(state.getValue(direction)))*/;
+		return state/**
+					 * .withProperty(direction,
+					 * rotation.rotate(state.getValue(direction)))
+					 */
+		;
 	}
 	
 	@Override

@@ -58,14 +58,16 @@ public class BlockMultiblock extends Block implements IBlockBoundable
 	@Override
 	public SoundType getSoundType(IBlockState state, World world, BlockPos pos, Entity entity)
 	{
-		RayTraceResult result = null;//entity instanceof EntityLivingBase ? ForgeHooks.rayTraceEyes((EntityLivingBase)entity, 5D) : null;
+		RayTraceResult result = null;// entity instanceof EntityLivingBase ?
+										// ForgeHooks.rayTraceEyes((EntityLivingBase)entity,
+										// 5D) : null;
 		try
 		{
 			result = Minecraft.getMinecraft().objectMouseOver;
 			result = result.getBlockPos().equals(pos) ? result : null;
 		}
 		catch(Exception e)
-		{	
+		{
 			SoundType resultSound = result != null && result.hitInfo instanceof MultipartState ? ((MultipartState)result.hitInfo).getSoundType() : SoundType.STONE;
 			Vec3d vec = entity == null ? null : new Vec3d(entity.posX, entity.posY, entity.posZ);
 			SoundType blockSound = vec != null && (result = world.rayTraceBlocks(vec, vec.subtract(0, 3, 0))) != null && result.getBlockPos().equals(pos) && result.hitInfo instanceof MultipartState ? ((MultipartState)result.hitInfo).getSoundType() : SoundType.STONE;
@@ -282,7 +284,8 @@ public class BlockMultiblock extends Block implements IBlockBoundable
 			for(MultipartState<?> info : entity1.getCapability(MultipartStateList.MULTIPARTINFOLIST, null))
 				for(AxisAlignedBB aabb : info.getCollisonBoxes())
 					if(!(aabb instanceof CollidableAABB && !((CollidableAABB)aabb).collidable) && box.intersectsWith(aabb = aabb.offset(pos)))
-						list.add(aabb);}
+						list.add(aabb);
+		}
 	}
 	
 	@Override
@@ -302,16 +305,15 @@ public class BlockMultiblock extends Block implements IBlockBoundable
 		{
 			Vec3d vec = new Vec3d((double)hitX, (double)hitY, (double)hitZ);
 			for(MultipartState info : entity.getCapability(MultipartStateList.MULTIPARTINFOLIST, null))
-				if(Iterables.any(info.getSelectableCuboids(), 
-						new Predicate<ICuboid>()
-						{
-							@Override
-							public boolean apply(ICuboid cuboid)
-							{
-								AxisAlignedBB aabb = cuboid.getSelectableCuboid();
-								return BlockHooks.isInsideAABB(aabb, vec);
-							}
-						}))
+				if(Iterables.any(info.getSelectableCuboids(), new Predicate<ICuboid>()
+				{
+					@Override
+					public boolean apply(ICuboid cuboid)
+					{
+						AxisAlignedBB aabb = cuboid.getSelectableCuboid();
+						return BlockHooks.isInsideAABB(aabb, vec);
+					}
+				}))
 					if(info.onActivated(player, hand, stack, facing, hitX, hitY, hitZ))
 						return true;
 		}

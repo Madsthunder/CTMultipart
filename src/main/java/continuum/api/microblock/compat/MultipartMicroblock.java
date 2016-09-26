@@ -68,7 +68,7 @@ public class MultipartMicroblock extends Multipart
 		BlockHooks.createLandingEffects(world, new Vec3d(entity.posX, entity.posY, entity.posZ), info.getTileEntity() instanceof TileEntityMicroblock ? ((TileEntityMicroblock)info.getTileEntity()).getMaterial().getBlockState() : Blocks.AIR.getDefaultState(), particles);
 		return true;
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean addHitEffects(MultipartState info, RayTraceResult result, ParticleManager manager)
@@ -141,7 +141,8 @@ public class MultipartMicroblock extends Multipart
 	{
 		IBlockState state = info.getState();
 		TileEntity entity = info.getTileEntity();
-		if(entity instanceof TileEntityMicroblock && state instanceof StateImplementation) state = new MicroblockStateImpl(state, this.getMicroblock(), ((TileEntityMicroblock)entity).getMaterial());
+		if(entity instanceof TileEntityMicroblock && state instanceof StateImplementation)
+			state = new MicroblockStateImpl(state, this.getMicroblock(), ((TileEntityMicroblock)entity).getMaterial());
 		return state;
 	}
 	
@@ -162,7 +163,7 @@ public class MultipartMicroblock extends Multipart
 	public Material getMaterial(MultipartState info)
 	{
 		IBlockState state = info.getExtendedState();
-		if(state instanceof MultiblockStateImpl  && (state = ((MultiblockStateImpl)state).getImplementation()) instanceof MicroblockStateImpl) 
+		if(state instanceof MultiblockStateImpl && (state = ((MultiblockStateImpl)state).getImplementation()) instanceof MicroblockStateImpl)
 			return ((MicroblockStateImpl)state).getMicroblockMaterial().getBlockState().getMaterial();
 		return this.getBlock().getMaterial(state);
 	}
@@ -212,7 +213,8 @@ public class MultipartMicroblock extends Multipart
 	public float getHardness(MultipartState info)
 	{
 		IBlockState state = info.getExtendedState();
-		if(state instanceof MicroblockStateImpl) return ((MicroblockStateImpl)state).getMicroblockMaterial().getBlockState().getBlockHardness(info.getWorld(), info.getPos());
+		if(state instanceof MicroblockStateImpl)
+			return ((MicroblockStateImpl)state).getMicroblockMaterial().getBlockState().getBlockHardness(info.getWorld(), info.getPos());
 		return 0F;
 	}
 	
@@ -220,7 +222,8 @@ public class MultipartMicroblock extends Multipart
 	public String getTool(MultipartState info)
 	{
 		IBlockState state = info.getExtendedState();
-		if(state instanceof MicroblockStateImpl) return ((MicroblockStateImpl)state).getMicroblockMaterial().getTool();
+		if(state instanceof MicroblockStateImpl)
+			return ((MicroblockStateImpl)state).getMicroblockMaterial().getTool();
 		return "";
 	}
 	
@@ -228,7 +231,8 @@ public class MultipartMicroblock extends Multipart
 	public int getHarvestLevel(MultipartState info)
 	{
 		IBlockState state = info.getExtendedState();
-		if(state instanceof MicroblockStateImpl) return ((MicroblockStateImpl)state).getMicroblockMaterial().getHarvestLevel();
+		if(state instanceof MicroblockStateImpl)
+			return ((MicroblockStateImpl)state).getMicroblockMaterial().getHarvestLevel();
 		return 0;
 	}
 	

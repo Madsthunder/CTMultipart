@@ -25,7 +25,6 @@ public class ClientProxy extends CommonProxy
 {
 	ClientProxy()
 	{
-		
 	}
 	
 	@Override
@@ -44,7 +43,8 @@ public class ClientProxy extends CommonProxy
 				Block block = microblock.getBlock();
 				ModelLoader.setCustomStateMapper(block, holder.microblockSM);
 				Item item = Item.getItemFromBlock(block);
-				if(item != null) ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(new ResourceLocation(holder.getModid(), "microblock"), "normal"));
+				if(item != null)
+					ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(new ResourceLocation(holder.getModid(), "microblock"), "normal"));
 			}
 		}
 		if(holder.multiblock != null)

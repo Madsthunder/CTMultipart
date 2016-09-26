@@ -1,7 +1,6 @@
 package continuum.multipart.enums;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import com.google.common.collect.Lists;
 
@@ -23,26 +22,17 @@ public class EnumFacingArray
 	
 	public EnumFacing[] toArray()
 	{
-		return new EnumFacing[]
-		{
-				this.x, this.y, this.z
-		};
+		return new EnumFacing[] { this.x, this.y, this.z };
 	}
 	
 	public EnumFacing[] toArray(EnumFacingArray efa2)
 	{
-		return new EnumFacing[]
-		{
-				this.x, efa2.x, this.y, efa2.y, this.z, efa2.z
-		};
+		return new EnumFacing[] { this.x, efa2.x, this.y, efa2.y, this.z, efa2.z };
 	}
 	
 	public EnumFacing[] toArray(EnumFacingArray efa2, EnumFacingArray efa3)
 	{
-		return new EnumFacing[]
-		{
-				this.x, efa2.x, efa3.x, this.y, efa2.y, efa3.y, this.z, efa2.z, efa3.z
-		};
+		return new EnumFacing[] { this.x, efa2.x, efa3.x, this.y, efa2.y, efa3.y, this.z, efa2.z, efa3.z };
 	}
 	
 	public static Iterable<EnumFacingArray> getIterable()

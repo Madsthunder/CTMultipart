@@ -1,7 +1,6 @@
 package continuum.api.multipart;
 
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 
 public class CollidableAABB extends AxisAlignedBB
 {

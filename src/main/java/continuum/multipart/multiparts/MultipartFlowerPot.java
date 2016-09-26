@@ -87,7 +87,7 @@ public class MultipartFlowerPot extends Multipart
 						case DARK_OAK :
 							blockflowerpot$enumflowertype = BlockFlowerPot.EnumFlowerType.DARK_OAK_SAPLING;
 							break;
-						default :
+						default:
 							blockflowerpot$enumflowertype = BlockFlowerPot.EnumFlowerType.EMPTY;
 					}
 				}
@@ -101,7 +101,7 @@ public class MultipartFlowerPot extends Multipart
 						case 2 :
 							blockflowerpot$enumflowertype = BlockFlowerPot.EnumFlowerType.FERN;
 							break;
-						default :
+						default:
 							blockflowerpot$enumflowertype = BlockFlowerPot.EnumFlowerType.EMPTY;
 					}
 				}
@@ -140,7 +140,7 @@ public class MultipartFlowerPot extends Multipart
 						case OXEYE_DAISY :
 							blockflowerpot$enumflowertype = BlockFlowerPot.EnumFlowerType.OXEYE_DAISY;
 							break;
-						default :
+						default:
 							blockflowerpot$enumflowertype = BlockFlowerPot.EnumFlowerType.EMPTY;
 					}
 				}

@@ -1,6 +1,5 @@
 package continuum.multipart.items;
 
-
 import java.util.List;
 
 import continuum.api.microblock.Microblock;
@@ -34,13 +33,13 @@ public class ItemMicroblock extends ItemBlock
 	{
 		IForgeRegistry<MicroblockMaterial> microblockMaterialRegistry = GameRegistry.findRegistry(MicroblockMaterial.class);
 		if(microblockMaterialRegistry != null)
-		for(MicroblockMaterial material : microblockMaterialRegistry)
-			if(material != MicroblockMaterial.defaultMaterial)
-			{
-				ItemStack stack = new ItemStack(item);
-				stack.setTagCompound(MicroblockMaterial.writeToNBT(material));
-				list.add(stack);
-			}
+			for(MicroblockMaterial material : microblockMaterialRegistry)
+				if(material != MicroblockMaterial.defaultMaterial)
+				{
+					ItemStack stack = new ItemStack(item);
+					stack.setTagCompound(MicroblockMaterial.writeToNBT(material));
+					list.add(stack);
+				}
 	}
 	
 	@Override
@@ -54,7 +53,8 @@ public class ItemMicroblock extends ItemBlock
 	{
 		Block block = this.block;
 		IBlockState defaultt = block.getDefaultState();
-		if(block instanceof BlockLayered) return defaultt.withProperty(BlockLayered.direction, EnumFacing.SOUTH);
+		if(block instanceof BlockLayered)
+			return defaultt.withProperty(BlockLayered.direction, EnumFacing.SOUTH);
 		return defaultt;
 	}
 	

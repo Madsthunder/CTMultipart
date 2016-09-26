@@ -1,9 +1,6 @@
 package continuum.multipart.blocks;
 
 import continuum.api.microblock.Microblock;
-import continuum.api.multipart.MultipartState;
-import continuum.multipart.mod.Multipart_OH;
-import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.BlockStateContainer.Builder;
@@ -37,7 +34,7 @@ public class BlockLayered extends BlockMicroblockBase
 				return this.getStateFromPlaceCoords(hitX, hitZ, facing, EnumFacing.NORTH, EnumFacing.WEST);
 			case Z :
 				return this.getStateFromPlaceCoords(hitX, hitY, facing, EnumFacing.DOWN, EnumFacing.WEST);
-			default :
+			default:
 				return this.getDefaultState();
 		}
 	}

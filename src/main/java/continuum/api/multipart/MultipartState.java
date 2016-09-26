@@ -80,7 +80,8 @@ public class MultipartState<M extends Multipart> implements INBTSerializable<NBT
 	public IBlockState getActualState(boolean addImpl)
 	{
 		IBlockState state = this.getMultipart().getMultipartState(this);
-		if(addImpl && state instanceof StateImplementation) state = new MultiblockStateImpl((StateImplementation)state, this.infoList, this);
+		if(addImpl && state instanceof StateImplementation)
+			state = new MultiblockStateImpl((StateImplementation)state, this.infoList, this);
 		return state;
 	}
 	
@@ -92,7 +93,8 @@ public class MultipartState<M extends Multipart> implements INBTSerializable<NBT
 	public IBlockState getExtendedState(boolean addImpl)
 	{
 		IBlockState state = this.getMultipart().getMultipartRenderState(this);
-		if(addImpl && state instanceof StateImplementation) state = new MultiblockStateImpl((StateImplementation)state, this.infoList, this);
+		if(addImpl && state instanceof StateImplementation)
+			state = new MultiblockStateImpl((StateImplementation)state, this.infoList, this);
 		return state;
 	}
 	
@@ -226,7 +228,8 @@ public class MultipartState<M extends Multipart> implements INBTSerializable<NBT
 	
 	public IBlockState setState(IBlockState state)
 	{
-		if(state.getBlock() == this.getBlock()) this.setMetadata(state.getBlock().getMetaFromState(state));
+		if(state.getBlock() == this.getBlock())
+			this.setMetadata(state.getBlock().getMetaFromState(state));
 		return this.getState();
 	}
 	

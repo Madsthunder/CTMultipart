@@ -28,7 +28,6 @@ public class MultipartStateList extends ArrayList<MultipartState> implements ICa
 {
 	@CapabilityInject(MultipartStateList.class)
 	public static Capability<MultipartStateList> MULTIPARTINFOLIST;
-	
 	private final TileEntity entity;
 	
 	public MultipartStateList(TileEntity entity)
@@ -36,7 +35,7 @@ public class MultipartStateList extends ArrayList<MultipartState> implements ICa
 		this.entity = entity;
 	}
 	
-    @Override
+	@Override
 	public NBTTagList serializeNBT()
 	{
 		NBTTagList list = new NBTTagList();
@@ -62,19 +61,19 @@ public class MultipartStateList extends ArrayList<MultipartState> implements ICa
 	{
 		return this.entity.getPos();
 	}
-
+	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing)
 	{
 		return capability == MULTIPARTINFOLIST;
 	}
-
+	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing)
 	{
 		return (T)this;
 	}
-
+	
 	@Override
 	public boolean add(MultipartState info)
 	{
@@ -116,21 +115,26 @@ public class MultipartStateList extends ArrayList<MultipartState> implements ICa
 			MultipartState data1 = this.get(0);
 			world.removeTileEntity(pos);
 			NBTTagCompound compound = new NBTTagCompound();
-			if(data1.hasTileEntity()) data1.getTileEntity().writeToNBT(compound);
+			if(data1.hasTileEntity())
+				data1.getTileEntity().writeToNBT(compound);
 			world.setBlockState(pos, data1.getState());
 			world.setTileEntity(pos, data1.getTileEntity());
 			TileEntity entity = world.getTileEntity(pos);
-			if(entity != null) entity.readFromNBT(compound);
+			if(entity != null)
+				entity.readFromNBT(compound);
 		}
-		else if(this.isEmpty()) world.setBlockToAir(pos);
+		else if(this.isEmpty())
+			world.setBlockToAir(pos);
 		world.checkLight(pos);
 	}
+	
 	public int getLightValue()
 	{
 		int light = 0;
 		int i;
 		for(MultipartState info : this)
-			if((i = info.getLightValue()) > light) light = i;
+			if((i = info.getLightValue()) > light)
+				light = i;
 		return light;
 	}
 	
@@ -143,16 +147,20 @@ public class MultipartStateList extends ArrayList<MultipartState> implements ICa
 			return this.boxIntersectsMultipart(exclude, box, useExclude, event.allowed);
 		}
 		for(Multipart multipart : this.getStoredMultiparts())
-			if(!useExclude || multipart != exclude) for(AxisAlignedBB aabb : this.getCollisionBoxes(multipart))
-				if((aabb instanceof PermanentAABB ? ((PermanentAABB)aabb).permanent : true) && box.intersectsWith(aabb)) return true;
+			if(!useExclude || multipart != exclude)
+				for(AxisAlignedBB aabb : this.getCollisionBoxes(multipart))
+					if((aabb instanceof PermanentAABB ? ((PermanentAABB)aabb).permanent : true) && box.intersectsWith(aabb))
+						return true;
 		return false;
 	}
 	
 	public boolean boxIntersectsMultipart(Multipart exclude, AxisAlignedBB box, boolean useExclude, List<AxisAlignedBB> allowed)
 	{
 		for(Multipart multipart : this.getStoredMultiparts())
-			if(!useExclude || multipart != exclude) for(AxisAlignedBB aabb : this.getCollisionBoxes(multipart))
-				if(!allowed.contains(aabb) && (aabb instanceof PermanentAABB ? ((PermanentAABB)aabb).permanent : true) && box.intersectsWith(aabb)) return true;
+			if(!useExclude || multipart != exclude)
+				for(AxisAlignedBB aabb : this.getCollisionBoxes(multipart))
+					if(!allowed.contains(aabb) && (aabb instanceof PermanentAABB ? ((PermanentAABB)aabb).permanent : true) && box.intersectsWith(aabb))
+						return true;
 		return false;
 	}
 	
@@ -178,7 +186,8 @@ public class MultipartStateList extends ArrayList<MultipartState> implements ICa
 	{
 		HashSet<MultipartState> infoList = Sets.newHashSet();
 		for(MultipartState info : this)
-			if(clasz.isInstance(info.getBlock())) infoList.add(info);
+			if(clasz.isInstance(info.getBlock()))
+				infoList.add(info);
 		return infoList;
 	}
 	
@@ -186,7 +195,8 @@ public class MultipartStateList extends ArrayList<MultipartState> implements ICa
 	{
 		HashSet<MultipartState> infoList = Sets.newHashSet();
 		for(MultipartState info : this)
-			if(clasz.isInstance(info.getTileEntity())) infoList.add(info);
+			if(clasz.isInstance(info.getTileEntity()))
+				infoList.add(info);
 		return infoList;
 	}
 	
@@ -194,21 +204,24 @@ public class MultipartStateList extends ArrayList<MultipartState> implements ICa
 	{
 		HashSet<MultipartState<V>> infoList = Sets.newHashSet();
 		for(MultipartState info : this)
-			if(clasz.isInstance(info.getMultipart())) infoList.add(info);
+			if(clasz.isInstance(info.getMultipart()))
+				infoList.add(info);
 		return infoList;
 	}
 	
 	public MultipartState findInfoForEntity(TileEntity entity)
 	{
 		for(MultipartState info : this)
-			if(info.getTileEntity() == entity) return info;
+			if(info.getTileEntity() == entity)
+				return info;
 		return null;
 	}
 	
 	public Multipart findMultipartForEntity(TileEntity entity)
 	{
 		MultipartState info = this.findInfoForEntity(entity);
-		if(info != null) return info.getMultipart();
+		if(info != null)
+			return info.getMultipart();
 		return null;
 	}
 	
@@ -216,7 +229,8 @@ public class MultipartStateList extends ArrayList<MultipartState> implements ICa
 	{
 		List<MultipartState> infoList = Lists.newArrayList();
 		for(MultipartState info : this)
-			if(info.getMultipart() == multipart) infoList.add(info);
+			if(info.getMultipart() == multipart)
+				infoList.add(info);
 		return infoList;
 	}
 	

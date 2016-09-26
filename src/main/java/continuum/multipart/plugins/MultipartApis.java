@@ -22,7 +22,11 @@ import net.minecraftforge.fml.common.registry.IForgeRegistry;
  */
 public class MultipartApis
 {
-	public static final IForgeRegistry<Multipart> multipartRegistry = null;//Registries.createRegistry(Multipart.class, 0, Integer.MAX_VALUE >> 5);
+	public static final IForgeRegistry<Multipart> multipartRegistry = null;// Registries.createRegistry(Multipart.class,
+																			// 0,
+																			// Integer.MAX_VALUE
+																			// >>
+																			// 5);
 	public static final FMLControlledNamespacedRegistry<MicroblockMaterial> microblockTextureRegistry = null;
 	public static final IForgeRegistry<Microblock> microblockRegistry = null;
 	private static final Map<Microblock, Map<Microblock, Predicate<Pair<MultipartState<MultipartMicroblock>, MultipartState<MultipartMicroblock>>>>> overlaps = Maps.newHashMap();
@@ -63,7 +67,7 @@ public class MultipartApis
 		return true;
 	}
 	
-	@APIMethodReflectable(clasz = "continuum.api.microblock.compat.MultipartCompat", method = "addMicroblockOverlap", type = MirrorType.REPLACE_RETURN, extras = { "params={ 0, 1, 2 }"})
+	@APIMethodReflectable(clasz = "continuum.api.microblock.compat.MultipartCompat", method = "addMicroblockOverlap", type = MirrorType.REPLACE_RETURN, extras = { "params={ 0, 1, 2 }" })
 	public static boolean addMicroblockOverlap(Microblock toOverlap, Microblock microblock, Predicate<Pair<MultipartState<MultipartMicroblock>, MultipartState<MultipartMicroblock>>> predicate)
 	{
 		Map<Microblock, Predicate<Pair<MultipartState<MultipartMicroblock>, MultipartState<MultipartMicroblock>>>> conflicting = overlaps.get(microblock);
@@ -79,7 +83,7 @@ public class MultipartApis
 		return true;
 	}
 	
-	@APIMethodReflectable(clasz = "continuum.api.microblock.compat.MultipartCompat", method = "microblockOverlaps", type = MirrorType.REPLACE_RETURN, extras = { "params={ 0, 1 }"})
+	@APIMethodReflectable(clasz = "continuum.api.microblock.compat.MultipartCompat", method = "microblockOverlaps", type = MirrorType.REPLACE_RETURN, extras = { "params={ 0, 1 }" })
 	public static boolean microblockOverlaps(MultipartState<MultipartMicroblock> subject, MultipartState<MultipartMicroblock> info)
 	{
 		Map<Microblock, Predicate<Pair<MultipartState<MultipartMicroblock>, MultipartState<MultipartMicroblock>>>> map = overlaps.get(subject.getMultipart().getMicroblock());

@@ -37,7 +37,7 @@ public class BlockCornered extends BlockMicroblockBase
 				return this.getStateFromPlaceCoords(hitX, hitZ, facing, directionY, directionX, directionZ);
 			case Z :
 				return this.getStateFromPlaceCoords(hitX, hitY, facing, directionZ, directionX, directionY);
-			default :
+			default:
 				return this.getDefaultState();
 		}
 	}
@@ -69,7 +69,8 @@ public class BlockCornered extends BlockMicroblockBase
 			state = state.withProperty(directionZ, EnumFacing.SOUTH);
 			meta = meta - 2;
 		}
-		if(meta == 1) state = state.withProperty(directionX, EnumFacing.EAST);
+		if(meta == 1)
+			state = state.withProperty(directionX, EnumFacing.EAST);
 		return state;
 	}
 	

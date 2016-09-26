@@ -43,7 +43,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -105,33 +104,32 @@ public class Multipart_EH
 		{
 			event.getRegistry().register((objectHolder.multiblock = new BlockMultiblock()).setUnlocalizedName(MULTIBLOCK.getResourcePath()).setRegistryName(MULTIBLOCK));
 			GameRegistry.registerTileEntity(TileEntityMultiblock.class, MULTIBLOCK.toString());
-			CapabilityManager.INSTANCE.register(MultipartStateList.class,
-					new IStorage<MultipartStateList>()
-					{
-						@Override
-						public NBTBase writeNBT(Capability capability, MultipartStateList instance, EnumFacing side)
-						{
-							return instance.serializeNBT();
-						}
-
-						@Override
-						public void readNBT(Capability capability, MultipartStateList instance, EnumFacing side, NBTBase nbt)
-						{
-							instance.deserializeNBT((NBTTagList)nbt);
-						}
-					}, MultipartStateList.class);
+			CapabilityManager.INSTANCE.register(MultipartStateList.class, new IStorage<MultipartStateList>()
+			{
+				@Override
+				public NBTBase writeNBT(Capability capability, MultipartStateList instance, EnumFacing side)
+				{
+					return instance.serializeNBT();
+				}
+				
+				@Override
+				public void readNBT(Capability capability, MultipartStateList instance, EnumFacing side, NBTBase nbt)
+				{
+					instance.deserializeNBT((NBTTagList)nbt);
+				}
+			}, MultipartStateList.class);
 		}
 		if(GameRegistry.findRegistry(Microblock.class) != null)
 			GameRegistry.registerTileEntity(TileEntityMicroblock.class, "ctmultipart:microblock");
 	}
-
+	
 	@SubscribeEvent
 	public static void onMultipartObjectsRegister(RegistryEvent.Register<Multipart> event)
 	{
 		event.getRegistry().register(new MultipartFlowerPot());
 		event.getRegistry().register(new MutipartTorch());
 	}
-
+	
 	@SubscribeEvent
 	public static void onMicroblockObjectsRegister(RegistryEvent.Register<Microblock> event)
 	{
@@ -260,7 +258,7 @@ public class Multipart_EH
 	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public static <T extends Comparable<T>>void onDebugInfoGet(DebugInfoEvent event)
+	public static <T extends Comparable<T>> void onDebugInfoGet(DebugInfoEvent event)
 	{
 		if(objectHolder.multiblock != null)
 		{
@@ -275,17 +273,17 @@ public class Multipart_EH
 					BlockPos pos = result.getBlockPos();
 					IBlockState state = world.getWorldType() == WorldType.DEBUG_WORLD ? info.getState() : info.getActualState();
 					list.add("(Multipart) " + info.getMultipart().getRegistryName());
-	                for(Entry<IProperty<?>, Comparable<?>> entry : state.getProperties().entrySet())
-	                {
-	                    IProperty property = entry.getKey();
-	                    Comparable value = entry.getValue();
-	                    String s = property.getName(value);
-	                    if (Boolean.TRUE.equals(value))
-	                        s = TextFormatting.GREEN + s;
-	                    else if (Boolean.FALSE.equals(value))
-	                        s = TextFormatting.RED + s;
-	                    list.add(property.getName() + ": " + s);
-	                }
+					for(Entry<IProperty<?>, Comparable<?>> entry : state.getProperties().entrySet())
+					{
+						IProperty property = entry.getKey();
+						Comparable value = entry.getValue();
+						String s = property.getName(value);
+						if(Boolean.TRUE.equals(value))
+							s = TextFormatting.GREEN + s;
+						else if(Boolean.FALSE.equals(value))
+							s = TextFormatting.RED + s;
+						list.add(property.getName() + ": " + s);
+					}
 				}
 			}
 		}
@@ -303,7 +301,8 @@ public class Multipart_EH
 			World world = event.getWorld();
 			BlockPos pos = result.getBlockPos().offset(result.sideHit);
 			Block possibleBlock = Block.getBlockFromItem(stack.getItem());
-			if(possibleBlock == null) possibleBlock = ForgeRegistries.BLOCKS.getValue(stack.getItem().getRegistryName());
+			if(possibleBlock == null)
+				possibleBlock = ForgeRegistries.BLOCKS.getValue(stack.getItem().getRegistryName());
 			Multipart prevEntry;
 			Multipart possibleEntry;
 			if(multipartRegistry != null && possibleBlock != null && (possibleEntry = multipartRegistry.getValue(stack.getItem().getRegistryName())) != null)
@@ -315,7 +314,7 @@ public class Multipart_EH
 				if(prevTile != null && prevTile.hasCapability(MultipartStateList.MULTIPARTINFOLIST, null))
 				{
 					if(attemptToPlace(world, pos, player, stack, Lists.newArrayList(), result, possibleEntry, possibleState))
-							player.swingArm(EnumHand.MAIN_HAND);
+						player.swingArm(EnumHand.MAIN_HAND);
 				}
 				else if((prevEntry = multipartRegistry.getValue(prevBlock.getBlock().getRegistryName())) != null)
 				{
@@ -347,12 +346,14 @@ public class Multipart_EH
 				infoList.add(info);
 				info.onPlaced(player, stack);
 				entity.markDirty();
-				//if(player instanceof EntityPlayerMP) ((EntityPlayerMP)player).connection.sendPacket(entity.getUpdatePacket());
+				// if(player instanceof EntityPlayerMP)
+				// ((EntityPlayerMP)player).connection.sendPacket(entity.getUpdatePacket());
 				SoundType sound = info.getSoundType();
 				world.playSound(player, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
 				world.checkLight(pos);
 				world.markBlockRangeForRenderUpdate(pos.add(-8, -8, -8), pos.add(8, 8, 8));
-				if(!player.capabilities.isCreativeMode) --stack.stackSize;
+				if(!player.capabilities.isCreativeMode)
+					--stack.stackSize;
 				return true;
 			}
 			else
@@ -370,24 +371,26 @@ public class Multipart_EH
 			return false;
 		else
 		{
-			if(stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag", 10)) if(entity != null)
-			{
-				if(!world.isRemote && entity.onlyOpsCanSetNbt() && (pos == null || !minecraftserver.getPlayerList().canSendCommands(player.getGameProfile()))) return false;
-				NBTTagCompound compound = new NBTTagCompound();
-				NBTTagCompound compound1 = (NBTTagCompound)compound.copy();
-				entity.writeToNBT(compound);
-				NBTTagCompound compound2 = (NBTTagCompound)stack.getTagCompound().getTag("BlockEntityTag");
-				compound.merge(compound2);
-				compound.setInteger("x", pos.getX());
-				compound.setInteger("y", pos.getY());
-				compound.setInteger("z", pos.getZ());
-				if(!compound.equals(compound1))
+			if(stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag", 10))
+				if(entity != null)
 				{
-					entity.readFromNBT(compound);
-					multiblock.markDirty();
-					return true;
+					if(!world.isRemote && entity.onlyOpsCanSetNbt() && (pos == null || !minecraftserver.getPlayerList().canSendCommands(player.getGameProfile())))
+						return false;
+					NBTTagCompound compound = new NBTTagCompound();
+					NBTTagCompound compound1 = (NBTTagCompound)compound.copy();
+					entity.writeToNBT(compound);
+					NBTTagCompound compound2 = (NBTTagCompound)stack.getTagCompound().getTag("BlockEntityTag");
+					compound.merge(compound2);
+					compound.setInteger("x", pos.getX());
+					compound.setInteger("y", pos.getY());
+					compound.setInteger("z", pos.getZ());
+					if(!compound.equals(compound1))
+					{
+						entity.readFromNBT(compound);
+						multiblock.markDirty();
+						return true;
+					}
 				}
-			}
 			return false;
 		}
 	}
@@ -413,17 +416,21 @@ public class Multipart_EH
 	public static void addAllCuboids(EnumFacing exclude, ILayeredCuboid[] cuboids, List<AxisAlignedBB> list)
 	{
 		for(ILayeredCuboid cuboid : cuboids)
-			if(cuboid.getSide() != exclude) list.add(cuboid.getSelectableCuboid());
+			if(cuboid.getSide() != exclude)
+				list.add(cuboid.getSelectableCuboid());
 	}
 	
 	public static EnumFacing tryFindFacing(AxisAlignedBB box)
 	{
 		for(SlabCuboid cuboid : SlabCuboid.values())
-			if(cuboid.getSelectableCuboid() == box) return cuboid.getSide();
+			if(cuboid.getSelectableCuboid() == box)
+				return cuboid.getSide();
 		for(PanelCuboid cuboid : PanelCuboid.values())
-			if(cuboid.getSelectableCuboid() == box) return cuboid.getSide();
+			if(cuboid.getSelectableCuboid() == box)
+				return cuboid.getSide();
 		for(CoverCuboid cuboid : CoverCuboid.values())
-			if(cuboid.getSelectableCuboid() == box) return cuboid.getSide();
+			if(cuboid.getSelectableCuboid() == box)
+				return cuboid.getSide();
 		return null;
 	}
 	
@@ -640,7 +647,7 @@ public class Multipart_EH
 							/* Up West */ drawZ(tess, z, boxZ.minX, boxZ.maxY - 0.5, boxZ.minX + 0.5, boxZ.maxY);
 							/* Up East */ drawZ(tess, z, boxZ.maxX - 0.5, boxZ.maxY - 0.5, boxZ.maxX, boxZ.maxY);
 							break;
-						default :
+						default:
 							objectHolder.getCTMultipart().getLogger().warn(side == null ? result + " has no side?" : result + " has no axis?");
 					}
 				}

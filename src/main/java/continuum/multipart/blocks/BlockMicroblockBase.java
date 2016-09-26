@@ -7,7 +7,6 @@ import com.google.common.collect.Lists;
 import continuum.api.microblock.Microblock;
 import continuum.api.microblock.MicroblockStateImpl;
 import continuum.api.microblock.TileEntityMicroblock;
-import continuum.api.microblock.compat.MultipartMicroblock;
 import continuum.api.microblock.texture.MicroblockMaterial;
 import continuum.essentials.hooks.BlockHooks;
 import net.minecraft.block.BlockContainer;
@@ -147,7 +146,8 @@ public abstract class BlockMicroblockBase extends BlockContainer
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess access, BlockPos pos)
 	{
 		TileEntity entity = access.getTileEntity(pos);
-		if(entity instanceof TileEntityMicroblock) state = new MicroblockStateImpl(state, this.microblock, ((TileEntityMicroblock)entity).getMaterial());
+		if(entity instanceof TileEntityMicroblock)
+			state = new MicroblockStateImpl(state, this.microblock, ((TileEntityMicroblock)entity).getMaterial());
 		return state;
 	}
 	

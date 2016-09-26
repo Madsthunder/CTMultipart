@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.registry.IForgeRegistry;
 import net.minecraftforge.fml.common.registry.IForgeRegistry.AddCallback;
 import net.minecraftforge.fml.common.registry.IForgeRegistry.CreateCallback;
 
-public class Multipart_Callbacks 
+public class Multipart_Callbacks
 {
 	private static final Multipart_OH objectHolder = Multipart_OH.INSTANCE;
 	public static final Object MULTIPARTS = new Multiparts();
@@ -27,7 +27,7 @@ public class Multipart_Callbacks
 	public static final ResourceLocation MICROBLOCK_OVERLAPS = new ResourceLocation("ctmultipart", "microblockoverlaps");
 	
 	private static class Multiparts implements AddCallback<Multipart>, CreateCallback<Multipart>
-	{		
+	{
 		@Override
 		public void onCreate(Map<ResourceLocation, ?> slaveset, BiMap<ResourceLocation, ? extends IForgeRegistry<?>> registries)
 		{
@@ -35,7 +35,7 @@ public class Multipart_Callbacks
 			slaves.put(MultipartUtils.BLOCK_TO_MULTIPART, HashBiMap.<Block, Multipart>create());
 			slaves.put(MultipartUtils.ITEM_TO_MULTIPART, HashBiMap.<Item, Multipart>create());
 		}
-
+		
 		@Override
 		public void onAdd(Multipart multipart, int id, Map<ResourceLocation, ?> slaveset)
 		{

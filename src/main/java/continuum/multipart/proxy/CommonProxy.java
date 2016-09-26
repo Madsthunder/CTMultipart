@@ -20,9 +20,9 @@ import net.minecraftforge.fml.relauncher.Side;
 public class CommonProxy extends Proxy<Multipart_Mod>
 {
 	public static final Proxy INSTANCE = FMLLaunchHandler.side() == Side.CLIENT ? new ClientProxy() : new CommonProxy();
+	
 	CommonProxy()
 	{
-		
 	}
 	
 	@Override
@@ -37,23 +37,20 @@ public class CommonProxy extends Proxy<Multipart_Mod>
 			MicroblockMaterial material = Iterables.find(microblockMaterialRegistry, Predicates.not(Predicates.equalTo(MicroblockMaterial.defaultMaterial)));
 			NBTTagCompound compound = MicroblockMaterial.writeToNBT(material == null ? MicroblockMaterial.defaultMaterial : material);
 			if(stack.hasTagCompound())
-					stack.getTagCompound().merge(compound);
+				stack.getTagCompound().merge(compound);
 			else
 				stack.setTagCompound(compound);
 			holder.microblocks = new CreativeTab("ctmicroblocks", stack);
 			for(Microblock microblock : microblockRegistry)
 				microblock.getBlock().setCreativeTab(holder.microblocks);
 		}
-	
 	}
 	
 	public void init(Multipart_Mod mod)
 	{
-		
 	}
 	
 	public void post(Multipart_Mod mod)
 	{
-		
 	}
 }

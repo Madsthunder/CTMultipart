@@ -6,7 +6,6 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.google.common.collect.Lists;
 
-import continuum.api.microblock.texture.MicroblockMaterial;
 import continuum.essentials.block.ICuboid;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -21,9 +20,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class Microblock implements IForgeRegistryEntry<Microblock>
 {
 	public abstract Block getBlock();
+	
 	public abstract List<ICuboid> getCuboids();
+	
 	public abstract String getName();
+	
 	public abstract AxisAlignedBB getSelectionBox(IBlockState state);
+	
 	public abstract List<AxisAlignedBB> getRenderBoxes(IBlockState state);
 	
 	@SideOnly(Side.CLIENT)
@@ -44,7 +47,6 @@ public abstract class Microblock implements IForgeRegistryEntry<Microblock>
 	
 	public void addExceptionsToList(ICuboid cuboid, List<AxisAlignedBB> aabbs)
 	{
-		
 	}
 	
 	public final Microblock setRegistryName(ResourceLocation location)

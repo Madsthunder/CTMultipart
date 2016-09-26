@@ -40,8 +40,7 @@ public class DefaultMicroblock extends Microblock
 	public static final ImmutableSet<IAxisedCuboid> AXISED_CUBOIDS = new ImmutableSet.Builder<IAxisedCuboid>().add(PillarCuboid.values()).add(PostCuboid.values()).add(StripCuboid.values()).build();
 	public static final ImmutableSet<ICorneredCuboid> CORNERED_CUBOIDS = new ImmutableSet.Builder<ICorneredCuboid>().add(NotchCuboid.values()).add(CornerCuboid.values()).add(NookCuboid.values()).build();
 	public static final ImmutableList<DefaultMicroblock> defaultMicroblocks = new ImmutableList.Builder<DefaultMicroblock>().add(SLAB, PANEL, COVER, PILLAR, POST, STRIP, NOTCH, CORNER, NOOK).build();
-	
-	public static final Multipart_OH holder  = Multipart_OH.INSTANCE;
+	public static final Multipart_OH holder = Multipart_OH.INSTANCE;
 	private final String name;
 	private final List<ICuboid> cuboids;
 	private final Block block;
@@ -76,13 +75,13 @@ public class DefaultMicroblock extends Microblock
 	{
 		return Lists.newArrayList(this.getCuboids().get(state.getBlock().getMetaFromState(state)).getSelectableCuboid());
 	}
-
+	
 	@Override
 	public Block getBlock()
 	{
 		return this.block;
 	}
-
+	
 	@Override
 	public ResourceLocation getRegistryName()
 	{
@@ -109,29 +108,27 @@ public class DefaultMicroblock extends Microblock
 		if(isLayered(this) && cuboid instanceof ILayeredCuboid)
 		{
 			ILayeredCuboid layered = (ILayeredCuboid)cuboid;
-			Iterables.addAll(list, Iterables.transform(Iterables.filter(LAYERED_CUBOIDS,
-					new Predicate<ILayeredCuboid>()
-					{
-						@Override
-						public boolean apply(ILayeredCuboid cuboid1)
-						{
-							return cuboid1.getSide() != layered.getSide();
-						}
-					}), ICuboid.CUBOID_TO_SELECTABLE));
+			Iterables.addAll(list, Iterables.transform(Iterables.filter(LAYERED_CUBOIDS, new Predicate<ILayeredCuboid>()
+			{
+				@Override
+				public boolean apply(ILayeredCuboid cuboid1)
+				{
+					return cuboid1.getSide() != layered.getSide();
+				}
+			}), ICuboid.CUBOID_TO_SELECTABLE));
 			Iterables.addAll(list, Iterables.transform(AXISED_CUBOIDS, ICuboid.CUBOID_TO_SELECTABLE));
 		}
 		else if(isAxised(this) && cuboid instanceof IAxisedCuboid)
 		{
 			IAxisedCuboid pillared = (IAxisedCuboid)cuboid;
-			Iterables.addAll(list, Iterables.transform(Iterables.filter(AXISED_CUBOIDS,
-					new Predicate<IAxisedCuboid>()
-					{
-						@Override
-						public boolean apply(IAxisedCuboid cuboid1)
-						{
-							return pillared.isCentered() ? !pillared.getSelectableCuboid().intersectsWith(cuboid1.getSelectableCuboid()) : pillared.getAxis() != cuboid1.getAxis();
-						}
-					}), ICuboid.CUBOID_TO_SELECTABLE));
+			Iterables.addAll(list, Iterables.transform(Iterables.filter(AXISED_CUBOIDS, new Predicate<IAxisedCuboid>()
+			{
+				@Override
+				public boolean apply(IAxisedCuboid cuboid1)
+				{
+					return pillared.isCentered() ? !pillared.getSelectableCuboid().intersectsWith(cuboid1.getSelectableCuboid()) : pillared.getAxis() != cuboid1.getAxis();
+				}
+			}), ICuboid.CUBOID_TO_SELECTABLE));
 			Iterables.addAll(list, Iterables.transform(LAYERED_CUBOIDS, ICuboid.CUBOID_TO_SELECTABLE));
 		}
 	}
@@ -150,7 +147,7 @@ public class DefaultMicroblock extends Microblock
 	{
 		return microblock == NOTCH || microblock == CORNER || microblock == NOOK;
 	}
-
+	
 	@Override
 	public AxisAlignedBB getSelectionBox(IBlockState state)
 	{

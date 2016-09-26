@@ -150,7 +150,7 @@ public abstract class MicroblockMaterial implements IForgeRegistryEntry<Microblo
 	{
 		IForgeRegistry<MicroblockMaterial> microblockMaterialRegistry = GameRegistry.findRegistry(MicroblockMaterial.class);
 		MicroblockMaterial material = compound != null && microblockMaterialRegistry != null ? microblockMaterialRegistry.getValue(new ResourceLocation(compound.getCompoundTag("BlockEntityTag").getString("material"))) : null;
-		return  material == null ? MicroblockMaterial.defaultMaterial : material;
+		return material == null ? MicroblockMaterial.defaultMaterial : material;
 	}
 	
 	public static NBTTagCompound writeToNBT(MicroblockMaterial material)
@@ -176,13 +176,13 @@ public abstract class MicroblockMaterial implements IForgeRegistryEntry<Microblo
 			super(name, block, meta);
 			this.location = new ResourceLocation(location);
 		}
-
+		
 		@Override
 		public ResourceLocation getParticleTexture()
 		{
 			return this.location;
 		}
-
+		
 		@Override
 		public ResourceLocation getTexture(EnumFacing direction)
 		{
@@ -208,21 +208,24 @@ public abstract class MicroblockMaterial implements IForgeRegistryEntry<Microblo
 			this.bottom = new ResourceLocation(bottom);
 			this.sides = new ResourceLocation(sides);
 		}
-
+		
 		@Override
 		public ResourceLocation getParticleTexture()
 		{
 			return this.sides;
 		}
-
+		
 		@Override
 		public ResourceLocation getTexture(EnumFacing direction)
 		{
 			switch(direction)
 			{
-				case DOWN : return this.bottom;
-				case UP : return this.top;
-				default : return this.sides;
+				case DOWN :
+					return this.bottom;
+				case UP :
+					return this.top;
+				default:
+					return this.sides;
 			}
 		}
 	}
@@ -243,20 +246,22 @@ public abstract class MicroblockMaterial implements IForgeRegistryEntry<Microblo
 			this.pillar = new ResourceLocation(pillar);
 			this.sides = new ResourceLocation(sides);
 		}
-
+		
 		@Override
 		public ResourceLocation getParticleTexture()
 		{
 			return this.sides;
 		}
-
+		
 		@Override
 		public ResourceLocation getTexture(EnumFacing direction)
 		{
 			switch(direction.getAxis())
 			{
-				case Y : return this.pillar;
-				default : return this.sides;
+				case Y :
+					return this.pillar;
+				default:
+					return this.sides;
 			}
 		}
 	}
@@ -288,8 +293,10 @@ public abstract class MicroblockMaterial implements IForgeRegistryEntry<Microblo
 		{
 			switch(direction)
 			{
-				case NORTH : return this.front;
-				default : return super.getTexture(direction);
+				case NORTH :
+					return this.front;
+				default:
+					return super.getTexture(direction);
 			}
 		}
 	}

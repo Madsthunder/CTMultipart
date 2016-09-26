@@ -15,7 +15,6 @@ import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
 public class MultipartUtils
 {
-
 	public static final ResourceLocation BLOCK_TO_MULTIPART = new ResourceLocation("ctmultipart", "blocktomultipart");
 	public static final ResourceLocation ITEM_TO_MULTIPART = new ResourceLocation("ctmultipart", "itemtomultipart");
 	

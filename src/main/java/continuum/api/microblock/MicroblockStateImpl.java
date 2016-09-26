@@ -1,12 +1,5 @@
 package continuum.api.microblock;
 
-import java.util.Map.Entry;
-
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableTable;
-import com.google.common.collect.Table;
-
 import continuum.api.microblock.texture.MicroblockMaterial;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer.StateImplementation;
@@ -32,12 +25,12 @@ public class MicroblockStateImpl extends StateImplementation
 		IBlockState state = this.state.withProperty(property, value);
 		return new MicroblockStateImpl(state, this.microblock, this.material);
 	}
-
+	
 	public IBlockState getState()
 	{
 		return state;
 	}
-
+	
 	public MicroblockMaterial getMicroblockMaterial()
 	{
 		return material;

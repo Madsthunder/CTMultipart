@@ -123,10 +123,13 @@ public class ModelMicroblock implements IModel
 		@Override
 		public List<BakedQuad> getQuads(IBlockState state, EnumFacing facing, long random)
 		{
-			if(this.itemModel != null) return this.itemModel.getRight();
+			if(this.itemModel != null)
+				return this.itemModel.getRight();
 			IBlockState state1 = state;
-			if(state instanceof MultiblockStateImpl) state1 = ((MultiblockStateImpl)state).getImplementation();
-			if(state1 instanceof MicroblockStateImpl) return this.createQuads(((MicroblockStateImpl)state1).getMicroblock(), state, facing, ((MicroblockStateImpl)state1).getMicroblockMaterial());
+			if(state instanceof MultiblockStateImpl)
+				state1 = ((MultiblockStateImpl)state).getImplementation();
+			if(state1 instanceof MicroblockStateImpl)
+				return this.createQuads(((MicroblockStateImpl)state1).getMicroblock(), state, facing, ((MicroblockStateImpl)state1).getMicroblockMaterial());
 			return Lists.newArrayList();
 		}
 		
@@ -139,54 +142,50 @@ public class ModelMicroblock implements IModel
 		{
 			List<BakedQuad> quads = Lists.newArrayList();
 			for(AxisAlignedBB aabb1 : aabbs)
-					for(EnumFacing facing1 : EnumFacing.values())
+				for(EnumFacing facing1 : EnumFacing.values())
+				{
+					int i = facing1.ordinal();
+					final AxisAlignedBB aabb = BlockHooks.createAABBFromSide(facing1, aabb1);
+					if(Iterables.any(originalBoxes, new Predicate<AxisAlignedBB>()
 					{
-						int i = facing1.ordinal();
-						final AxisAlignedBB aabb = BlockHooks.createAABBFromSide(facing1, aabb1);
-						if(Iterables.any(originalBoxes, new Predicate<AxisAlignedBB>()
-								{
-									@Override
-									public boolean apply(AxisAlignedBB aabb2)
-									{
-										return BlockHooks.isFlushWithSide(facing1, aabb2, aabb);
-									}
-								}))
+						@Override
+						public boolean apply(AxisAlignedBB aabb2)
 						{
-							AxisAlignedBB aabb3 = BlockHooks.dialate(aabb, 16);
-							quads.add(bakery.makeBakedQuad(minVec(aabb3), maxVec(aabb3), createPartFace(facing1, aabb3, textures.get(i)), textures.get(i), facing1, ModelRotation.X0_Y0, null, true, true));
+							return BlockHooks.isFlushWithSide(facing1, aabb2, aabb);
 						}
+					}))
+					{
+						AxisAlignedBB aabb3 = BlockHooks.dialate(aabb, 16);
+						quads.add(bakery.makeBakedQuad(minVec(aabb3), maxVec(aabb3), createPartFace(facing1, aabb3, textures.get(i)), textures.get(i), facing1, ModelRotation.X0_Y0, null, true, true));
 					}
+				}
 			return quads;
 		}
 		
 		public static float[] getUVs(EnumFacing f, AxisAlignedBB aabb)
 		{
 			Axis axis = f.getAxis();
-			if(axis.isVertical()) return new float[]
-			{
-					(float)aabb.minX, invertMin(EnumFacing.DOWN, f, aabb.minZ, aabb.maxZ), (float)aabb.maxX, invertMax(EnumFacing.DOWN, f, aabb.minZ, aabb.maxZ)
-			};
-			if(axis.isHorizontal()) if(axis == Axis.Z)
-				return new float[]
-				{
-						invertMin(EnumFacing.NORTH, f, aabb.minX, aabb.maxX), invertMin(f, f, aabb.minY, aabb.maxY), invertMax(EnumFacing.NORTH, f, aabb.minX, aabb.maxX), invertMax(f, f, aabb.minY, aabb.maxY)
-				};
-			else if(axis == Axis.X) return new float[]
-			{
-					invertMin(EnumFacing.EAST, f, aabb.minZ, aabb.maxZ), invertMin(f, f, aabb.minY, aabb.maxY), invertMax(EnumFacing.EAST, f, aabb.minZ, aabb.maxZ), invertMax(f, f, aabb.minY, aabb.maxY)
-			};
+			if(axis.isVertical())
+				return new float[] { (float)aabb.minX, invertMin(EnumFacing.DOWN, f, aabb.minZ, aabb.maxZ), (float)aabb.maxX, invertMax(EnumFacing.DOWN, f, aabb.minZ, aabb.maxZ) };
+			if(axis.isHorizontal())
+				if(axis == Axis.Z)
+					return new float[] { invertMin(EnumFacing.NORTH, f, aabb.minX, aabb.maxX), invertMin(f, f, aabb.minY, aabb.maxY), invertMax(EnumFacing.NORTH, f, aabb.minX, aabb.maxX), invertMax(f, f, aabb.minY, aabb.maxY) };
+				else if(axis == Axis.X)
+					return new float[] { invertMin(EnumFacing.EAST, f, aabb.minZ, aabb.maxZ), invertMin(f, f, aabb.minY, aabb.maxY), invertMax(EnumFacing.EAST, f, aabb.minZ, aabb.maxZ), invertMax(f, f, aabb.minY, aabb.maxY) };
 			return new float[4];
 		}
 		
 		public static float invertMin(EnumFacing facingEquals, EnumFacing facingSubject, double minValue, double maxValue)
 		{
-			if(facingSubject == facingEquals) return (float)(16 - maxValue);
+			if(facingSubject == facingEquals)
+				return (float)(16 - maxValue);
 			return (float)minValue;
 		}
 		
 		public static float invertMax(EnumFacing facingEquals, EnumFacing facingSubject, double minValue, double maxValue)
 		{
-			if(facingSubject == facingEquals) return (float)(16 - minValue);
+			if(facingSubject == facingEquals)
+				return (float)(16 - minValue);
 			return (float)maxValue;
 		}
 		
@@ -198,12 +197,18 @@ public class ModelMicroblock implements IModel
 		public static AxisAlignedBB getAABB(AxisAlignedBB aabb, EnumFacing facing)
 		{
 			aabb = new AxisAlignedBB(aabb.minX * 16, aabb.minY * 16, aabb.minZ * 16, aabb.maxX * 16, aabb.maxY * 16, aabb.maxZ * 16);
-			if(facing == EnumFacing.DOWN) return new AxisAlignedBB(aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.minY, aabb.maxZ);
-			if(facing == EnumFacing.UP) return new AxisAlignedBB(aabb.minX, aabb.maxY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ);
-			if(facing == EnumFacing.NORTH) return new AxisAlignedBB(aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.minZ);
-			if(facing == EnumFacing.SOUTH) return new AxisAlignedBB(aabb.minX, aabb.minY, aabb.maxZ, aabb.maxX, aabb.maxY, aabb.maxZ);
-			if(facing == EnumFacing.WEST) return new AxisAlignedBB(aabb.minX, aabb.minY, aabb.minZ, aabb.minX, aabb.maxY, aabb.maxZ);
-			if(facing == EnumFacing.EAST) return new AxisAlignedBB(aabb.maxX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ);
+			if(facing == EnumFacing.DOWN)
+				return new AxisAlignedBB(aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.minY, aabb.maxZ);
+			if(facing == EnumFacing.UP)
+				return new AxisAlignedBB(aabb.minX, aabb.maxY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ);
+			if(facing == EnumFacing.NORTH)
+				return new AxisAlignedBB(aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.minZ);
+			if(facing == EnumFacing.SOUTH)
+				return new AxisAlignedBB(aabb.minX, aabb.minY, aabb.maxZ, aabb.maxX, aabb.maxY, aabb.maxZ);
+			if(facing == EnumFacing.WEST)
+				return new AxisAlignedBB(aabb.minX, aabb.minY, aabb.minZ, aabb.minX, aabb.maxY, aabb.maxZ);
+			if(facing == EnumFacing.EAST)
+				return new AxisAlignedBB(aabb.maxX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ);
 			return aabb;
 		}
 		
@@ -281,23 +286,21 @@ public class ModelMicroblock implements IModel
 		if(state instanceof MultiblockStateImpl)
 		{
 			MultiblockStateImpl msi = (MultiblockStateImpl)state;
-			set = BlockHooks.splitAABBs(set, msi.getInfoList().getAllInfoOfMultipartInstance(MultipartMicroblock.class), 
-					new Predicate<MultipartState<MultipartMicroblock>>()
-					{
-						@Override
-						public boolean apply(MultipartState<MultipartMicroblock> info)
-						{
-							return MultipartCompat.microblockOverlaps(info, msi.getInfo());
-						}
-					},
-					new Function<MultipartState<MultipartMicroblock>, Iterable<AxisAlignedBB>>()
-					{
-						@Override
-						public Iterable<AxisAlignedBB> apply(MultipartState<MultipartMicroblock> info)
-						{
-							return ((MultipartMicroblock)info.getMultipart()).getMicroblock().getRenderBoxes(info.getState());
-						}
-					});
+			set = BlockHooks.splitAABBs(set, msi.getInfoList().getAllInfoOfMultipartInstance(MultipartMicroblock.class), new Predicate<MultipartState<MultipartMicroblock>>()
+			{
+				@Override
+				public boolean apply(MultipartState<MultipartMicroblock> info)
+				{
+					return MultipartCompat.microblockOverlaps(info, msi.getInfo());
+				}
+			}, new Function<MultipartState<MultipartMicroblock>, Iterable<AxisAlignedBB>>()
+			{
+				@Override
+				public Iterable<AxisAlignedBB> apply(MultipartState<MultipartMicroblock> info)
+				{
+					return ((MultipartMicroblock)info.getMultipart()).getMicroblock().getRenderBoxes(info.getState());
+				}
+			});
 		}
 		return set;
 	}
