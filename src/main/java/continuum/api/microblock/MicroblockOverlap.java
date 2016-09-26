@@ -9,7 +9,7 @@ import com.google.common.base.Predicates;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 
-public final class MicroblockOverlap extends Pair<Microblock, Microblock> implements IForgeRegistryEntry<MicroblockOverlap>
+public final class MicroblockOverlap implements IForgeRegistryEntry<MicroblockOverlap>
 {
 	public static final ResourceLocation OVERLAPREGISTRY = new ResourceLocation("ctmultipart", "microblockoverlapregistry");
 	private final Microblock microblock;
@@ -64,23 +64,5 @@ public final class MicroblockOverlap extends Pair<Microblock, Microblock> implem
 	public Class<? super MicroblockOverlap> getRegistryType()
 	{
 		return MicroblockOverlap.class;
-	}
-
-	@Override
-	public Microblock setValue(Microblock value)
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Microblock getLeft()
-	{
-		return this.microblock;
-	}
-
-	@Override
-	public Microblock getRight()
-	{
-		return this.overlapped;
 	}
 }
