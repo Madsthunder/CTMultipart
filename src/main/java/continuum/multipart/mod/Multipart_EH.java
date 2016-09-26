@@ -86,13 +86,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @EventBusSubscriber
 public class Multipart_EH
 {
-	private static Multipart_EH eventHandler;
-	
-	public static Multipart_EH getEventHandler()
-	{
-		return eventHandler == null ? eventHandler = new Multipart_EH() : eventHandler;
-	}
-	private static final Multipart_OH objectHolder = Multipart_OH.getObjectHolder();
+	private static final Multipart_EH INSTANCE = new Multipart_EH();
+	private static final Multipart_OH objectHolder = Multipart_OH.INSTANCE;
 	public static final ResourceLocation MULTIBLOCK = new ResourceLocation("ctmultipart", "multiblock");
 	
 	@SubscribeEvent
