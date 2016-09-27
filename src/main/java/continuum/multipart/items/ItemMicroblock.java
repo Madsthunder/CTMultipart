@@ -4,6 +4,7 @@ import java.util.List;
 
 import continuum.api.microblock.Microblock;
 import continuum.api.microblock.material.MicroblockMaterial;
+import continuum.api.microblock.material.MicroblockMaterialCapability;
 import continuum.multipart.blocks.BlockLayered;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -37,16 +38,19 @@ public class ItemMicroblock extends ItemBlock
 				if(material != MicroblockMaterial.defaultMaterial)
 				{
 					ItemStack stack = new ItemStack(item);
-					stack.setTagCompound(MicroblockMaterial.writeToNBT(material));
-					list.add(stack);
+					if(stack.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
+					{
+						stack.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).setMaterial(material);
+						list.add(stack);
+					}
 				}
 	}
 	
 	@Override
 	public String getItemStackDisplayName(ItemStack stack)
 	{
-		MicroblockMaterial entry = MicroblockMaterial.readFromNBT(stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound());
-		return entry == MicroblockMaterial.defaultMaterial ? "Default" : entry.getDisplayName() + " " + I18n.translateToLocal("microblock." + this.microblock.getName().toLowerCase());
+		MicroblockMaterial material = stack.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null) ? stack.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial() : MicroblockMaterial.defaultMaterial;
+		return material == MicroblockMaterial.defaultMaterial ? "Default" : material.getDisplayName() + " " + I18n.translateToLocal("microblock." + this.microblock.getName().toLowerCase());
 	}
 	
 	public IBlockState getRenderState()

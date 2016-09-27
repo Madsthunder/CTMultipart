@@ -1,13 +1,11 @@
-package continuum.multipart.blocks;
+package continuum.api.microblock;
 
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import continuum.api.microblock.Microblock;
-import continuum.api.microblock.MicroblockStateImpl;
-import continuum.api.microblock.TileEntityMicroblock;
 import continuum.api.microblock.material.MicroblockMaterial;
+import continuum.api.microblock.material.MicroblockMaterialCapability;
 import continuum.essentials.hooks.BlockHooks;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -37,7 +35,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class BlockMicroblockBase extends BlockContainer
 {
 	private final Microblock microblock;
-	private Material tempMaterial;
+	protected Material tempMaterial;
 	
 	public BlockMicroblockBase(Microblock microblock)
 	{
@@ -59,19 +57,19 @@ public abstract class BlockMicroblockBase extends BlockContainer
 	@Override
 	public SoundType getSoundType(IBlockState state, World world, BlockPos pos, Entity entity)
 	{
-		TileEntity tile = world.getTileEntity(pos);
-		if(tile instanceof TileEntityMicroblock)
-			return ((TileEntityMicroblock)tile).getMaterial().getSound();
+		TileEntity entity1 = world.getTileEntity(pos);
+		if(entity1.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
+			return entity1.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial().getSound();
 		return super.getSoundType(state, world, pos, entity);
 	}
 	
 	@Override
 	public boolean addLandingEffects(IBlockState state, WorldServer world, BlockPos pos, IBlockState uselessState, EntityLivingBase entity, int particles)
 	{
-		TileEntity tile = world.getTileEntity(pos);
-		if(tile instanceof TileEntityMicroblock)
+		TileEntity entity1 = world.getTileEntity(pos);
+		if(entity1.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
 		{
-			BlockHooks.createLandingEffects(world, new Vec3d(entity.posX, entity.posY, entity.posZ), ((TileEntityMicroblock)tile).getMaterial().getBlockState(), particles);
+			BlockHooks.createLandingEffects(world, new Vec3d(entity.posX, entity.posY, entity.posZ), entity1.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial().getBlockState(), particles);
 			return true;
 		}
 		return super.addLandingEffects(state, world, pos, uselessState, entity, particles);
@@ -81,10 +79,10 @@ public abstract class BlockMicroblockBase extends BlockContainer
 	@SideOnly(Side.CLIENT)
 	public boolean addHitEffects(IBlockState state, World world, RayTraceResult result, ParticleManager manager)
 	{
-		TileEntity tile = world.getTileEntity(result.getBlockPos());
-		if(tile instanceof TileEntityMicroblock)
+		TileEntity entity =  world.getTileEntity(result.getBlockPos());
+		if(entity.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
 		{
-			BlockHooks.createHitEffects(manager, world, result, this.microblock.getSelectionBox(state), ((TileEntityMicroblock)tile).getMaterial().getBlockState());
+			BlockHooks.createHitEffects(manager, world, result, this.microblock.getSelectionBox(state), entity.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial().getBlockState());
 			return true;
 		}
 		return super.addHitEffects(state, world, result, manager);
@@ -94,10 +92,10 @@ public abstract class BlockMicroblockBase extends BlockContainer
 	@SideOnly(Side.CLIENT)
 	public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager)
 	{
-		TileEntity tile = world.getTileEntity(pos);
-		if(tile instanceof TileEntityMicroblock)
+		TileEntity entity = world.getTileEntity(pos);
+		if(entity.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
 		{
-			BlockHooks.createDestroyEffects(manager, world, pos, ((TileEntityMicroblock)tile).getMaterial().getBlockState());
+			BlockHooks.createDestroyEffects(manager, world, pos, entity.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial().getBlockState());
 			return true;
 		}
 		return super.addDestroyEffects(world, pos, manager);
@@ -114,9 +112,9 @@ public abstract class BlockMicroblockBase extends BlockContainer
 	public float getPlayerRelativeBlockHardness(IBlockState state, EntityPlayer player, World world, BlockPos pos)
 	{
 		TileEntity entity = world.getTileEntity(pos);
-		if(entity instanceof TileEntityMicroblock)
+		if(entity.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
 		{
-			MicroblockMaterial material = ((TileEntityMicroblock)entity).getMaterial();
+			MicroblockMaterial material = entity.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial();
 			this.tempMaterial = material.getBlockState().getMaterial();
 			this.setHardness(material.getBlockState().getBlockHardness(world, pos));
 			this.setHarvestLevel(material.getTool(), material.getHarvestLevel());
@@ -133,10 +131,11 @@ public abstract class BlockMicroblockBase extends BlockContainer
 	{
 		List<ItemStack> list = Lists.newArrayList();
 		TileEntity entity = world.getTileEntity(pos);
-		if(entity instanceof TileEntityMicroblock)
+		if(entity.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
 		{
 			ItemStack stack = new ItemStack(this);
-			stack.setTagCompound(MicroblockMaterial.writeToNBT(((TileEntityMicroblock)entity).getMaterial()));
+			if(stack.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
+				stack.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).setMaterial(entity.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial());
 			list.add(stack);
 		}
 		return list;
@@ -146,8 +145,8 @@ public abstract class BlockMicroblockBase extends BlockContainer
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess access, BlockPos pos)
 	{
 		TileEntity entity = access.getTileEntity(pos);
-		if(entity instanceof TileEntityMicroblock)
-			state = new MicroblockStateImpl(state, this.microblock, ((TileEntityMicroblock)entity).getMaterial());
+		if(entity.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
+			state = new MicroblockStateImpl(state, this.microblock, entity.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial());
 		return state;
 	}
 	
@@ -155,27 +154,26 @@ public abstract class BlockMicroblockBase extends BlockContainer
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult result, World world, BlockPos pos, EntityPlayer player)
 	{
 		TileEntity entity = world.getTileEntity(pos);
-		if(entity instanceof TileEntityMicroblock)
+		if(entity.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
 		{
 			ItemStack stack = new ItemStack(this);
-			stack.setTagCompound(new NBTTagCompound());
-			NBTTagCompound compound = new NBTTagCompound();
-			compound.merge(((TileEntityMicroblock)entity).writeItemsToNBT());
-			stack.setTagInfo("BlockEntityTag", compound);
+			if(stack.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
+				stack.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).setMaterial(entity.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial());
 			return stack;
 		}
 		return null;
 	}
 	
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta)
-	{
-		return new TileEntityMicroblock();
-	}
-	
 	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face)
 	{
 		return false;
+	}
+	
+	@Override
+	public boolean canRenderInLayer(BlockRenderLayer layer)
+	{
+		MicroblockMaterial material = TESRMicroblockBase.getMaterial();
+		return material != MicroblockMaterial.defaultMaterial && material.canRenderInLayer(layer);
 	}
 	
 	@Override
@@ -206,12 +204,12 @@ public abstract class BlockMicroblockBase extends BlockContainer
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entity, ItemStack stack)
 	{
-		if(stack != null && stack.hasTagCompound())
+		if(stack != null && stack.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
 		{
-			TileEntity tile = world.getTileEntity(pos);
-			if(tile instanceof TileEntityMicroblock)
+			TileEntity entity1 = world.getTileEntity(pos);
+			if(entity1.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
 			{
-				((TileEntityMicroblock)tile).readItemsFromNBT(stack.getTagCompound().getCompoundTag("BlockEntityTag"));
+				entity1.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).setMaterial(stack.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial());
 			}
 		}
 	}
@@ -232,4 +230,7 @@ public abstract class BlockMicroblockBase extends BlockContainer
 	{
 		return this.microblock;
 	}
+	
+	@Override
+	public abstract TileEntity createNewTileEntity(World world, int meta);
 }

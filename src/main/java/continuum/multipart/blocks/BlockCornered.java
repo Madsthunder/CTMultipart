@@ -2,6 +2,7 @@ package continuum.multipart.blocks;
 
 import com.google.common.collect.Lists;
 
+import continuum.api.microblock.BlockMicroblockBase;
 import continuum.api.microblock.Microblock;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
@@ -14,7 +15,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockCornered extends BlockMicroblockBase
+public class BlockCornered extends BlockDefaultMicroblock
 {
 	public static final PropertyDirection directionX = PropertyDirection.create("x", Lists.newArrayList(EnumFacing.WEST, EnumFacing.EAST));
 	public static final PropertyDirection directionY = PropertyDirection.create("y", Lists.newArrayList(EnumFacing.DOWN, EnumFacing.UP));

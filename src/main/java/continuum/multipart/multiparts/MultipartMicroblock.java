@@ -6,7 +6,8 @@ import com.google.common.collect.Lists;
 
 import continuum.api.microblock.Microblock;
 import continuum.api.microblock.MicroblockStateImpl;
-import continuum.api.microblock.TileEntityMicroblock;
+import continuum.api.microblock.TileEntityMicroblockBase;
+import continuum.api.microblock.material.MicroblockMaterialCapability;
 import continuum.api.multipart.MultiblockStateImpl;
 import continuum.api.multipart.Multipart;
 import continuum.api.multipart.MultipartState;
@@ -65,7 +66,7 @@ public class MultipartMicroblock extends Multipart
 	@Override
 	public boolean addLandingEffects(MultipartState info, WorldServer world, EntityLivingBase entity, int particles)
 	{
-		BlockHooks.createLandingEffects(world, new Vec3d(entity.posX, entity.posY, entity.posZ), info.getTileEntity() instanceof TileEntityMicroblock ? ((TileEntityMicroblock)info.getTileEntity()).getMaterial().getBlockState() : Blocks.AIR.getDefaultState(), particles);
+		BlockHooks.createLandingEffects(world, new Vec3d(entity.posX, entity.posY, entity.posZ), info.hasTileEntity() && info.getTileEntity().hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null) ? info.getTileEntity().getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial().getBlockState() : Blocks.AIR.getDefaultState(), particles);
 		return true;
 	}
 	
@@ -73,7 +74,7 @@ public class MultipartMicroblock extends Multipart
 	@SideOnly(Side.CLIENT)
 	public boolean addHitEffects(MultipartState info, RayTraceResult result, ParticleManager manager)
 	{
-		BlockHooks.createHitEffects(manager, info.getWorld(), result, this.getMicroblock().getSelectionBox(info.getState()), info.getTileEntity() instanceof TileEntityMicroblock ? ((TileEntityMicroblock)info.getTileEntity()).getMaterial().getBlockState() : Blocks.AIR.getDefaultState());
+		BlockHooks.createHitEffects(manager, info.getWorld(), result, this.getMicroblock().getSelectionBox(info.getState()), info.hasTileEntity() && info.getTileEntity().hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null) ? info.getTileEntity().getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial().getBlockState() : Blocks.AIR.getDefaultState());
 		return true;
 	}
 	
@@ -81,7 +82,7 @@ public class MultipartMicroblock extends Multipart
 	@SideOnly(Side.CLIENT)
 	public boolean addDestroyEffects(MultipartState info, ParticleManager manager)
 	{
-		BlockHooks.createDestroyEffects(manager, info.getWorld(), info.getPos(), info.getTileEntity() instanceof TileEntityMicroblock ? ((TileEntityMicroblock)info.getTileEntity()).getMaterial().getBlockState() : Blocks.AIR.getDefaultState());
+		BlockHooks.createDestroyEffects(manager, info.getWorld(), info.getPos(), info.hasTileEntity() && info.getTileEntity().hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null) ? info.getTileEntity().getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial().getBlockState() : Blocks.AIR.getDefaultState());
 		return true;
 	}
 	
@@ -121,11 +122,14 @@ public class MultipartMicroblock extends Multipart
 	@Override
 	public ItemStack getPickBlock(MultipartState info)
 	{
-		if(info.getTileEntity() instanceof TileEntityMicroblock)
+		if(info.hasTileEntity() && info.getTileEntity().hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
 		{
 			ItemStack stack = new ItemStack(this.getItem(), 1, 0, new NBTTagCompound());
-			stack.setTagInfo("BlockEntityTag", ((TileEntityMicroblock)info.getTileEntity()).writeItemsToNBT());
-			return stack;
+			if(stack.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
+			{
+				stack.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).setMaterial(info.getTileEntity().getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial());
+				return stack;
+			}
 		}
 		return null;
 	}
@@ -140,23 +144,22 @@ public class MultipartMicroblock extends Multipart
 	public IBlockState getMultipartRenderState(MultipartState info)
 	{
 		IBlockState state = info.getState();
-		TileEntity entity = info.getTileEntity();
-		if(entity instanceof TileEntityMicroblock && state instanceof StateImplementation)
-			state = new MicroblockStateImpl(state, this.getMicroblock(), ((TileEntityMicroblock)entity).getMaterial());
+		if(info.hasTileEntity() && info.getTileEntity().hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
+			state = new MicroblockStateImpl(state, this.getMicroblock(), info.getTileEntity().getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial());
 		return state;
 	}
 	
 	@Override
 	public void onMultipartPlaced(MultipartState info, EntityLivingBase entity, ItemStack stack)
 	{
-		if(stack != null && stack.hasTagCompound() && info.getTileEntity() instanceof TileEntityMicroblock)
-			((TileEntityMicroblock)info.getTileEntity()).readItemsFromNBT(stack.getTagCompound().getCompoundTag("BlockEntityTag"));
+		if(stack != null && stack.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null) && info.hasTileEntity() && info.getTileEntity().hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
+			info.getTileEntity().getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).setMaterial(stack.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial());
 	}
 	
 	@Override
 	public SoundType getSoundType(MultipartState info)
 	{
-		return info.getTileEntity() instanceof TileEntityMicroblock ? ((TileEntityMicroblock)info.getTileEntity()).getMaterial().getSound() : SoundType.STONE;
+		return info.hasTileEntity() && info.getTileEntity().hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null) ? info.getTileEntity().getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial().getSound() : SoundType.STONE;
 	}
 	
 	@Override
@@ -239,17 +242,16 @@ public class MultipartMicroblock extends Multipart
 	@Override
 	public int getLightValue(MultipartState info)
 	{
-		if(info.getTileEntity() instanceof TileEntityMicroblock)
-			return ((TileEntityMicroblock)info.getTileEntity()).getMaterial().getLight();
+		if(info.hasTileEntity() && info.getTileEntity().hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
+			return info.getTileEntity().getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial().getLight();
 		return 0;
 	}
 	
 	@Override
 	public boolean canRenderInLayer(MultipartState info, BlockRenderLayer layer)
 	{
-		TileEntity entity = info.getTileEntity();
-		if(entity instanceof TileEntityMicroblock)
-			return ((TileEntityMicroblock)entity).getMaterial().canRenderInLayer(layer);
+		if(info.hasTileEntity() && info.getTileEntity().hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
+			return info.getTileEntity().getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial().canRenderInLayer(layer);
 		return false;
 	}
 }

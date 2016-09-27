@@ -10,15 +10,18 @@ import com.google.common.collect.Lists;
 
 import continuum.api.microblock.Microblock;
 import continuum.api.microblock.MicroblockOverlap;
-import continuum.api.microblock.TileEntityMicroblock;
+import continuum.api.microblock.TileEntityMicroblockBase;
 import continuum.api.microblock.material.MicroblockMaterial;
+import continuum.api.microblock.material.MicroblockMaterialCapability;
 import continuum.api.multipart.Multipart;
 import continuum.api.multipart.MultipartEvent.AABBExceptionsEvent;
 import continuum.api.multipart.MultipartState;
 import continuum.api.multipart.MultipartStateList;
-import continuum.api.multipart.TileEntityMultiblock;
+import continuum.api.multipart.TESRMultiblockBase;
+import continuum.api.multipart.TileEntityMultiblockBase;
 import continuum.essentials.block.ICuboid;
 import continuum.essentials.events.DebugInfoEvent;
+import continuum.essentials.events.ResourceManagerReloadEvent;
 import continuum.essentials.hooks.BlockHooks;
 import continuum.multipart.blocks.BlockCornered;
 import continuum.multipart.blocks.BlockLayered;
@@ -44,10 +47,12 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -102,7 +107,7 @@ public class Multipart_EH
 		if(GameRegistry.findRegistry(Multipart.class) != null)
 		{
 			event.getRegistry().register((Multipart_OH.I.multiblock = new BlockMultiblock()).setUnlocalizedName(MULTIBLOCK.getResourcePath()).setRegistryName(MULTIBLOCK));
-			GameRegistry.registerTileEntity(TileEntityMultiblock.class, MULTIBLOCK.toString());
+			GameRegistry.registerTileEntity(TileEntityMultiblockBase.class, MULTIBLOCK.toString());
 			CapabilityManager.INSTANCE.register(MultipartStateList.class, new IStorage<MultipartStateList>()
 			{
 				@Override
@@ -119,7 +124,23 @@ public class Multipart_EH
 			}, MultipartStateList.class);
 		}
 		if(GameRegistry.findRegistry(Microblock.class) != null)
-			GameRegistry.registerTileEntity(TileEntityMicroblock.class, "ctmultipart:microblock");
+			GameRegistry.registerTileEntity(TileEntityMicroblockBase.class, "ctmultipart:microblock");
+		if(GameRegistry.findRegistry(MicroblockMaterial.class) != null)
+			CapabilityManager.INSTANCE.register(MicroblockMaterialCapability.class, new IStorage<MicroblockMaterialCapability>()
+					{
+						@Override
+						public NBTBase writeNBT(Capability<MicroblockMaterialCapability> capability, MicroblockMaterialCapability instance, EnumFacing side)
+						{
+							return instance.serializeNBT();
+						}
+
+						@Override
+						public void readNBT(Capability<MicroblockMaterialCapability> capability, MicroblockMaterialCapability instance, EnumFacing side, NBTBase nbt)
+						{
+							instance.deserializeNBT((NBTTagString)nbt);
+						}
+				
+					}, MicroblockMaterialCapability.class);
 	}
 	
 	@SubscribeEvent
@@ -249,10 +270,19 @@ public class Multipart_EH
 	}
 	
 	@SubscribeEvent
-	public static void onCapabilitiesGet(AttachCapabilitiesEvent<TileEntity> event)
+	public static void onTileEntityCapabilitiesGet(AttachCapabilitiesEvent<TileEntity> event)
 	{
-		if(event.getObject() instanceof TileEntityMultiblock)
-			event.addCapability(new ResourceLocation("ctmultipart", "multipartList"), new MultipartStateList(event.getObject()));
+		if(event.getObject() instanceof TileEntityMultiblockBase)
+			event.addCapability(new ResourceLocation("ctmultipart", "multiparts"), new MultipartStateList(event.getObject()));
+		if(event.getObject() instanceof TileEntityMicroblockBase)
+			event.addCapability(new ResourceLocation("ctmultipart", "material"), new MicroblockMaterialCapability());
+	}
+	
+	@SubscribeEvent
+	public static void onItemStackCapabilitiesGet(AttachCapabilitiesEvent<Item> event)
+	{
+		if(event.getObject() instanceof ItemMicroblock)
+			event.addCapability(new ResourceLocation("ctmultipart", "material"), new MicroblockMaterialCapability());
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -431,6 +461,12 @@ public class Multipart_EH
 			if(cuboid.getSelectableCuboid() == box)
 				return cuboid.getSide();
 		return null;
+	}
+	
+	@SubscribeEvent
+	public static void onResourceManagerReload(ResourceManagerReloadEvent event)
+	{
+		TESRMultiblockBase.initTextures();
 	}
 	
 	@SideOnly(Side.CLIENT)

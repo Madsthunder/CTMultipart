@@ -73,7 +73,7 @@ public class ModelMultiblock implements IModel
 				MultiblockStateImpl impl = (MultiblockStateImpl)state;
 				IBakedModel model;
 				for(MultipartState info : impl.getInfoList().getInfoToRenderInLayer(MinecraftForgeClient.getRenderLayer()))
-					if((model = mc.getBlockRendererDispatcher().getModelForState(info.getState())) != null)
+					if((model = mc.getBlockRendererDispatcher().getModelForState(info.getActualState())) != null)
 						quads.addAll(model.getQuads(info.getExtendedState(true), side, rand));
 			}
 			return quads;

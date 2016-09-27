@@ -127,7 +127,7 @@ public abstract class MicroblockMaterial implements IForgeRegistryEntry<Microblo
 	@Override
 	public String toString()
 	{
-		return "MicroblockEntry {" + getRegistryName().toString() + "}";
+		return "MicroblockMaterial {" + getRegistryName().toString() + "}";
 	}
 	
 	public final MicroblockMaterial setRegistryName(ResourceLocation name)
@@ -144,22 +144,6 @@ public abstract class MicroblockMaterial implements IForgeRegistryEntry<Microblo
 	public final Class<? super MicroblockMaterial> getRegistryType()
 	{
 		return MicroblockMaterial.class;
-	}
-	
-	public static MicroblockMaterial readFromNBT(NBTTagCompound compound)
-	{
-		IForgeRegistry<MicroblockMaterial> microblockMaterialRegistry = GameRegistry.findRegistry(MicroblockMaterial.class);
-		MicroblockMaterial material = compound != null && microblockMaterialRegistry != null ? microblockMaterialRegistry.getValue(new ResourceLocation(compound.getCompoundTag("BlockEntityTag").getString("material"))) : null;
-		return material == null ? MicroblockMaterial.defaultMaterial : material;
-	}
-	
-	public static NBTTagCompound writeToNBT(MicroblockMaterial material)
-	{
-		NBTTagCompound compound = new NBTTagCompound();
-		NBTTagCompound compound1 = new NBTTagCompound();
-		compound1.setString("material", material.getRegistryName().toString());
-		compound.setTag("BlockEntityTag", compound1);
-		return compound;
 	}
 	
 	public static class All extends MicroblockMaterial

@@ -6,9 +6,12 @@ import com.google.common.collect.Iterables;
 
 import continuum.api.microblock.Microblock;
 import continuum.api.microblock.MicroblockOverlap;
+import continuum.api.microblock.TESRMicroblockBase;
+import continuum.api.microblock.TileEntityMicroblockBase;
 import continuum.api.microblock.material.MicroblockMaterial;
+import continuum.api.microblock.material.MicroblockMaterialCapability;
 import continuum.api.multipart.TESRMultiblockBase;
-import continuum.api.multipart.TileEntityMultiblock;
+import continuum.api.multipart.TileEntityMultiblockBase;
 import continuum.core.mod.CTCore_OH;
 import continuum.essentials.client.state.StateMapperStatic;
 import continuum.essentials.mod.Proxy;
@@ -21,7 +24,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -44,13 +46,9 @@ public final class Multipart_Proxies
 			if(microblockRegistry != null && microblockMaterialRegistry != null)
 			{
 				ItemStack stack = new ItemStack(DefaultMicroblock.SLAB.getBlock(), 1);
-				MicroblockMaterial material = Iterables.find(microblockMaterialRegistry, Predicates.not(Predicates.equalTo(MicroblockMaterial.defaultMaterial)));
-				NBTTagCompound compound = MicroblockMaterial.writeToNBT(material == null ? MicroblockMaterial.defaultMaterial : material);
-				if(stack.hasTagCompound())
-					stack.getTagCompound().merge(compound);
-				else
-					stack.setTagCompound(compound);
-				Multipart_OH.I.microblocks = new CreativeTab("ctmicroblocks", stack);
+				if(stack.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
+					stack.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).setMaterial(Iterables.find(microblockMaterialRegistry, Predicates.not(Predicates.equalTo(MicroblockMaterial.defaultMaterial))));
+				Multipart_OH.I.microblocks = new CreativeTab("microblocks", stack);
 				for(Microblock microblock : microblockRegistry)
 					microblock.getBlock().setCreativeTab(Multipart_OH.I.microblocks);
 			}
@@ -88,7 +86,8 @@ public final class Multipart_Proxies
 		public void init(Multipart_Mod mod)
 		{
 			super.init(mod);
-			ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMultiblock.class, new TESRMultiblockBase());
+			ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMultiblockBase.class, new TESRMultiblockBase());
+			ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMicroblockBase.class, new TESRMicroblockBase());
 		}
 	}
 }

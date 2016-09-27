@@ -1,5 +1,6 @@
 package continuum.multipart.blocks;
 
+import continuum.api.microblock.BlockMicroblockBase;
 import continuum.api.microblock.Microblock;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
@@ -13,7 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockLayered extends BlockMicroblockBase
+public class BlockLayered extends BlockDefaultMicroblock
 {
 	public static final PropertyDirection direction = PropertyDirection.create("direction");
 	

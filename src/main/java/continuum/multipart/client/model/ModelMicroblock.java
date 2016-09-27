@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.Logger;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.google.common.base.Function;
@@ -18,14 +17,12 @@ import com.google.common.collect.Sets;
 import continuum.api.microblock.Microblock;
 import continuum.api.microblock.MicroblockStateImpl;
 import continuum.api.microblock.material.MicroblockMaterial;
+import continuum.api.microblock.material.MicroblockMaterialCapability;
 import continuum.api.multipart.MultiblockStateImpl;
 import continuum.api.multipart.MultipartState;
 import continuum.essentials.hooks.BlockHooks;
 import continuum.essentials.hooks.ObjectHooks;
-import continuum.essentials.mod.CTMod;
 import continuum.multipart.items.ItemMicroblock;
-import continuum.multipart.mod.Multipart_EH;
-import continuum.multipart.mod.Multipart_OH;
 import continuum.multipart.multiparts.MultipartMicroblock;
 import continuum.multipart.registry.MicroblockOverlapRegistry;
 import net.minecraft.block.state.IBlockState;
@@ -42,7 +39,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.ResourceLocation;
@@ -104,12 +100,12 @@ public class ModelMicroblock implements IModel
 			this.itemModel = null;
 		}
 		
-		public BakedModelMicroblock(BakedModelMicroblock baseModel, ItemMicroblock item, NBTTagCompound compound)
+		public BakedModelMicroblock(BakedModelMicroblock baseModel, ItemMicroblock item, MicroblockMaterial material)
 		{
 			this.format = baseModel.format;
 			this.function = baseModel.function;
 			IBlockState state = item.getRenderState();
-			this.itemModel = Pair.of(item.getMicroblock(), this.createQuads(item.getMicroblock(), state, null, MicroblockMaterial.readFromNBT(compound)));
+			this.itemModel = Pair.of(item.getMicroblock(), this.createQuads(item.getMicroblock(), state, null, material));
 		}
 		
 		@Override
@@ -241,7 +237,7 @@ public class ModelMicroblock implements IModel
 		@Override
 		public ItemCameraTransforms getItemCameraTransforms()
 		{
-			return this.itemModel.getLeft().getCameraTransforms();
+			return this.itemModel == null ? ItemCameraTransforms.DEFAULT : this.itemModel.getLeft().getCameraTransforms();
 		}
 		
 		@Override
@@ -264,9 +260,9 @@ public class ModelMicroblock implements IModel
 		public IBakedModel handleItemState(IBakedModel model, ItemStack stack, World world, EntityLivingBase entity)
 		{
 			MicroblockMaterial material;
-			if(model instanceof BakedModelMicroblock && stack != null && stack.getItem() instanceof ItemMicroblock && (stack.hasTagCompound() && (material = MicroblockMaterial.readFromNBT(stack.getTagCompound())) != null))
+			if(model instanceof BakedModelMicroblock && stack != null && stack.getItem() instanceof ItemMicroblock && stack.hasCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null))
 			{
-				return new BakedModelMicroblock((BakedModelMicroblock)model, (ItemMicroblock)stack.getItem(), stack.getTagCompound());
+				return new BakedModelMicroblock((BakedModelMicroblock)model, (ItemMicroblock)stack.getItem(), stack.getCapability(MicroblockMaterialCapability.MICROBLOCKMATERIAL, null).getMaterial());
 			}
 			return model;
 		}

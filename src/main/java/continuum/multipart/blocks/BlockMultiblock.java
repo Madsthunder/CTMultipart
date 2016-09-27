@@ -14,7 +14,7 @@ import continuum.api.multipart.MultipartState;
 import continuum.api.multipart.MultipartStateList;
 import continuum.api.multipart.MultipartUtils;
 import continuum.api.multipart.TESRMultiblockBase;
-import continuum.api.multipart.TileEntityMultiblock;
+import continuum.api.multipart.TileEntityMultiblockBase;
 import continuum.essentials.block.CuboidSelector;
 import continuum.essentials.block.IBlockBoundable;
 import continuum.essentials.block.ICuboid;
@@ -132,7 +132,6 @@ public class BlockMultiblock extends Block implements IBlockBoundable
 		TileEntity entity = world.getTileEntity(pos);
 		if(entity.hasCapability(MultipartStateList.MULTIPARTINFOLIST, null))
 		{
-			TileEntityMultiblock multipart = (TileEntityMultiblock)entity;
 			MultipartStateList infoList = entity.getCapability(MultipartStateList.MULTIPARTINFOLIST, null);
 			if(!infoList.isEmpty())
 			{
@@ -174,7 +173,7 @@ public class BlockMultiblock extends Block implements IBlockBoundable
 		if(entity.hasCapability(MultipartStateList.MULTIPARTINFOLIST, null))
 		{
 			MultipartStateList infoList = entity.getCapability(MultipartStateList.MULTIPARTINFOLIST, null);
-			MultipartState info = MultipartUtils.getSelectedInfo(this, player, world);
+			MultipartState info = MultipartUtils.getSelectedInfo(pos, player, world);
 			if(info != null)
 			{
 				infoList.remove(infoList.indexOf(info));
@@ -188,7 +187,7 @@ public class BlockMultiblock extends Block implements IBlockBoundable
 	@Override
 	public float getPlayerRelativeBlockHardness(IBlockState state, EntityPlayer player, World world, BlockPos pos)
 	{
-		MultipartState info = MultipartUtils.getSelectedInfo(this, player, world);
+		MultipartState info = MultipartUtils.getSelectedInfo(pos, player, world);
 		if(info != null)
 		{
 			this.setSoundType(info.getMultipart().getBlock().getSoundType());
@@ -265,7 +264,7 @@ public class BlockMultiblock extends Block implements IBlockBoundable
 	@Override
 	public TileEntity createTileEntity(World worldIn, IBlockState state)
 	{
-		return new TileEntityMultiblock();
+		return new TileEntityMultiblockBase();
 	}
 	
 	@Override
@@ -280,7 +279,6 @@ public class BlockMultiblock extends Block implements IBlockBoundable
 		TileEntity entity1 = world.getTileEntity(pos);
 		if(entity1.hasCapability(MultipartStateList.MULTIPARTINFOLIST, null))
 		{
-			TileEntityMultiblock multiblock = (TileEntityMultiblock)entity1;
 			for(MultipartState<?> info : entity1.getCapability(MultipartStateList.MULTIPARTINFOLIST, null))
 				for(AxisAlignedBB aabb : info.getCollisonBoxes())
 					if(!(aabb instanceof CollidableAABB && !((CollidableAABB)aabb).collidable) && box.intersectsWith(aabb = aabb.offset(pos)))
