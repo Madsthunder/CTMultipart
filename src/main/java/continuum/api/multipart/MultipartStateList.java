@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import continuum.api.multipart.MultipartEvent.AABBExceptionsEvent;
-import continuum.essentials.hooks.NBTHooks;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
@@ -47,9 +47,13 @@ public class MultipartStateList extends ArrayList<MultipartState> implements ICa
 	@Override
 	public void deserializeNBT(NBTTagList list)
 	{
-		this.clear();
-		for(NBTTagCompound compound : NBTHooks.increment(NBTTagCompound.class, list))
-			this.add(MultipartState.readFromNBT(null, compound));
+		super.clear();
+		for(int i = 0; i < list.tagCount(); i++)
+		{
+			NBTBase nbt = list.get(i);
+			if(nbt instanceof NBTTagCompound)
+				MultipartState.readFromNBT(this, (NBTTagCompound)nbt);
+		}
 	}
 	
 	public World getWorld()
