@@ -6,7 +6,7 @@ public class TileEntityMultiblockBase extends TileEntitySyncable
 {
 	public TileEntityMultiblockBase()
 	{
-		super(false, true);
+		super(false, true, true);
 	}
 	
 	@Override
